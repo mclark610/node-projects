@@ -1,0 +1,12 @@
+{
+    "server": {
+        "port": 5000
+    },
+    "database": {
+        "url" : "mongodb://localhost:27017/jobtrack",
+        "db_name" : "jobtrack"
+    },
+    "data": {
+        "location": "/src/air"
+    }
+}

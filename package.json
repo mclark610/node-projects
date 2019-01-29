@@ -1,0 +1,21 @@
+{
+  "name": "node-maintain",
+  "version": "1.0.0",
+  "description": "Backend to maintain maintenance",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "backend"
+  ],
+  "author": "Mark",
+  "license": "MIT",
+  "dependencies": {
+    "config": "^3.0.1",
+    "express": "^4.16.4",
+    "winston": "^3.2.0"
+  }
+}
