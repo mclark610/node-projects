@@ -1,12 +1,23 @@
 {
-    "server": {
-        "port": 5000
-    },
-    "database": {
-        "url" : "mongodb://localhost:27017/jobtrack",
-        "db_name" : "jobtrack"
-    },
-    "data": {
-        "location": "/src/air"
-    }
+	"database": {
+		"username": "maintain",
+		"password": "maintain",
+		"database": "maintain",
+		"host": "localhost",
+		"dialect": "mysql"
+	},
+	"sequelize": {
+		"options": {
+			"dialect": "mysql",
+			"host": "localhost",
+			"port": "3306",
+			"operatorsAliases": false,
+			"pool": {
+				"max": 3,
+				"min": 0,
+				"acquire": 30000,
+				"idle": 1000
+			}
+		}
+	}
 }
