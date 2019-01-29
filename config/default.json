@@ -1,7 +1,7 @@
 {
 	"database": {
-		"username": "maintain",
-		"password": "maintain",
+		"username": "root",
+		"password": "my-secret-pw",
 		"database": "maintain",
 		"host": "localhost",
 		"dialect": "mysql"

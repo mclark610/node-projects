@@ -5,15 +5,31 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const config = require('config');
+const Config = require('config');
 
-const sqlconfig = config.get('database');
-const options   = config.get('sequelize.options');
+const config  = Config.get('database');
+const options = Config.get('sequelize.options');
 const db = {};
 
-let sequelize = new Sequelize(sqlconfig.database, config.username, config.password, options);
+console.log("options: " + JSON.stringify(options));
+console.log("sqlconfig" + JSON.stringify(config));
 
-
+let sequelize = new Sequelize(config.database, config.username, config.password, options);
+/*
+let sequelize = new Sequelize("maintain", "maintain", "maintain",
+{
+  dialect: 'mysql',
+  host: "localhost",
+  port: 3306,
+  operatorsAliases: false,
+  pool: {
+    max: 3,
+    min: 0,
+    acquire: 30*1000,
+    idle: 1000
+  }
+});
+*/
 fs
   .readdirSync(__dirname)
   .filter(file => {

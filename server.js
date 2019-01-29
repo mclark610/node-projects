@@ -5,5 +5,24 @@ const logging = require('./modules/logger');
 const config  = require('config');
 
 const models = require( './models');
+const db = require('./models/index.js');
 
 const app = express();
+
+//console.log("sequelize: " + JSON.stringify(db.sequelize.host));
+
+db.sequelize
+    .authenticate()
+    .then(function() {
+        console.log("sequelize: logged in successfully");
+    })
+    .catch(function(err) {
+        console.error("sequelize:error: <"+err+">");
+    })
+
+    .catch(db.sequelize.ConnectionTimedOutError, err => {
+        console.log("Connection Timed out error loading: " + err.sql);
+    })
+    .catch(db.sequelize.TimeoutError, err => {
+        console.log("Connection Timeout error loading: " + err.sql);
+    })
