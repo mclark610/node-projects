@@ -9,8 +9,6 @@ const db = require('./models/index.js');
 
 const app = express();
 
-//console.log("sequelize: " + JSON.stringify(db.sequelize.host));
-
 db.sequelize
     .authenticate()
     .then(function() {
@@ -24,5 +22,5 @@ db.sequelize
         console.log("Connection Timed out error loading: " + err.sql);
     })
     .catch(db.sequelize.TimeoutError, err => {
-        console.log("Connection Timeout error loading: " + err.sql);
+        console.log("Timeout error loading: " + err.sql);
     })
