@@ -3,7 +3,7 @@
  */
 
 module.exports = (sequelize, DataTypes) => {
-    let ToDo = sequelize.define('todo', {
+    let ToDo = sequelize.define('todos', {
       id:  {
           type: DataTypes.INTEGER,
           primaryKey: true,
@@ -30,7 +30,10 @@ module.exports = (sequelize, DataTypes) => {
           values: ['active','inactive'],
           defaultValue: 'active'
       },
-      complete: DataTypes.BOOLEAN
+      complete: DataTypes.BOOLEAN,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE
+
     },
     {
         timestamps        : true,
@@ -38,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     ToDo.associate = function(models) {
-        models.ToDo.belongsTo(models.maintain, {
+        models.todos.belongsTo(models.maintains, {
               onDelete: "CASCADE",
               foreignKey: {
                 allowNull: false

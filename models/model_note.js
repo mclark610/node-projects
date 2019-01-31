@@ -3,7 +3,7 @@
  */
 
 module.exports = (sequelize, DataTypes) => {
-    let Note = sequelize.define('note', {
+    let Note = sequelize.define('notes', {
       id:  {
           type: DataTypes.INTEGER,
           primaryKey: true,
@@ -27,11 +27,15 @@ module.exports = (sequelize, DataTypes) => {
           values: ['active','inactive'],
           defaultValue: 'active'
       },
-      complete: DataTypes.BOOLEAN
+      complete: DataTypes.BOOLEAN,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE
+
     });
 
     Note.associate = function(models) {
-        models.Note.belongsTo(models.maintain, {
+        
+        models.notes.belongsTo(models.maintains, {
               onDelete: "CASCADE",
               foreignKey: {
                 allowNull: false

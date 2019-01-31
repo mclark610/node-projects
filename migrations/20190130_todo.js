@@ -28,7 +28,9 @@ module.exports = {
           values: ['active','inactive'],
           defaultValue: 'active'
       },
-      complete: Sequelize.BOOLEAN
+      complete: Sequelize.BOOLEAN,
+      createdAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE
     });
   },
   down: (queryInterface, Sequelize) => {

@@ -3,7 +3,7 @@
  */
 
 module.exports = (sequelize, DataTypes) => {
-    let Part = sequelize.define('part', {
+    let Part = sequelize.define('parts', {
       id:  {
           type: DataTypes.INTEGER,
           primaryKey: true,
@@ -30,7 +30,10 @@ module.exports = (sequelize, DataTypes) => {
           values: ['active','inactive'],
           defaultValue: 'active'
       },
-      complete: DataTypes.BOOLEAN
+      complete: DataTypes.BOOLEAN,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE
+
     },
     {
         timestamps        : true,
@@ -38,7 +41,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Part.associate = function(models) {
-        models.Part.belongsTo(models.maintain, {
+        models.parts.belongsTo(models.maintains, {
               onDelete: "CASCADE",
               foreignKey: {
                 allowNull: false

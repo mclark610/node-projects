@@ -17,14 +17,17 @@ module.exports = (sequelize, DataTypes) => {
           values: ['active','inactive'],
           defaultValue: 'active'
       },
-      complete: DataTypes.BOOLEAN
+      complete: DataTypes.BOOLEAN,
+      createdAt: DataTypes.DATE,
+      updatedAt: DataTypes.DATE
+
     });
 
     Maintain.associate = function(models) {
           // associations can be defined here
-          models.maintain.hasMany(models.part);
-          models.maintain.hasMany(models.todo);
-          models.maintain.hasMany(models.note);
+          models.maintains.hasMany(models.parts);
+          models.maintains.hasMany(models.todos);
+          models.maintains.hasMany(models.notes);
     };
-    return maintain;
+    return Maintain;
 };
