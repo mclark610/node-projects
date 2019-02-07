@@ -33,7 +33,6 @@ module.exports = (sequelize, DataTypes) => {
       complete: DataTypes.BOOLEAN,
       createdAt: DataTypes.DATE,
       updatedAt: DataTypes.DATE
-
     },
     {
         timestamps        : true,
