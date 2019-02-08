@@ -2,14 +2,20 @@
   "name": "node-maintain",
   "version": "1.0.0",
   "description": "Backend to maintain maintenance",
-  "main": "server.js",
+  "private": true,
+  "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "dev": "cross-env NODE_ENV=development node dist/server.bundle.js",
+    "test": "mocha",
+    "build": "webpack --config webpack.config.js"
   },
   "keywords": [
     "node",
     "express",
-    "backend"
+    "backend",
+    "sequelize",
+    "webpack",
+    "cross-env"
   ],
   "author": "Mark",
   "license": "MIT",
@@ -22,5 +28,10 @@
     "path": "^0.12.7",
     "sequelize": "^4.42.0",
     "winston": "^3.2.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "webpack": "^4.29.3",
+    "webpack-cli": "^3.2.3"
   }
 }
