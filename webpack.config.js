@@ -18,12 +18,6 @@ module.exports = {
             /^lodash/
         ]
     })],
-    node: {
-        fs: 'empty',
-        tls: 'empty',
-        net: 'empty'
-    },
-
     output: {
         filename: 'server.bundle.js',
         path: path.resolve(__dirname,'dist'),
