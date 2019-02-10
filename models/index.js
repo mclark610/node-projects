@@ -28,22 +28,22 @@ db.Sequelize = Sequelize;
 
 //grab all model files and plop into an array
 fs.readdirSync("./models/")
-  .filter( file => file !== "index.js")
-  .forEach( file => {
-      models.push(require(path.join(__dirname,file)));
-  })
+    .filter( file => file !== "index.js")
+    .forEach( file => {
+        models.push(require(path.join(__dirname,file)));
+    });
 
 // load each model passing in sequelize and where to find datatypes
 _.each(models, (modelName) => {
     const model = modelName(sequelize,Sequelize);
     db[model.name] = model;
-})
+});
 
 // run each
 Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
+    }
 });
 
 module.exports = db;
