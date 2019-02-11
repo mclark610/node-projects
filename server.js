@@ -3,7 +3,7 @@ const logger  = require('./modules/logger');
 const db = require('./models/index.js');
 const _ = require('lodash');
 const models = require( './models');
-
+//TODO: add hot module replacement to webpack development
 
 db.sequelize
     .authenticate()
