@@ -2,37 +2,50 @@
 
 const fs = require('fs');
 const path = require('path');
+const _ = require('lodash');
+
 const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || 'development';
+
 const Config = require('config');
 
 const config  = Config.get('database');
 const options = Config.get('sequelize.options');
 const db = {};
-
-console.log("options: " + JSON.stringify(options));
-console.log("sqlconfig" + JSON.stringify(config));
+const models = [];
 
 let sequelize = new Sequelize(config.database, config.username, config.password, options);
-
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = sequelize['import'](path.join(__dirname, file));
-    db[model.name] = model;
-  });
-
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
-});
+/*
+//Webpack require.context : read in a directory - use regex for searches!
+const context = require.context('.', true, /^\.\/(?!index\.js).*\.js$/, 'sync')
+context.keys().map(context).forEach(module => {
+  const sequelizeModel = module(sequelize, Sequelize);
+  db[sequelizeModel.name] = sequelizeModel;
+})
+*/
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+//grab all model files and plop into an array
+fs.readdirSync("./models/")
+    .filter( file => file !== "index.js")
+    .forEach( file => {
+        let modelFile = path.join(__dirname,file);
+        console.log("modelFile: " + modelFile);
+        models.push( require(modelFile));
+    });
+
+// load each model passing in sequelize and where to find datatypes
+_.each(models, (modelName) => {
+    const model = modelName(sequelize,Sequelize);
+    db[model.name] = model;
+});
+
+// run each
+Object.keys(db).forEach(modelName => {
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
+    }
+});
 
 module.exports = db;

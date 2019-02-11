@@ -2,8 +2,6 @@
 
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const webpack = require('webpack')
 // node : the listed modules are built in to node.  webpack gets confused if
 //        they arent included in node
 // externals: webpack throws lots of errors for modules used in node_modules
@@ -23,10 +21,8 @@ module.exports = {
             /^lodash/
         ]
     })],
-    node: {
-        fs: 'empty',
-        tls: 'empty',
-        net: 'empty'
+    devServer: {
+        contentBase: './dist'
     },
     output: {
         filename: 'server.bundle.js',
