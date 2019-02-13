@@ -1,27 +1,7 @@
 const logger = require('../modules/logger');
-const db = require('../models/index.js');
 const models = require( '../models');
-const _ = require('lodash');
 
-db.sequelize
-    .authenticate()
-    .then(function() {
-        logger.info("sequelize: logged in successfully");
-        //Print available models
-//        _.each( models["maintains"],(results) => {
-//            logger.info("model<" + results + ">");
-//        });
-    })
-    .catch(function(err) {
-        logger.info("sequelize:error: <"+err+">");
-    })
-    .catch(db.sequelize.ConnectionTimedOutError, err => {
-        logger.info("Connection Timed out error loading: " + err.sql);
-    })
-    .catch(db.sequelize.TimeoutError, err => {
-        logger.info("Timeout error loading: " + err.sql);
-    });
-
+const { maintains } = models;
 
 let validateMaintain = (body) => {
     let results;
@@ -77,9 +57,11 @@ let fetchMaintain = (id) => {
         logger.info("fetchMaintain:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
-            models["maintains"].findByPk(id)
+
+            //models["maintains"].findByPk(id)
+            maintains.findByPk(id)
                 .then( (results) => {
-                    logger.info("results: " + JSON.stringify(results));
+                    logger.info("results findByPk: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
@@ -88,9 +70,10 @@ let fetchMaintain = (id) => {
                 });
         }
         else {
-            models["maintains"].findAll({})
+            //models["maintains"].findAll({})
+            maintains.findAll({})
                 .then( (results) => {
-                    logger.info("results: " + JSON.stringify(results));
+                    logger.info("results findAll: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
