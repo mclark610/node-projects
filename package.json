@@ -20,6 +20,7 @@
   "author": "Mark",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "config": "^3.0.1",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
