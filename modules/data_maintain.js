@@ -1,12 +1,20 @@
 const logger = require('../modules/logger');
 const models = require( '../models');
-
 const { maintains } = models;
 
-let validateMaintain = (body) => {
+let setStatus= (body) => {
+    // Check if id is number
+    if (( body["id"]) && !isNaN(parseInt(body["id"]))) {
+        if ( body["status"] == "active" || body["status"] == "inactive" ) {
+            return new maintains.update({"status":body["status"]}, {where: {"id": body["id"]}});
+        }
+    }
+};
+
+// TODO: needs work.  check for sql injection? 
+let validate = (body) => {
     let results;
     return new Promise((resolve,reject) => {
-        // TODO: empty JSON object reject
         if (!body) {
             results = {
                 "id": -1,
@@ -19,25 +27,12 @@ let validateMaintain = (body) => {
     });
 };
 
-let saveMaintain = (body) => {
-    return new Promise((resolve,reject) => {
-        logger.info("saveMaintain: " + JSON.stringify(body));
-        if ( body["id"] === -1) {
-            resolve("save new record");
-        }
-        else {
-            resolve("update existing record");
-        }
-        reject("nothing");
-
-    });
-};
-
-let insertMaintain = (body) => {
+// manually tested: success
+let insert = (body) => {
     return new Promise( (resolve,reject) => {
-        validateMaintain(body)
+        validate(body)
             .then((results) => {
-                saveMaintain(results)
+                maintains.create(results)
                     .then( (id) => {
                         resolve( `
                             "id": ${id},
@@ -46,26 +41,26 @@ let insertMaintain = (body) => {
                     });
             })
             .catch((err) => {
-                logger.info("validateMaintain failed with " + err);
+                logger.info("insertMaintain: validateMaintain failed with " + err);
                 reject(err);
             });
     });
 };
 
-let fetchMaintain = (id) => {
+// tested manually works with id and no id
+let fetch = (id) => {
     return new Promise( (resolve,reject) => {
         logger.info("fetchMaintain:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
-
             //models["maintains"].findByPk(id)
             maintains.findByPk(id)
                 .then( (results) => {
-                    logger.info("results findByPk: " + JSON.stringify(results));
+                    logger.info("fetchMaintain:findAll: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("models[maintains] error: " + err);
+                    logger.info("fetchMaintain:findByPk error: " + err);
                     reject(err);
                 });
         }
@@ -73,18 +68,63 @@ let fetchMaintain = (id) => {
             //models["maintains"].findAll({})
             maintains.findAll({})
                 .then( (results) => {
-                    logger.info("results findAll: " + JSON.stringify(results));
+                    logger.info("fetchMaintain:findAll: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("models[maintains] error: " + err);
+                    logger.info("fetchMaintain:findAll error: " + err);
                     reject(err);
                 });
         }
     });
 };
 
+// tested manually - works
+let update = (body) => {
+    return new Promise( (resolve,reject) => {
+        logger.info("update: body: " + JSON.stringify(body));
+        validate(body)
+            .then( (valbody) => {
+                maintains.update(valbody, {where: {"id": body["id"]}
+                })
+                    .then( (results) => {
+                        logger.info("updateMaintain:results: " + results);
+                        resolve(results);
+                    })
+                    .catch( (err) => {
+                        logger.error("updateMaintain:error: " + err );
+                        reject(err);
+                    });
+            })
+            .catch( (err) => {
+                logger.error("updateMaintain: validateMaintain: error: " + err );
+                reject(err);
+            });
+    });
+};
+
+// TODO: Need validation
+// tested manually without validation works
+let deleteMaintain = (id) => {
+    return new Promise( (resolve, reject) => {
+        maintains.findByPk(id)
+            .then( (results) => {
+                return results.destroy();
+            })
+            .then( () => {
+                resolve("deleteMaintain: deleted id: " + id);
+            })
+            .catch( (err) => {
+                logger.info("deleteMaintain:findByPk error: " + err);
+                reject(err);
+            });
+    });
+};
+
 module.exports = {
-    insertMaintain,
-    fetchMaintain
+    insert,
+    fetch,
+    setStatus,
+    update,
+    deleteMaintain
 };
