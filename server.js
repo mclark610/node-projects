@@ -6,6 +6,7 @@ const logger  = require('./modules/logger');
 const PORT =3000;
 
 const maintain = require('./router/maintain');
+const part = require('./router/part');
 
 let app = express();
 
@@ -28,6 +29,7 @@ let loadUser = (req,res,next) => {
 app.all('*',requireAuthentication,loadUser);
 
 app.use('/maintain',maintain);
+app.use('/part',part);
 
 app.listen(PORT, () => {
     logger.info(`LISTEN: started on port ${PORT}`);

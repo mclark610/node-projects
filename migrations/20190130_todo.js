@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      maintain_id: {
+      maintainId: {
           type: Sequelize.INTEGER,
           onDelete: "CASCADE",
           allowNull: false,
