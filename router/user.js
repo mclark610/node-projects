@@ -2,24 +2,20 @@ const express = require('express');
 const router = express.Router();
 
 const logger = require('../modules/logger.js');
-const maintain = require('../modules/data_maintain.js');
+const user = require('../modules/data_user.js');
+
+// TODO: create /user/destroy to destroy session
+
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    // Check user is logged in.
-    logger.info("maintain use called");
-    logger.info("------------------ use -------------------------------------");
-    logger.info("req.session.cookie: " + JSON.stringify(req.session.cookie));
-    logger.info("req.session: " + JSON.stringify(req.session));
-    logger.info("------------------------------------------------------------");
-
+    logger.info("user use called");
     next();
-
 });
 
 router.put('/set-active', (req,res) => {
 
-    maintain.setStatus(req.body)
+    user.setStatus(req.body)
         .then( (results) => {
             logger.info("router.post /set-active: results:  " + results);
             res.send("set-active: " + results);
@@ -30,10 +26,10 @@ router.put('/set-active', (req,res) => {
         });
 });
 
-// delete tested with maintain deletion only. works
+// delete tested with part deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
 
-    maintain.deleteMaintain(req.params["id"])
+    user.deleteUser(req.params["id"])
         .then( (results) => {
             logger.info("delete: " + req.params["id"] + "--- " + results);
             res.send("router.delete this stuff!: " + req.params["id"]);
@@ -43,21 +39,9 @@ router.delete('/:id(\\d+)', (req,res) => {
         });
 });
 
-router.get('/:id(\\d+)?', function (req,res) {
-    if ( req.session.views) {
-        req.session.views++;
-    }
-    else {
-        req.session.views = 1;
-    }
-    req.session.save();
-    logger.info("====================== get ================================")
-    logger.info("maintain: number of calls: "+ req.session.views);
-//    logger.info("req.session.cookie: " + JSON.stringify(req.session.cookie));
-    logger.info("req.session: " + JSON.stringify(req.session));
-    logger.info("===========================================================")
+router.get('/:id(\\d+)?', function (req, res) {
 
-    maintain.fetch(req.params["id"])
+    user.fetch(req.params["id"])
         .then( (results) => {
             logger.info("results: " + results);
             res.send(results);
@@ -71,28 +55,48 @@ router.get('/:id(\\d+)?', function (req,res) {
 
 router.put('/', (req,res) => {
     // update
-    maintain.update(req.body)
+    user.update(req.body)
         .then( (results) => {
             logger.log("info","results: " + results);
             res.send(results);
         })
         .catch( (err) => {
-            logger.info("maintain catch err: " + err);
+            logger.info("part catch err: " + err);
             res.send(err);
         });
 });
 
-// post maintenance
-router.post('/', function (req, res) {
-    maintain.insert(req.body)
+// post user
+router.post('/register', function (req, res) {
+    user.insert(req.body)
         .then( (results) => {
             logger.log("info","results: " + results);
             res.send(results);
         })
         .catch( (err) => {
-            logger.info("maintain catch err: " + err);
+            logger.info("part catch err: " + err);
             res.send(err);
         });
+});
+
+router.post('/login', function (req, res) {
+    logger.info("user/login called---user: " );
+    logger.info("sessionID: " + req.sessionID);
+    logger.info("session.id: " +req.session.id);
+    logger.info("session cookie: " + JSON.stringify(req.session.cookie));
+    logger.info("session.user before: " + req.session.user);
+    logger.info("store: " + JSON.stringify(req.session));
+
+    user.fetchByNamePassword(req.body["name"],req.body["password"])
+        .then( (results) => {
+            logger.info("results good: time to " + results);
+            res.send(results);
+        })
+        .catch( (err) => {
+            logger.info("results err: " + err);
+            res.send(err);
+        });
+
 });
 
 module.exports = router;
