@@ -6,15 +6,37 @@ const maintain = require('../modules/data_maintain.js');
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
+    let option;
     // Check user is logged in.
     logger.info("maintain use called");
     logger.info("------------------ use -------------------------------------");
-    logger.info("req.session.cookie: " + JSON.stringify(req.session.cookie));
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    next();
+    if (req.session["user"] && req.session["key"]) {
+        option = {
+            status: "success",
+            user: req.session["user"],
+            key:  req.session["key"]
+        };
+        logger.info("option: " + option);
 
+        next();
+    }
+    else {
+        logger.info("user and key not found in session");
+        option = {
+            status: "fail",
+            user: (req.session["user"] ? req.session["user"] : ""),
+            key : (req.session["key "] ? req.session["key"] : "")
+        };
+        res.send(option);
+    }
+
+    //works
+    //    if (!req.session["user"] ) {
+    //        res.sendFile('/src/node-maintain/public/view/test.html');
+    //    }
 });
 
 router.put('/set-active', (req,res) => {
@@ -51,11 +73,11 @@ router.get('/:id(\\d+)?', function (req,res) {
         req.session.views = 1;
     }
     req.session.save();
-    logger.info("====================== get ================================")
+    logger.info("====================== get ================================");
     logger.info("maintain: number of calls: "+ req.session.views);
-//    logger.info("req.session.cookie: " + JSON.stringify(req.session.cookie));
+    //logger.info("req.session.cookie: " + JSON.stringify(req.session.cookie));
     logger.info("req.session: " + JSON.stringify(req.session));
-    logger.info("===========================================================")
+    logger.info("===========================================================");
 
     maintain.fetch(req.params["id"])
         .then( (results) => {
@@ -67,6 +89,7 @@ router.get('/:id(\\d+)?', function (req,res) {
             res.send(err);
 
         });
+
 });
 
 router.put('/', (req,res) => {

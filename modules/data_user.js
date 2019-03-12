@@ -49,6 +49,7 @@ let insert = (body) => {
 };
 
 // tested manually works with id and no id
+// returns empty array if user/password not found
 let fetchByNamePassword = (name,password) => {
     return new Promise( (resolve,reject) => {
         logger.info("user:fetchByNamePassword:name: " + name + "---password: " + password);

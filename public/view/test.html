@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Temporary Test Screen</title>
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+</head>
+<body>
+    <form id="collection" name="collection" action="#">
+        <input id="username" name="username" type="text" placeholder="mclark" value="mclark"/><br/>
+        <input id="password" name="password" type="text" placeholder="password" value="password"/><br/>
+        <input id="key" name="key" type="text" placeholder="key" value="1552226499311"/><br/>
+        <input id="btn-login" name="btn-login" type="button" value="POST LOGIN"/><br/>
+        <input id="btn-check" name="btn-check" type="button" value="GET CHECK"/><br/>
+        <input id="btn-logout" name="btn-logout" type="button" value="POST LOGOUT"/><br/>
+        <input id="btn-maintain-list" name="btn-maintain-list" type="button" value="GET MAINTAIN LIST"/><br/>
+        <div id="result" name="result"></div>
+    </form>
+</body>
+
+<script src="/js/jquery.min.js"></script>
+<script>
+
+$(document).ready( function() {
+    $(window).on("load", function() {
+        console.log("windows is ok");
+    });
+
+    $('#collection').submit(function(event) {
+        event.preventDefault();
+        alert("Submitted");
+    });
+
+    $("#btn-maintain-list").on("click", function() {
+        $('#collection').submit();
+        console.log("maintain-list");
+        $.ajax({
+           type: "GET",
+           url: "/maintain",
+           dataType:"json",
+           crossDomain: true,
+           jsonp: false,
+           data: {
+               id: 2
+           },
+           done: function() {
+               console.log("btn-login done called");
+           },
+           error: function (xhr, status) {
+               console.log("xhr: " + JSON.stringify(xhr));
+           },
+           success: function(response){
+               //if request if made successfully then the response represent the data
+               console.log("btn-login: response: " + JSON.stringify(response));
+               //$( "#result" ).empty().append( response );
+           }
+         })
+    });
+    $("#btn-login").on("click", function() {
+        $('#collection').submit();
+        console.log("login click");
+
+        let username = $("#collection #username").val();
+        let password = $("#collection #password").val();
+
+        console.log("username: "+ username);
+        console.log("password: " + password);
+
+        $.ajax({
+           type: "POST",
+           url: "/user/login",
+           dataType:"json",
+           crossDomain: true,
+           jsonp: false,
+           data: {
+               username: $("#collection #username").val(),
+               password: $("#collection #password").val()
+           },
+           done: function() {
+               console.log("btn-login done called");
+               window.location.reload(true);
+           },
+           error: function (xhr, status) {
+               console.log("xhr: " + JSON.stringify(xhr));
+           },
+           success: function(response){
+               //if request if made successfully then the response represent the data
+               console.log("btn-login: response: " + JSON.stringify(response));
+               //$( "#result" ).empty().append( response );
+
+           }
+       });
+
+    });
+
+    $("#btn-status").on("click", function() {
+        console.log("status click");
+        $.ajax({
+           type: "POST",
+           url: "/user/status",
+           dataType:"json",
+           crossDomain: true,
+           jsonp: false,
+           data: {
+               username: $("#collection #username").val(),
+               key: $("#collection #key").val()
+           },
+           done: function() {
+               console.log("btn-login done called");
+               window.location.reload(true);
+           },
+           error: function (xhr, status) {
+               console.log("xhr: " + JSON.stringify(xhr));
+           },
+           success: function(response){
+               //if request if made successfully then the response represent the data
+               console.log("btn-login: response: " + JSON.stringify(response));
+               //$( "#result" ).empty().append( response );
+
+           }
+       });
+
+    });
+
+    $("#btn-check").on("click", function() {
+        console.log("status click");
+        $.ajax({
+           type: "POST",
+           url: "/user/check",
+           dataType:"json",
+           crossDomain: true,
+           jsonp: false,
+           data: {
+               username: $("#collection #username").val(),
+               key: $("#collection #key").val()
+           },
+           done: function() {
+               console.log("btn-login done called");
+               window.location.reload(true);
+           },
+           error: function (xhr, status) {
+               console.log("xhr: " + JSON.stringify(xhr));
+           },
+           success: function(response){
+               //if request if made successfully then the response represent the data
+               console.log("btn-login: response: " + JSON.stringify(response));
+               //$( "#result" ).empty().append( response );
+           }
+       });
+
+    });
+
+    $("#btn-logout").on("click", function() {
+        console.log("logout click");
+        $.ajax({
+           type: "POST",
+           url: "/user/logout",
+           dataType:"json",
+           crossDomain: true,
+           jsonp: false,
+           data: {
+               username: $("#collection #username").val(),
+               password: $("#collection #password").val()
+           },
+           done: function() {
+               console.log("btn-login done called");
+               window.location.reload(true);
+           },
+           error: function (xhr, status) {
+               console.log("xhr: " + JSON.stringify(xhr));
+           },
+           success: function(response){
+               //if request if made successfully then the response represent the data
+               console.log("btn-login: response: " + JSON.stringify(response));
+               //$( "#result" ).empty().append( response );
+           }
+       });
+    });
+});
+</script>
+</html>
