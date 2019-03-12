@@ -5,13 +5,14 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const logger  = require('./modules/logger');
 const uuid = require('uuid');
-
+const path = require('path');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 
 let client = redis.createClient();
 
 const PORT =3000;
+
 
 const maintain = require('./router/maintain');
 const part = require('./router/part');
@@ -39,6 +40,11 @@ let configSession = {
 };
 
 let app = express();
+const cors = require('cors');
+app.use(cors({origin: '*'}));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 // dev or production:
 logger.info("env: " + app.get('env'));
@@ -49,17 +55,25 @@ if ( app.get('env') === 'production') {
 
 app.use(session(configSession));
 
+// temporary no affect to jquery error yet
+app.use(express.static(path.join(__dirname, 'public')));
+logger.info("dirname: " + __dirname);
 // init cookies in redis and user if server went down
 app.use((req,res,next) => {
-    logger.info("app.js use: " );
+    logger.info("server use called: " );
     next();
 });
+app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
     extended: false
 }));
 
-app.use(bodyParser.json());
+
+app.use('/test', (req,res) => {
+    logger.info("server / called test.html at: " +__dirname+'/public/view/test.html');
+    res.sendFile(__dirname+'/public/view/test.html');
+});
 
 app.use('/maintain',maintain);
 app.use('/part',part);

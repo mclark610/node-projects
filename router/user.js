@@ -9,7 +9,8 @@ const user = require('../modules/data_user.js');
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    logger.info("user use called");
+    logger.info("user use called: ");
+
     next();
 });
 
@@ -79,24 +80,114 @@ router.post('/register', function (req, res) {
         });
 });
 
-router.post('/login', function (req, res) {
+router.post('/check', function (req, res) {
+    logger.info("===========================================================");
     logger.info("user/login called---user: " );
     logger.info("sessionID: " + req.sessionID);
     logger.info("session.id: " +req.session.id);
     logger.info("session cookie: " + JSON.stringify(req.session.cookie));
+    logger.info("session.user: " + req.session["user"]);
+    logger.info("store: " + JSON.stringify(req.session));
+    logger.info("===========================================================");
+
+    res.send(req.session);
+});
+
+router.post('/login', function (req, res) {
+    let output = {
+        status: "false",
+        user: "",
+        key: ""
+    };
+    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    logger.info("user/login called---user: " );
+    logger.info("  sessionID   : " + req.sessionID);
+    logger.info("  session     : " + JSON.stringify(req.session));
+    logger.info("  password    : " + req.body["password"]);
+    logger.info("  session key : " + req.session["key"]);
+    // is user already logged in?
+    // if user name matches in cookie
+    // and if user key matches in cookie
+    // then ignore existing login request
+    if (!req.session["key"]) {
+        user.fetchByNamePassword(req.body["username"],req.body["password"])
+            .then( (results) => {
+                logger.info("  login:fetchByNamePassword: " + JSON.stringify(results));
+                req.session.cookie["user"] = req.body["username"];
+                req.session["user"] = req.body["username"];
+                if ( results.length > 0) {
+
+                    req.session["key"]  = new Date().getTime();
+                    output = {
+                        status: "success",
+                        user: req.session["user"],
+                        key: req.session["key"]
+                    };
+                    logger.info("  End of fetch sessionID  : " + req.sessionID);
+                    logger.info("  End of fetch session    : " + JSON.stringify(req.session));
+                    logger.info("  End of fetch password   : " + req.body["password"]);
+                    logger.info("  End of fetch cookie key : " + JSON.stringify(req.session.key));
+                    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++");
+                    res.send(output);
+                }
+                else {
+                    output = {
+                        status: "failed",
+                        user: req.session["user"],
+                        key: ""
+                    };
+                    res.send(output);
+                }
+            })
+            .catch( (err) => {
+                logger.info("results err: " + err);
+                output = {
+                    status: "failed: " + JSON.stringify(err),
+                    user: req.session["user"],
+                    key: ""
+                };
+                res.send(output);
+            });
+    }
+    else {
+        logger.info("  login: session cookie key already exists");
+        output = {
+            status: "failed: already logged in",
+            user: req.session["user"],
+            key: req.session["key"]
+        };
+        res.send(output);
+    }
+});
+
+router.post('/logout', function(req,res) {
+    let output = {
+        status: "failed: ",
+        user: req.session["user"],
+        key: req.session["key"]
+    };
+    logger.info("user/logout called---user");
+    logger.info("sessionID: " + req.sessionID);
+
+    logger.info("session before: " + JSON.stringify(req.session));
     logger.info("session.user before: " + req.session.user);
     logger.info("store: " + JSON.stringify(req.session));
 
-    user.fetchByNamePassword(req.body["name"],req.body["password"])
-        .then( (results) => {
-            logger.info("results good: time to " + results);
-            res.send(results);
-        })
-        .catch( (err) => {
-            logger.info("results err: " + err);
-            res.send(err);
-        });
-
+    req.session.destroy( (err) => {
+        if (err) {
+            logger.error("user:logout:destroy failed with error: " + JSON.stringify(err));
+            output["status"] = "fail: " + JSON.stringify(err);
+        }
+        else {
+            logger.info("user:logout success");
+            output = {
+                status: "success: ",
+                user: "",
+                key: ""
+            };
+        }
+        res.send(output);
+    });
 });
 
 module.exports = router;
