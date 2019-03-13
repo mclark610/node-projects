@@ -2,13 +2,14 @@ const express = require('express');
 const router = express.Router();
 
 const logger = require('../modules/logger.js');
-const maintain = require('../modules/data_maintain.js');
+const todo = require('../modules/data_todo');
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
+    logger.info("todo use called");
     let option;
     // Check user is logged in.
-    logger.info("maintain use called");
+    logger.info("todo use called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
@@ -17,26 +18,26 @@ router.use((req,res,next) => {
         option = {
             status: "success",
             user: req.session["user"],
-            key:  req.session["key"]
+            key:  req.session["key"],
         };
-        logger.info("option: " + option);
+        logger.info("option: " + JSON.stringify(option));
 
         next();
     }
     else {
-        logger.info("user and key not found in session");
         option = {
             status: "fail",
             user: (req.session["user"] ? req.session["user"] : ""),
             key : (req.session["key "] ? req.session["key"] : "")
         };
+        logger.info("option in fail: " + JSON.stringify(option));
         res.send(option);
     }
 });
 
 router.put('/set-active', (req,res) => {
 
-    maintain.setStatus(req.body)
+    todo.setStatus(req.body)
         .then( (results) => {
             logger.info("router.post /set-active: results:  " + results);
             res.send("set-active: " + results);
@@ -47,10 +48,10 @@ router.put('/set-active', (req,res) => {
         });
 });
 
-// delete tested with maintain deletion only. works
+// delete tested with todo deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
 
-    maintain.deleteMaintain(req.params["id"])
+    todo.deletetodo(req.params["id"])
         .then( (results) => {
             logger.info("delete: " + req.params["id"] + "--- " + results);
             res.send("router.delete this stuff!: " + req.params["id"]);
@@ -60,21 +61,9 @@ router.delete('/:id(\\d+)', (req,res) => {
         });
 });
 
-router.get('/:id(\\d+)?', function (req,res) {
-    if ( req.session.views) {
-        req.session.views++;
-    }
-    else {
-        req.session.views = 1;
-    }
-    req.session.save();
-    logger.info("====================== get ================================");
-    logger.info("maintain: number of calls: "+ req.session.views);
-    //logger.info("req.session.cookie: " + JSON.stringify(req.session.cookie));
-    logger.info("req.session: " + JSON.stringify(req.session));
-    logger.info("===========================================================");
+router.get('/:id(\\d+)?', function (req, res) {
 
-    maintain.fetch(req.params["id"])
+    todo.fetch(req.params["id"])
         .then( (results) => {
             logger.info("results: " + results);
             res.send(results);
@@ -84,31 +73,30 @@ router.get('/:id(\\d+)?', function (req,res) {
             res.send(err);
 
         });
-
 });
 
 router.put('/', (req,res) => {
     // update
-    maintain.update(req.body)
+    todo.update(req.body)
         .then( (results) => {
             logger.log("info","results: " + results);
             res.send(results);
         })
         .catch( (err) => {
-            logger.info("maintain catch err: " + err);
+            logger.info("todo catch err: " + err);
             res.send(err);
         });
 });
 
-// post maintenance
+// post todo
 router.post('/', function (req, res) {
-    maintain.insert(req.body)
+    todo.insert(req.body)
         .then( (results) => {
-            logger.log("info","results: " + results);
+            logger.log("info","results: " + JSON.stringify(results));
             res.send(results);
         })
         .catch( (err) => {
-            logger.info("maintain catch err: " + err);
+            logger.info("todo catch err: " + err);
             res.send(err);
         });
 });

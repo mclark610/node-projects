@@ -100,9 +100,11 @@ router.post('/login', function (req, res) {
         key: ""
     };
     logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++");
-    logger.info("user/login called---user: " );
+    logger.info("user/login called---session info below " );
     logger.info("  sessionID   : " + req.sessionID);
     logger.info("  session     : " + JSON.stringify(req.session));
+    logger.info("  body        : " + JSON.stringify(req.body));
+    logger.info("  user        : " + req.body["username"]);
     logger.info("  password    : " + req.body["password"]);
     logger.info("  session key : " + req.session["key"]);
     // is user already logged in?
@@ -113,6 +115,7 @@ router.post('/login', function (req, res) {
         user.fetchByNamePassword(req.body["username"],req.body["password"])
             .then( (results) => {
                 logger.info("  login:fetchByNamePassword: " + JSON.stringify(results));
+
                 req.session.cookie["user"] = req.body["username"];
                 req.session["user"] = req.body["username"];
                 if ( results.length > 0) {
