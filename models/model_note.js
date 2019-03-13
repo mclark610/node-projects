@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        maintain_id: {
+        maintainId: {
             type: DataTypes.INTEGER,
             onDelete: "CASCADE",
             allowNull: false,
