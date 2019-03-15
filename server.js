@@ -86,3 +86,5 @@ app.use('/note',note);
 app.listen(PORT, () => {
     logger.info(`LISTEN: started on port ${PORT}`);
 });
+
+module.exports=app;
