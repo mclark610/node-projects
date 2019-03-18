@@ -9,15 +9,6 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        maintainId: {
-            type: DataTypes.INTEGER,
-            onDelete: "CASCADE",
-            allowNull: false,
-            references: {
-                model: 'maintains',
-                key: 'id'
-            }
-        },
         name:   DataTypes.STRING(128),
         part_nbr: DataTypes.STRING(48),
         price: DataTypes.DECIMAL(8,2),
@@ -40,11 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Part.associate = function(models) {
-        models.parts.belongsTo(models.maintains, {
-            onDelete: "CASCADE",
-            foreignKey: {
-                allowNull: false
-            }
+        models.parts.belongsToMany(models.maintains, {
+            through: 'maintain_parts',
+            foreignKey: 'partId'
         });
     };
     return Part;

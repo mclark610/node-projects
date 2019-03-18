@@ -11,12 +11,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         maintainId: {
             type: DataTypes.INTEGER,
-            onDelete: "CASCADE",
-            allowNull: false,
-            references: {
-                model: 'maintains',
-                key: 'id'
-            }
         },
         name:   DataTypes.STRING(128),
         description: DataTypes.TEXT,
@@ -40,12 +34,8 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     ToDo.associate = function(models) {
-        models.todos.belongsTo(models.maintains, {
-            onDelete: "CASCADE",
-            foreignKey: {
-                allowNull: false
-            }
-        });
+        models.todos.belongsTo(models.maintains);
     };
+
     return ToDo;
 };

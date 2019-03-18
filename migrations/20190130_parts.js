@@ -8,15 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      maintainId: {
-          type: Sequelize.INTEGER,
-          onDelete: "CASCADE",
-          allowNull: false,
-          references: {
-            model: 'maintains',
-            key: 'id'
-          }
-      },
       name:   Sequelize.STRING(128),
       part_nbr: Sequelize.STRING(48),
       price: Sequelize.DECIMAL(8,2),

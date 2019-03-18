@@ -9,15 +9,6 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true
         },
-        maintain_id: {
-            type: DataTypes.INTEGER,
-            onDelete: "CASCADE",
-            allowNull: false,
-            references: {
-                model: 'maintains',
-                key: 'id'
-            }
-        },
         name:   DataTypes.STRING(128),
         description: DataTypes.TEXT,
         image_filename: DataTypes.STRING(255),
@@ -34,12 +25,11 @@ module.exports = (sequelize, DataTypes) => {
 
     Note.associate = function(models) {
 
-        models.notes.belongsTo(models.maintains, {
-            onDelete: "CASCADE",
-            foreignKey: {
-                allowNull: false
-            }
+        models.notes.belongsToMany(models.maintains, {
+            through: 'maintain_notes',
+            foreignKey: 'noteId'
         });
+
     };
     return Note;
 };

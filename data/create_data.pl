@@ -1,8 +1,11 @@
-#!/usr/bin/perl 
+#!/usr/bin/perl
 #-------------------------------------------------------------
 # create_data creates test data for maintain,parts,todo,notes
 # table in maintain database.  sql inserts are returned.
 # ------------------------------------------------------------
+# TODO: add maintain_part table
+# TODO: create random created date
+
 use strict;
 use warnings;
 
@@ -11,7 +14,7 @@ use Data::Dumper qw(Dumper);
 
 
 use Text::Lorem;
- 
+
 my $text = Text::Lorem->new();
 
 
@@ -35,7 +38,7 @@ sub fillMaintain {
         $pos++;
 
 my $line = <<"END_LINE";
-insert into maintain (id,name,description,status,complete,createdAt) 
+insert into maintain (id,name,description,status,complete,createdAt)
 values(
     $pos,
     '$name',
@@ -48,7 +51,7 @@ END_LINE
 
 	push(@arr,$line);
     }
-    
+
     return @arr;
 }
 
@@ -60,17 +63,16 @@ sub fillTodo {
     for(my $pos=0;$pos<$maxTodo;$pos++) {
         my $name = $text->words(int(rand(3)));
         my $maintainId=int(rand($maxMaintainId));
-	my $desc = $text->paragraphs(1);
-	my $sts  ="active";
-	my $complete ="false";
-	my $createdAt = "2019-01-17";
+    	my $desc = $text->paragraphs(1);
+    	my $sts  ="active";
+    	my $complete ="false";
+    	my $createdAt = "2019-01-17";
 
 my $line = <<"END_LINE";
-insert into todo (id,name,maintainID,description,status,complete,createdAt) 
+insert into todo (id,name,description,status,complete,createdAt)
 values(
     $pos,
     '$name',
-    $maintainId,
     '$desc',
     '$sts',
     '$complete',
@@ -84,7 +86,7 @@ END_LINE
     return @arr;
 }
 
-  
+
 sub fillPart {
     my $maxParts=45;
     my @arr;
@@ -92,7 +94,6 @@ sub fillPart {
 
     for(my $pos=0;$pos<$maxParts;$pos++) {
         my $name = $text->words(int(rand(3)));
-        my $maintainId=int(rand($maxMaintainId));
 	my $desc = $text->paragraphs(1);
 	my $price=sprintf("%.2f",rand(25.00));
 	my $vendor=$text->words(int(rand(2)));
@@ -101,11 +102,10 @@ sub fillPart {
 	my $createdAt = "2019-01-17";
 
 my $line = <<"END_LINE";
-insert into part (id,name,maintainID,description,price,vendor,status,complete,createdAt) 
+insert into part (id,name,description,price,vendor,status,complete,createdAt)
 values(
     $pos,
     '$name',
-    $maintainId,
     '$desc',
     $price,
     '$vendor',
@@ -116,7 +116,7 @@ values(
 END_LINE
 
 	push(@arr,$line);
-    } 
+    }
     return @arr;
 }
 
@@ -127,14 +127,13 @@ sub fillNote {
 
     for(my $pos=0;$pos<$maxNotes;$pos++) {
         my $name = $text->words(int(rand(3)));
-        my $maintainId=int(rand($maxMaintainId));
-	my $desc = $text->paragraphs(1);
-	my $sts  ="active";
-	my $complete ="false";
-	my $createdAt = "2019-01-17";
+    	my $desc = $text->paragraphs(1);
+    	my $sts  ="active";
+    	my $complete ="false";
+    	my $createdAt = "2019-01-17";
 
 my $line = <<"END_LINE";
-insert into part (id,name,maintainID,description,status,complete,createdAt) 
+insert into part (id,name,maintainID,description,status,complete,createdAt)
 values(
     $pos,
     '$name',
@@ -146,16 +145,15 @@ values(
 );
 END_LINE
 
-	push(@arr,$line);
-    } 
- 
+    	push(@arr,$line);
+    }
+
     return @arr;
 }
+
 # -------------------------------------------------
 # main
 # -------------------------------------------------
-
-print "Hey Mark! Long time no see!\n";
 
 #print "meta: ",$meta->name(),"\n";
 
@@ -171,5 +169,3 @@ print @part;
 print @note;
 
 __END__
-
-

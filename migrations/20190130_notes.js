@@ -8,15 +8,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      maintain_id: {
-          type: Sequelize.INTEGER,
-          onDelete: "CASCADE",
-          allowNull: false,
-          references: {
-            model: 'maintains',
-            key: 'id'
-          }
-      },
       name:   Sequelize.STRING(128),
       description: Sequelize.TEXT,
       image_filename: Sequelize.STRING(255),
