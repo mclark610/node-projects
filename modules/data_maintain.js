@@ -11,7 +11,7 @@ let setStatus= (body) => {
     }
 };
 
-// TODO: needs work.  check for sql injection? 
+// TODO: needs work.  check for sql injection?
 let validate = (body) => {
     let results;
     return new Promise((resolve,reject) => {
@@ -56,7 +56,7 @@ let fetch = (id) => {
             //models["maintains"].findByPk(id)
             maintains.findByPk(id)
                 .then( (results) => {
-                    logger.info("fetchMaintain:findAll: success: " + JSON.stringify(results));
+                    logger.info("fetchMaintain:findByPk: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
