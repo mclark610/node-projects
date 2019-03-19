@@ -1,6 +1,6 @@
 const logger = require('../modules/logger');
 const models = require( '../models');
-const { maintains } = models;
+const { maintains,parts,notes,todos } = models;
 
 let setStatus= (body) => {
     // Check if id is number
@@ -54,7 +54,18 @@ let fetch = (id) => {
         // look for -1 for all or > -1 for one
         if (id) {
             //models["maintains"].findByPk(id)
-            maintains.findByPk(id)
+            maintains.findByPk(id, {
+                include: [{
+                    model: parts,
+                    as: 'parts'
+                },{
+                    model: notes,
+                    as: 'notes'
+                },{
+                    model: todos,
+                    as: 'todos'
+                }],
+            })
                 .then( (results) => {
                     logger.info("fetchMaintain:findByPk: success: " + JSON.stringify(results));
                     resolve(results);

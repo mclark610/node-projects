@@ -1,15 +1,11 @@
-/*
- * maintain_note table is the main maintenance table.
- */
-
+'use strict';
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define('maintain_note', {
-        maintain_id: DataTypes.INTEGER,
-        note_id: DataTypes.INTEGER
-    },
-    {
-        timestamps        : false,
-        tableName         : 'maintain_note',
-    }
-);
-}
+  const maintain_note = sequelize.define('maintain_note', {
+    maintainId: DataTypes.INTEGER,
+    noteId: DataTypes.INTEGER
+  }, {});
+  maintain_note.associate = function(models) {
+    // associations can be defined here
+  };
+  return maintain_note;
+};

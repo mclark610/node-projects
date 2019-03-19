@@ -9,13 +9,10 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       maintainId: {
-          type: Sequelize.INTEGER,
-          onDelete: "CASCADE",
-          allowNull: false,
-          references: {
-            model: 'maintains',
-            key: 'id'
-          }
+        type: Sequelize.INTEGER
+      },
+      todo_order: {
+          type: Sequelize.INTEGER
       },
       name:   Sequelize.STRING(128),
       description: Sequelize.TEXT,
