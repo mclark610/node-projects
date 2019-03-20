@@ -10,6 +10,5 @@ module.exports = (sequelize, DataTypes) => {
     {
         timestamps        : false,
         tableName         : 'maintain_todo',
-    }
-);
-}
+    });
+};

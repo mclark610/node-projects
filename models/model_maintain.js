@@ -24,18 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Maintain.associate = function(models) {
-        // associations can be defined here
-        models.maintains.belongsToMany(models.parts, {
-            through: 'maintain_parts',
-            foreignKey: 'maintainId',
-            as: 'parts'
-        });
-        models.maintains.belongsToMany(models.notes, {
-            through: 'maintain_notes',
-            foreignKey: 'maintainId',
-            as: 'notes'
-        });
-        
+
         models.maintains.hasMany(models.todos);
 
     };

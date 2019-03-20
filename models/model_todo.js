@@ -34,7 +34,23 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     ToDo.associate = function(models) {
-        models.todos.belongsTo(models.maintains);
+        models.todos.hasOne(models.maintains, {
+            through: 'maintains',
+            foreignKey: 'maintainId'
+        });
+        // associations can be defined here
+
+        models.todos.belongsToMany(models.parts, {
+            through: 'todo_parts',
+            foreignKey: 'todoId',
+            as: 'parts'
+        });
+        models.todos.belongsToMany(models.notes, {
+            through: 'todo_notes',
+            foreignKey: 'todoId',
+            as: 'notes'
+        });
+
     };
 
     return ToDo;

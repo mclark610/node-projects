@@ -62,7 +62,7 @@ router.delete('/:id(\\d+)', (req,res) => {
 });
 
 router.get('/:id(\\d+)?', function (req, res) {
-
+    logger.info("todo: id: " + req.params["id"] );
     todo.fetch(req.params["id"])
         .then( (results) => {
             logger.info("results: " + results);
@@ -71,7 +71,6 @@ router.get('/:id(\\d+)?', function (req, res) {
         .catch( (err) => {
             logger.info("err: " + err);
             res.send(err);
-
         });
 });
 

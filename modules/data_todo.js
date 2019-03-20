@@ -1,6 +1,6 @@
 const logger = require('../modules/logger');
 const models = require( '../models');
-const { todos } = models;
+const { todos, parts, notes,maintains } = models;
 
 let setStatus= (body) => {
     // Check if id is number
@@ -49,18 +49,65 @@ let insert = (body) => {
     });
 };
 
-// tested manually works with id and no id
 let fetch = (id) => {
     return new Promise( (resolve,reject) => {
-        logger.info("fetchMaintain:id: " + id);
+        logger.info("fetchTodo:id: " + id);
+        // look for -1 for all or > -1 for one
+        if (id) {
+            //models["maintains"].findByPk(id)
+            todos.findByPk(id, {
+                include: [{
+                    model: parts,
+                    as: 'parts'
+                },{
+                    model: notes,
+                    as: 'notes'
+                }
+                /*,{
+                    model: maintains,
+                    as: 'maintains'
+                }*/],
+            })
+                .then( (results) => {
+                    logger.info("fetchTodos:findByPk: success: " + JSON.stringify(results));
+                    resolve(results);
+                })
+                .catch( (err) => {
+                    logger.info("fetchTodos:findByPk error: " + err);
+                    reject(err);
+                });
+        }
+        else {
+            //models["maintains"].findAll({})
+            todos.findAll({})
+                .then( (results) => {
+                    logger.info("fetchTodos:findAll: success: " + JSON.stringify(results));
+                    resolve(results);
+                })
+                .catch( (err) => {
+                    logger.info("fetchTodos:findAll error: " + err);
+                    reject(err);
+                });
+        }
+    });
+};
+
+// tested manually works with id and no id
+let fetch_org = (id) => {
+    return new Promise( (resolve,reject) => {
+        logger.info("fetchTodo:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
             //models["todos"].findByPk(id)
-            todos.findByPk(id)
-                .then( (results) => {
-                    logger.info("fetchMaintain:findAll: success: " + JSON.stringify(results));
-                    resolve(results);
-                })
+            todos.findByPk(id, {
+                include: [{
+                    model: parts,
+                    as: 'parts'
+                },{
+                    model: notes,
+                    as: 'notes'
+                }],
+            })
                 .catch( (err) => {
                     logger.info("fetchMaintain:findByPk error: " + err);
                     reject(err);

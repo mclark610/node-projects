@@ -25,8 +25,8 @@ module.exports = (sequelize, DataTypes) => {
 
     Note.associate = function(models) {
 
-        models.notes.belongsToMany(models.maintains, {
-            through: 'maintain_notes',
+        models.notes.belongsToMany(models.todos, {
+            through: 'todo_notes',
             foreignKey: 'noteId'
         });
 
