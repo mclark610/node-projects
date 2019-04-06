@@ -3,104 +3,77 @@ const router = express.Router();
 
 const logger = require('../modules/logger.js');
 const todo = require('../modules/data_todo');
+const _ = require("lodash");
+
+const Status = require('../modules/status');
 
 let option;
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
+    let option;
     // Check user is logged in.
     logger.info("todo use called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    if (req.session["user"]) {
-        option = {
-            status: "success",
-            user: req.session["user"]
-        };
-        logger.info("option: " + JSON.stringify(option));
-
+    if (_.has(req.session, 'req.session.user')) {
+        option = new Status("success",req.session.user,"");
         next();
     }
     else {
-        option = {
-            status: "fail",
-            user: (req.session["user"] ? req.session["user"] : "")
-        };
         logger.info("todo:use:option: " + JSON.stringify(option));
-
+        option = new Status("failed",req.session.user,"todo use user not available");
         res.send(option);
     }
 });
 
 router.put('/set-active', (req,res) => {
+    let option;
 
     todo.setStatus(req.body)
         .then( (results) => {
             logger.info("note:set-active: results:  " + results);
-            option = {
-                status: "success",
-                user: req.session["user"],
-                data: results
-            };
+            option = new Status("success",req.session.user,"todo set-active",results);
 
             res.send(option);
         })
         .catch( (err) => {
             logger.error("note:set-active: err: " +err);
-            option = {
-                status: "fail",
-                user: (req.session["user"] ? req.session["user"] : ""),
-                data: err
-            };
+            option = new Status("failed",req.session.user,err);
             res.send(option);
         });
 });
 
 // delete tested with todo deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
+    let option;
 
     todo.deletetodo(req.params["id"])
         .then( (results) => {
             logger.info("note:delete: " + req.params["id"] + "--- " + results);
-            option = {
-                status: "success",
-                user: req.session["user"],
-                data: results
-            };
+            option = new Status("success",req.session.user,"todo delete",results);
             res.send(option);
         })
         .catch( (err) => {
-            option = {
-                status: "fail",
-                user: (req.session["user"] ? req.session["user"] : ""),
-                data: err
-            };
+            option = new Status("failed",req.session.user,err);
             res.send(option);
         });
 });
 
 router.get('/:id(\\d+)?', function (req, res) {
+    let option;
     logger.info("todo: id: " + req.params["id"] );
     todo.fetch(req.params["id"])
         .then( (results) => {
             logger.info("results: " + results);
-            option = {
-                status: "success",
-                user: req.session["user"],
-                data: results
-            };
+            option = new Status("success",req.session.user,results);
             res.send(option);
         })
         .catch( (err) => {
             logger.info("err: " + err);
-            option = {
-                status: "fail",
-                user: (req.session["user"] ? req.session["user"] : ""),
-                data: err
-            };
-
+            option = new Status("failed",req.session.user,err);
             res.send(option);
 
         });
@@ -111,21 +84,13 @@ router.put('/', (req,res) => {
     todo.update(req.body)
         .then( (results) => {
             logger.info("todo:put:results: " + results);
-            option = {
-                status: "success",
-                user: req.session["user"],
-                data: results
-            };
+            option = new Status("success",req.session.user,results);
             res.send(option);
         })
         .catch( (err) => {
             logger.info("todo:put:err: " + err);
-            option = {
-                status: "fail",
-                user: (req.session["user"] ? req.session["user"] : ""),
-                data: err
-            };
 
+            option = new Status("failed",req.session.user,err);
             res.send(option);
 
         });
@@ -133,24 +98,17 @@ router.put('/', (req,res) => {
 
 // post todo
 router.post('/', function (req, res) {
+    let option;
     todo.insert(req.body)
         .then( (results) => {
             logger.info("todo:results: " + JSON.stringify(results));
-            option = {
-                status: "success",
-                user: req.session["user"],
-                data: results
-            };
+            option = new Status("success",req.session.user,results);
 
-            res.send(results);
+            res.send(option);
         })
         .catch( (err) => {
             logger.info("todo:err: " + err);
-            option = {
-                status: "fail",
-                user: (req.session["user"] ? req.session["user"] : ""),
-                data: err
-            };
+            option = new Status("failed",req.session.user,err);
 
             res.send(option);
         });
