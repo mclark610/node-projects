@@ -13,22 +13,20 @@ router.use((req,res,next) => {
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    if (req.session["user"] && req.session["key"]) {
+    if (req.session["user"]) {
         option = {
             status: "success",
-            user: req.session["user"],
-            key:  req.session["key"]
+            user: req.session["user"]
         };
         logger.info("option: " + option);
 
         next();
     }
     else {
-        logger.info("user and key not found in session");
+        logger.info("user not found in session");
         option = {
             status: "fail",
-            user: (req.session["user"] ? req.session["user"] : ""),
-            key : (req.session["key "] ? req.session["key"] : "")
+            user: (req.session["user"] ? req.session["user"] : "")
         };
         res.send(option);
     }
@@ -61,13 +59,6 @@ router.delete('/:id(\\d+)', (req,res) => {
 });
 
 router.get('/:id(\\d+)?', function (req,res) {
-    if ( req.session.views) {
-        req.session.views++;
-    }
-    else {
-        req.session.views = 1;
-    }
-    req.session.save();
     logger.info("====================== get ================================");
     logger.info("maintain: number of calls: "+ req.session.views);
     //logger.info("req.session.cookie: " + JSON.stringify(req.session.cookie));

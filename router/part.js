@@ -4,22 +4,23 @@ const router = express.Router();
 const logger = require('../modules/logger.js');
 const part = require('../modules/data_part');
 
+let option;
+
 // middleware that is specific to this router
 router.use((req,res,next) => {
     logger.info("part use called");
-    let option;
     // Check user is logged in.
     logger.info("part use called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    if (req.session["user"] && req.session["key"]) {
+    if (req.session["user"]) {
         option = {
             status: "success",
-            user: req.session["user"],
-            key:  req.session["key"]
+            user: req.session["user"]
         };
+
         logger.info("option: " + option);
 
         next();
@@ -27,8 +28,7 @@ router.use((req,res,next) => {
     else {
         option = {
             status: "fail",
-            user: (req.session["user"] ? req.session["user"] : ""),
-            key : (req.session["key "] ? req.session["key"] : "")
+            user: (req.session["user"] ? req.session["user"] : "")
         };
         res.send(option);
     }
@@ -38,12 +38,23 @@ router.put('/set-active', (req,res) => {
 
     part.setStatus(req.body)
         .then( (results) => {
-            logger.info("router.post /set-active: results:  " + results);
-            res.send("set-active: " + results);
+            logger.info("part:set-active: results:  " + results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+
+            res.send(option);
         })
         .catch( (err) => {
-            logger.error("router.post /set-active: err: " +err);
-            res.send("set-active: error: + err");
+            logger.error("part:set-active: err: " +err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+            res.send(option);
         });
 });
 
@@ -52,11 +63,21 @@ router.delete('/:id(\\d+)', (req,res) => {
 
     part.deletePart(req.params["id"])
         .then( (results) => {
-            logger.info("delete: " + req.params["id"] + "--- " + results);
-            res.send("router.delete this stuff!: " + req.params["id"]);
+            logger.info("part:delete: " + req.params["id"] + "--- " + results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+            res.send(option);
         })
         .catch( (err) => {
-            res.send("router.delete error: " + err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+            res.send(option);
         });
 });
 
@@ -64,12 +85,23 @@ router.get('/:id(\\d+)?', function (req, res) {
 
     part.fetch(req.params["id"])
         .then( (results) => {
-            logger.info("results: " + results);
-            res.send(results);
+            logger.info("part:get: results: " + results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+            res.send(option);
         })
         .catch( (err) => {
-            logger.info("err: " + err);
-            res.send(err);
+            logger.info("part:get: err: " + err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+
+            res.send(option);
 
         });
 });
@@ -78,25 +110,45 @@ router.put('/', (req,res) => {
     // update
     part.update(req.body)
         .then( (results) => {
-            logger.log("info","results: " + results);
-            res.send(results);
+            logger.info( "part:results: " + results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+            res.send(option);
         })
         .catch( (err) => {
             logger.info("part catch err: " + err);
-            res.send(err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+            res.send(option);
         });
 });
 
-// post maintenance
+// post part
 router.post('/', function (req, res) {
     part.insert(req.body)
         .then( (results) => {
-            logger.log("info","results: " + results);
+            logger.info("part:results: " + JSON.stringify(results));
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
             res.send(results);
         })
         .catch( (err) => {
             logger.info("part catch err: " + err);
-            res.send(err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+            res.send(option);
         });
 });
 

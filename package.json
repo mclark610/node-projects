@@ -22,29 +22,30 @@
   "author": "Mark",
   "license": "MIT",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "config": "^3.0.1",
-    "connect-redis": "^3.4.0",
+    "connect-redis": "^3.4.1",
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "fs": "0.0.1-security",
     "fs-extra": "^7.0.1",
     "jquery": "^3.3.1",
+    "mocha": "^6.0.2",
     "mysql2": "^1.6.4",
     "nodemon": "^1.18.10",
     "path": "^0.12.7",
     "redis": "^2.8.0",
-    "sequelize": "^4.42.0",
+    "sequelize": "^4.43.0",
     "uuid": "^3.3.2",
-    "winston": "^3.2.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "cross-env": "^5.2.0",
-    "eslint": "^5.13.0",
-    "mocha": "^6.0.2",
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.2.3",
+    "eslint": "^5.15.3",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0",
     "webpack-node-externals": "^1.7.2"
   }
 }

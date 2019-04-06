@@ -4,22 +4,22 @@ const router = express.Router();
 const logger = require('../modules/logger.js');
 const note = require('../modules/data_note');
 
+let option;
+
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    logger.info("note use called");
-    let option;
     // Check user is logged in.
     logger.info("note use called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    if (req.session["user"] && req.session["key"]) {
+    if (req.session["user"]) {
         option = {
             status: "success",
-            user: req.session["user"],
-            key:  req.session["key"],
+            user: req.session["user"]
         };
+
         logger.info("option: " + JSON.stringify(option));
 
         next();
@@ -28,8 +28,9 @@ router.use((req,res,next) => {
         option = {
             status: "fail",
             user: (req.session["user"] ? req.session["user"] : ""),
-            key : (req.session["key "] ? req.session["key"] : "")
+            data: "note:use: session user not found"
         };
+
         logger.info("option in fail: " + JSON.stringify(option));
         res.send(option);
     }
@@ -39,12 +40,23 @@ router.put('/set-active', (req,res) => {
 
     note.setStatus(req.body)
         .then( (results) => {
-            logger.info("router.post /set-active: results:  " + results);
-            res.send("set-active: " + results);
+            logger.info("note:set-active: results:  " + results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+
+            res.send(option);
         })
         .catch( (err) => {
-            logger.error("router.post /set-active: err: " +err);
-            res.send("set-active: error: + err");
+            logger.error("note:set-active: err: " +err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+            res.send(option);
         });
 });
 
@@ -53,11 +65,21 @@ router.delete('/:id(\\d+)', (req,res) => {
 
     note.deletenote(req.params["id"])
         .then( (results) => {
-            logger.info("delete: " + req.params["id"] + "--- " + results);
-            res.send("router.delete this stuff!: " + req.params["id"]);
+            logger.info("note:delete: " + req.params["id"] + "--- " + results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+            res.send(option);
         })
         .catch( (err) => {
-            res.send("router.delete error: " + err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+            res.send(option);
         });
 });
 
@@ -66,11 +88,22 @@ router.get('/:id(\\d+)?', function (req, res) {
     note.fetch(req.params["id"])
         .then( (results) => {
             logger.info("results: " + results);
-            res.send(results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+            res.send(option);
         })
         .catch( (err) => {
             logger.info("err: " + err);
-            res.send(err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+
+            res.send(option);
 
         });
 });
@@ -79,12 +112,24 @@ router.put('/', (req,res) => {
     // update
     note.update(req.body)
         .then( (results) => {
-            logger.log("info","results: " + results);
-            res.send(results);
+            logger.info("note:put:results: " + results);
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+            res.send(option);
         })
         .catch( (err) => {
-            logger.info("note catch err: " + err);
-            res.send(err);
+            logger.info("note:put:err: " + err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+
+            res.send(option);
+
         });
 });
 
@@ -92,12 +137,24 @@ router.put('/', (req,res) => {
 router.post('/', function (req, res) {
     note.insert(req.body)
         .then( (results) => {
-            logger.log("info","results: " + JSON.stringify(results));
+            logger.info("note:results: " + JSON.stringify(results));
+            option = {
+                status: "success",
+                user: req.session["user"],
+                data: results
+            };
+
             res.send(results);
         })
         .catch( (err) => {
-            logger.info("note catch err: " + err);
-            res.send(err);
+            logger.info("note:err: " + err);
+            option = {
+                status: "fail",
+                user: (req.session["user"] ? req.session["user"] : ""),
+                data: err
+            };
+
+            res.send(option);
         });
 });
 

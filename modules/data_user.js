@@ -1,7 +1,10 @@
 const logger = require('../modules/logger');
 const models = require( '../models');
+const Status = require('./status');
+
 const { users } = models;
-const Op = require('sequelize').Op;
+
+const encrypt = require('../modules/encrypt_data');
 
 let setStatus= (body) => {
     // Check if id is number
@@ -12,64 +15,52 @@ let setStatus= (body) => {
     }
 };
 
-// TODO: needs work.  check for sql injection?
-let validate = (body) => {
-    let results;
-    return new Promise((resolve,reject) => {
-        if (!body) {
-            results = {
-                "id": -1,
-                "err": "body empty"
-            };
-            reject(results);
-        } else {
-            resolve(body);
-        }
-    });
-};
-
 // manually tested: success
-let insert = (body) => {
-    return new Promise( (resolve,reject) => {
-        validate(body)
-            .then((results) => {
-                users.create(results)
-                    .then( (id) => {
-                        resolve( `
-                            "id": ${id},
-                            "status": "success"
-                            `);
-                    });
-            })
-            .catch((err) => {
-                logger.info("insertMaintain: validateMaintain failed with " + err);
-                reject(err);
-            });
-    });
+let register = (body) => {
+
+    let options = {
+        fields: ["name","password","description","status"]
+    };
+
+    return users.create(body,options);
 };
 
 // tested manually works with id and no id
 // returns empty array if user/password not found
 let fetchByNamePassword = (name,password) => {
     return new Promise( (resolve,reject) => {
+        let output;
+
         logger.info("user:fetchByNamePassword:name: " + name + "---password: " + password);
-        if (name) {
-            //models["users"].findByPk(id)
-            users.findAll( {
-                where:{
-                    [Op.and]:[
-                        {name: name},
-                        {password: password}
-                    ]
-                }})
-                .then( (results) => {
-                    logger.info("user:findByNamePassword: success: " + JSON.stringify(results));
-                    //
-                    resolve(results);
+        logger.info("user:fetchByNamePassword:name: " + name + "---pwd: " + password);
+
+        if (!name) {
+            reject({status:"failed",data:"name missing"});
+        }
+        else if (!password) {
+            reject({status:"failed",data:"password missing"});
+        }
+        else {
+            logger.info("users in fetch");
+            users.findOne({
+                where: {
+                    name: name
+                }
+            })
+                .then((results) =>  {
+                    logger.info("results : " + JSON.stringify(results));
+                    logger.info("password: " + password);
+                    let validpwd = encrypt.checkPassword(password,results.password);
+                    logger.info("name: " + results.name);
+                    logger.info("compare: " + validpwd);
+                    output = new Status('success',results.name,results.email);
+
+                    resolve(output);
                 })
-                .catch( (err) => {
-                    logger.info("user:fetchByNamePassword: error: " + err);
-                    reject(err);
+                .catch((err) => {
+                    logger.info("error: "+ err);
+                    output = new Status('failed','undefined','error in finding user');
+                    reject(output);
                 });
         }
     });
@@ -108,26 +99,8 @@ let fetch = (id) => {
 
 // tested manually - works
 let update = (body) => {
-    return new Promise( (resolve,reject) => {
-        logger.info("update: body: " + JSON.stringify(body));
-        validate(body)
-            .then( (valbody) => {
-                users.update(valbody, {where: {"id": body["id"]}
-                })
-                    .then( (results) => {
-                        logger.info("updateMaintain:results: " + results);
-                        resolve(results);
-                    })
-                    .catch( (err) => {
-                        logger.error("updateMaintain:error: " + err );
-                        reject(err);
-                    });
-            })
-            .catch( (err) => {
-                logger.error("updateMaintain: validateMaintain: error: " + err );
-                reject(err);
-            });
-    });
+    logger.info("update: body: " + JSON.stringify(body));
+    users.update(body, {where: {"id": body["id"]}});
 };
 
 // TODO: Need validation
@@ -149,7 +122,7 @@ let deleteUser = (id) => {
 };
 
 module.exports = {
-    insert,
+    register,
     fetch,
     fetchByNamePassword,
     setStatus,
