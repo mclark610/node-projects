@@ -9,6 +9,8 @@ const path = require('path');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 
+//const https = require('https');
+
 let client = redis.createClient();
 
 const PORT =3000;
@@ -84,3 +86,13 @@ app.use('/todo',todo);
 app.listen(PORT, () => {
     logger.info(`LISTEN: started on port ${PORT}`);
 });
+// openssl req -nodes -new -x509 -keyout server.key -out server.cert
+//https.createServer({
+//    key: fs.readFileSync('server.key'),
+//    cert: fs.readFileSync('server.cert')
+//},app)
+//.listen(PORT, () => {
+//    logger.info(`LISTEN: started on port ${PORT}`);
+//});
+
+module.exports = app;

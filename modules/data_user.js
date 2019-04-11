@@ -25,42 +25,40 @@ let register = (body) => {
     return users.create(body,options);
 };
 
-// tested manually works with id and no id
-// returns empty array if user/password not found
-let fetchByNamePassword = (name,password) => {
+let fetchByNamePassword = (username,password) => {
     return new Promise( (resolve,reject) => {
-        let output;
 
-        logger.info("user:fetchByNamePassword:name: " + name + "---password: " + password);
-        logger.info("user:fetchByNamePassword:name: " + name + "---pwd: " + password);
-
-        if (!name) {
-            reject({status:"failed",data:"name missing"});
+        if (!username) {
+            logger.info("missing username from body");
+            reject(new Status("failed",username,"name missing"));
         }
         else if (!password) {
-            reject({status:"failed",data:"password missing"});
+            logger.info("missing password from body");
+            reject(new Status("failed",username,": password missing"));
         }
         else {
             logger.info("users in fetch");
             users.findOne({
                 where: {
-                    name: name
+                    name: username
                 }
             })
                 .then((results) =>  {
-                    logger.info("results : " + JSON.stringify(results));
-                    logger.info("password: " + password);
                     let validpwd = encrypt.checkPassword(password,results.password);
                     logger.info("name: " + results.name);
                     logger.info("compare: " + validpwd);
-                    output = new Status('success',results.name,results.email);
-
-                    resolve(output);
+                    if (validpwd == true) {
+                        logger.info("findOne sending success");
+                        resolve(new Status('success',results.name,results.email));
+                    }
+                    else {
+                        logger.info("findone sending fail because of invalid password");
+                        reject(new Status('failed',results.name,"invalid password"));
+                    }
                 })
                 .catch((err) => {
-                    logger.info("error: "+ err);
-                    output = new Status('failed','undefined','error in finding user');
-                    reject(output);
+                    logger.info("findOne sending error! error: "+ JSON.stringify(err));
+                    reject(new Status('failed','undefined','error in finding user'));
                 });
         }
     });
@@ -71,7 +69,6 @@ let fetch = (id) => {
         logger.info("fetchUser:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
-            //models["users"].findByPk(id)
             users.findByPk(id)
                 .then( (results) => {
                     logger.info("fetchUser:findAll: success: " + JSON.stringify(results));
@@ -83,7 +80,6 @@ let fetch = (id) => {
                 });
         }
         else {
-            //models["users"].findAll({})
             users.findAll({})
                 .then( (results) => {
                     logger.info("fetchUser:findAll: success: " + JSON.stringify(results));

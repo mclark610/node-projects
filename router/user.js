@@ -12,7 +12,7 @@ const Status = require('../modules/status');
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    logger.info("user use called: ");
+    logger.info("***********************USED CALLED************************* ");
 
     next();
 });
@@ -96,7 +96,8 @@ router.put('/', (req,res) => {
         });
 });
 
-// post user
+/*
+// This will be for admin
 router.post('/register', function (req, res) {
 
     user.register(req.body)
@@ -115,7 +116,7 @@ router.post('/register', function (req, res) {
             res.send(output);
         });
 });
-
+*/
 router.post('/check', function (req, res) {
     logger.info("===========================================================");
     logger.info("user/login called---user: " );
@@ -133,53 +134,44 @@ router.post('/check', function (req, res) {
 router.post('/login', function (req,res) {
     let output;
 
-    logger.info("+++++++++++++++++++++++++++++++++++++++++++++++++");
+    logger.info(" **********************LOGIN CALLED************************ ");
     logger.info("user/login called---session info below " );
     logger.info("  sessionID   : " + req.sessionID);
     logger.info("  session     : " + JSON.stringify(req.session));
     logger.info("  body        : " + JSON.stringify(req.body));
     logger.info("  user        : " + req.body["username"]);
-    logger.info("  session key : " + req.session["key"]);
+    logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "yes": "no" ));
     // is user already logged in?
     // if user name matches in cookie
     // and if user key matches in cookie
     // then ignore existing login request
 
     if (_.has(req.session, 'req.session.key')) {
-        logger.info("  login: session cookie key already exists");
+        logger.info("login: session cookie key already exists");
 
-        output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined",req.session["user"] );
+        output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined","already logged in" );
 
-        res.send(output);
+        res.json(output);
     }
     else {
-        logger.info("key is not in req.session" + JSON.stringify(req.session));
+        logger.info("login: new session");
+
         user.fetchByNamePassword(req.body["username"],req.body["password"])
             .then( (results) => {
-                logger.info("  login:fetchByNamePassword success: " + JSON.stringify(results));
-
+                logger.info("results were a success " + JSON.stringify(results));
                 req.session.cookie["user"] = req.body["username"];
                 req.session["user"] = req.body["username"];
-                if ( results.length > 0) {
+                //req.session["key"]  = new Date().getTime();
+                req.session.key  = new Date().getTime();
 
-                    req.session["key"]  = new Date().getTime();
+                res.json(results);
 
-                    output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined",req.session["user"] );
-
-                    res.send(output);
-                }
-                else {
-                    output = new Status("failed",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined", JSON.stringify() );
-                    res.send(output);
-                }
             })
             .catch( (err) => {
-                logger.info("results err: " + err);
-
-                let output = new Status("failed",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined", err);
-
-                res.send(output);
+                logger.info("results were failed " + JSON.stringify(err));
+                res.json(err);
             });
+
     }
 });
 

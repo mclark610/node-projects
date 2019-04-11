@@ -18,7 +18,7 @@ router.use((req,res,next) => {
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    if (req.session["user"]) {
+    if (_.has(req.session, 'req.session.user')) {
         option = new Status("success",req.session.user,"use: continue on");
 
         logger.info("option: " + JSON.stringify(option));
