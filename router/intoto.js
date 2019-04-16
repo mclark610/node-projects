@@ -41,6 +41,51 @@ let statusType = new graphql.GraphQLEnumType({
     }
 });
 */
+var partType = new graphql.GraphQLObjectType({
+    name: 'Part',
+    fields: {
+        id:  {
+            type: graphql.GraphQLInt,
+        },
+        name: {
+            type: graphql.GraphQLString,
+        },
+        part_nbr: {
+            type: graphql.GraphQLString
+        },
+        price: {
+            type: graphql.GraphQLFloat
+        },
+        description: {
+            type: graphql.GraphQLString,
+        },
+        vendor: {
+            type: graphql.GraphQLString,
+        },
+        image_filename:{
+            type: graphql.GraphQLString,
+        },
+        doc_filename: {
+            type: graphql.GraphQLString,
+        },
+        type: {
+            type: graphql.GraphQLString,
+        },
+        complete: {
+            type: graphql.GraphQLBoolean,
+        },
+        status: {
+            type: graphql.GraphQLString,
+        },
+        createdAt: {
+            type: graphqlDate.GraphQLDateTime
+        },
+        updatedAt: {
+            type: graphqlDate.GraphQLDateTime
+        }
+    }
+});
+
 var todoType = new graphql.GraphQLObjectType({
     name: 'Todo',
     fields: {
@@ -49,6 +94,9 @@ var todoType = new graphql.GraphQLObjectType({
         },
         maintainId: {
             type: graphql.GraphQLInt,
+        },
+        parts: {
+            type: new graphql.GraphQLList(partType),
         },
         name: {
             type: graphql.GraphQLString,
@@ -112,50 +160,6 @@ var maintainType = new graphql.GraphQLObjectType({
 
 });
 
-var partType = new graphql.GraphQLObjectType({
-    name: 'Part',
-    fields: {
-        id:  {
-            type: graphql.GraphQLInt,
-        },
-        name: {
-            type: graphql.GraphQLString,
-        },
-        part_nbr: {
-            type: graphql.GraphQLString
-        },
-        price: {
-            type: graphql.GraphQLFloat
-        },
-        description: {
-            type: graphql.GraphQLString,
-        },
-        vendor: {
-            type: graphql.GraphQLString,
-        },
-        image_filename:{
-            type: graphql.GraphQLString,
-        },
-        doc_filename: {
-            type: graphql.GraphQLString,
-        },
-        type: {
-            type: graphql.GraphQLString,
-        },
-        complete: {
-            type: graphql.GraphQLBoolean,
-        },
-        status: {
-            type: graphql.GraphQLString,
-        },
-        createdAt: {
-            type: graphqlDate.GraphQLDateTime
-        },
-        updatedAt: {
-            type: graphqlDate.GraphQLDateTime
-        }
-    }
-});
 
 let queryType = new graphql.GraphQLObjectType({
     name: 'Query',
@@ -179,14 +183,14 @@ let queryType = new graphql.GraphQLObjectType({
             }
         },
         todo: {
-            type: partType,
+            type: todoType,
             args: {
                 id: {
                     type: graphql.GraphQLInt
                 }
             },
             resolve: function( _, id ) {
-                return Part.fetch(id["id"]);
+                return Todo.fetch(id["id"]);
                 //return fakeDatabase[id];
             }
         },
