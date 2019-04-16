@@ -1,7 +1,7 @@
 const logger = require('../modules/logger');
 const models = require( '../models');
 const { parts } = models;
-
+logger.info("zzzzzzzzzzzzzzzzzzzzzzzzz data_part loaded zzzzzzzzzzzzzzzzzzzzzz");
 let setStatus= (body) => {
     // Check if id is number
     if (( body["id"]) && !isNaN(parseInt(body["id"]))) {
@@ -41,7 +41,7 @@ let insert = (body) => {
                     });
             })
             .catch((err) => {
-                logger.info("insertMaintain: validateMaintain failed with " + err);
+                logger.info("insertPart: validatePart failed with " + err);
                 reject(err);
             });
     });
@@ -50,17 +50,17 @@ let insert = (body) => {
 // tested manually works with id and no id
 let fetch = (id) => {
     return new Promise( (resolve,reject) => {
-        logger.info("fetchMaintain:id: " + id);
+        logger.info("fetchPart:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
             //models["parts"].findByPk(id)
             parts.findByPk(id)
                 .then( (results) => {
-                    logger.info("fetchMaintain:findAll: success: " + JSON.stringify(results));
+                    logger.info("fetchPart:findAll: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchMaintain:findByPk error: " + err);
+                    logger.info("fetchPart:findByPk error: " + err);
                     reject(err);
                 });
         }
@@ -68,11 +68,11 @@ let fetch = (id) => {
             //models["parts"].findAll({})
             parts.findAll({})
                 .then( (results) => {
-                    logger.info("fetchMaintain:findAll: success: " + JSON.stringify(results));
+                    logger.info("fetchPart:findAll: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchMaintain:findAll error: " + err);
+                    logger.info("fetchPart:findAll error: " + err);
                     reject(err);
                 });
         }
@@ -88,16 +88,16 @@ let update = (body) => {
                 parts.update(valbody, {where: {"id": body["id"]}
                 })
                     .then( (results) => {
-                        logger.info("updateMaintain:results: " + results);
+                        logger.info("updatePart:results: " + results);
                         resolve(results);
                     })
                     .catch( (err) => {
-                        logger.error("updateMaintain:error: " + err );
+                        logger.error("updatePart:error: " + err );
                         reject(err);
                     });
             })
             .catch( (err) => {
-                logger.error("updateMaintain: validateMaintain: error: " + err );
+                logger.error("updatePart: validatePart: error: " + err );
                 reject(err);
             });
     });
@@ -112,10 +112,10 @@ let deletePart = (id) => {
                 return results.destroy();
             })
             .then( () => {
-                resolve("deleteMaintain: deleted id: " + id);
+                resolve("deletePart: deleted id: " + id);
             })
             .catch( (err) => {
-                logger.info("deleteMaintain:findByPk error: " + err);
+                logger.info("deletePart:findByPk error: " + err);
                 reject(err);
             });
     });
@@ -126,5 +126,6 @@ module.exports = {
     fetch,
     setStatus,
     update,
-    deletePart
+    deletePart,
+    parts
 };

@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     ToDo.associate = function(models) {
         models.todos.hasOne(models.maintains, {
             through: 'maintains',
-            foreignKey: 'maintainId'
+            foreignKey: 'id'
         });
         // associations can be defined here
 

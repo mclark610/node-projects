@@ -4,6 +4,7 @@ const Status = require('./status');
 
 const { users } = models;
 
+
 const encrypt = require('../modules/encrypt_data');
 
 let setStatus= (body) => {

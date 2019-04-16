@@ -1,6 +1,6 @@
 const logger = require('../modules/logger');
 const models = require( '../models');
-const { maintains,parts,notes,todos } = models;
+const { maintains,todos } = models;
 
 let setStatus= (body) => {
     // Check if id is number
@@ -56,12 +56,6 @@ let fetch = (id) => {
             //models["maintains"].findByPk(id)
             maintains.findByPk(id, {
                 include: [{
-                    model: parts,
-                    as: 'parts'
-                },{
-                    model: notes,
-                    as: 'notes'
-                },{
                     model: todos,
                     as: 'todos'
                 }],

@@ -15,6 +15,7 @@ router.use((req,res,next) => {
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
+/*
     if (_.has(req.session, 'req.session.user')) {
         option = new Status("success",req.session.user,"");
         next();
@@ -24,6 +25,8 @@ router.use((req,res,next) => {
         option = new Status("failed",req.session.user,"part use user not available");
         res.send(option);
     }
+*/
+next();
 });
 
 router.put('/set-active', (req,res) => {

@@ -20,6 +20,7 @@ const maintain = require('./router/maintain');
 const part = require('./router/part');
 const user = require('./router/user');
 const todo = require('./router/todo');
+const toto = require('./router/intoto');
 
 // get this from config
 // This is for session cookies saved in
@@ -82,6 +83,7 @@ app.use('/maintain',maintain);
 app.use('/part',part);
 app.use('/user',user);
 app.use('/todo',todo);
+app.use('/toto',toto);
 
 app.listen(PORT, () => {
     logger.info(`LISTEN: started on port ${PORT}`);
