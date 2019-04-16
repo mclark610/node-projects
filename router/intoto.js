@@ -12,6 +12,7 @@ const logger = require('../modules/logger.js');
 const Part = require('../modules/data_part');
 const Maintain = require('../modules/data_maintain');
 const Todo = require('../modules/data_todo');
+const Note = require('../modules/data_note');
 
 const graphql = require('graphql');
 const graphqlDate = require('graphql-iso-date');
@@ -41,6 +42,39 @@ let statusType = new graphql.GraphQLEnumType({
     }
 });
 */
+var noteType = new graphql.GraphQLObjectType({
+    name: 'Note',
+    fields: {
+        id:  {
+            type: graphql.GraphQLInt,
+        },
+        name: {
+            type: graphql.GraphQLString,
+        },
+        description: {
+            type: graphql.GraphQLString,
+        },
+        image_filename:{
+            type: graphql.GraphQLString,
+        },
+        doc_filename: {
+            type: graphql.GraphQLString,
+        },
+        complete: {
+            type: graphql.GraphQLBoolean,
+        },
+        status: {
+            type: graphql.GraphQLString,
+        },
+        createdAt: {
+            type: graphqlDate.GraphQLDateTime
+        },
+        updatedAt: {
+            type: graphqlDate.GraphQLDateTime
+        }
+    }
+});
+
 var partType = new graphql.GraphQLObjectType({
     name: 'Part',
     fields: {
@@ -97,6 +131,9 @@ var todoType = new graphql.GraphQLObjectType({
         },
         parts: {
             type: new graphql.GraphQLList(partType),
+        },
+        notes: {
+            type: new graphql.GraphQLList(noteType),
         },
         name: {
             type: graphql.GraphQLString,
@@ -198,6 +235,24 @@ let queryType = new graphql.GraphQLObjectType({
             type: new graphql.GraphQLList(todoType),
             resolve: function() {
                 return Todo.fetch(undefined);
+            }
+        },
+        note: {
+            type: noteType,
+            args: {
+                id: {
+                    type: graphql.GraphQLInt
+                }
+            },
+            resolve: function( _, id ) {
+                return Note.fetch(id["id"]);
+                //return fakeDatabase[id];
+            }
+        },
+        notes: {
+            type: new graphql.GraphQLList(noteType),
+            resolve: function() {
+                return Note.fetch(undefined);
             }
         },
         maintain: {
