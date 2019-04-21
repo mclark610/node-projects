@@ -97,7 +97,7 @@ else {
     // openssl req -nodes -new -x509 -keyout server.key -out server.cert
     https.createServer({
         key: fs.readFileSync('./keys/server.key'),
-        cert: fs.readFileSync('.keys/server.cert')
+        cert: fs.readFileSync('./keys/server.cert')
     },app)
         .listen(PORT, () => {
             logger.info(`LISTEN: started on port ${PORT}`);
