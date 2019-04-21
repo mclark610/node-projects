@@ -96,8 +96,8 @@ if ( process.env.NODE_ENV === 'development' ) {
 else {
     // openssl req -nodes -new -x509 -keyout server.key -out server.cert
     https.createServer({
-        key: fs.readFileSync('server.key'),
-        cert: fs.readFileSync('server.cert')
+        key: fs.readFileSync('./keys/server.key'),
+        cert: fs.readFileSync('.keys/server.cert')
     },app)
         .listen(PORT, () => {
             logger.info(`LISTEN: started on port ${PORT}`);
