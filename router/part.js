@@ -9,41 +9,23 @@ const _ = require("lodash");
 // middleware that is specific to this router
 router.use((req,res,next) => {
     let option;
-    logger.info("part use called");
-    // Check user is logged in.
+    // Check if user is logged in.
     logger.info("part use called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
-/*
-    if (_.has(req.session, 'req.session.user')) {
-        option = new Status("success",req.session.user,"");
-        next();
-    }
-    else {
-        logger.info("part:use:option: " + JSON.stringify(option));
-        option = new Status("failed",req.session.user,"part use user not available");
-        res.send(option);
-    }
-*/
-next();
-});
-
-router.put('/set-active', (req,res) => {
-    let option;
-    part.setStatus(req.body)
-        .then( (results) => {
-            logger.info("part:set-active: results:  " + results);
-
-            option = new Status("success",req.session.user,results);
-
+    /*
+        if (_.has(req.session, 'req.session.user')) {
+            option = new Status("success",req.session.user,"");
+            next();
+        }
+        else {
+            logger.info("part:use:option: " + JSON.stringify(option));
+            option = new Status("failed",req.session.user,"part use user not available");
             res.send(option);
-        })
-        .catch( (err) => {
-            logger.error("part:set-active: err: " +err);
-            option = new Status("failed",req.session.user,err);
-            res.send(option);
-        });
+        }
+    */
+    next();
 });
 
 // delete tested with part deletion only. works

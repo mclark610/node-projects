@@ -277,7 +277,7 @@ let queryType = new graphql.GraphQLObjectType({
     }
 });
 
-logger.info("parts: " + JSON.stringify(fakeDatabase['a']));
+//logger.info("parts: " + JSON.stringify(fakeDatabase['a']));
 
 router.use((req,res,next) => {
     // Check user is logged in.

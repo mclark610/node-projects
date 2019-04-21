@@ -2,19 +2,13 @@ const logger = require('../modules/logger');
 const models = require( '../models');
 const Status = require('./status');
 
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+
 const { users } = models;
 
 
 const encrypt = require('../modules/encrypt_data');
-
-let setStatus= (body) => {
-    // Check if id is number
-    if (( body["id"]) && !isNaN(parseInt(body["id"]))) {
-        if ( body["status"] == "active" || body["status"] == "inactive" ) {
-            return new users.update({"status":body["status"]}, {where: {"id": body["id"]}});
-        }
-    }
-};
 
 // manually tested: success
 let register = (body) => {
@@ -47,6 +41,7 @@ let fetchByNamePassword = (username,password) => {
                 .then((results) =>  {
                     let validpwd = encrypt.checkPassword(password,results.password);
                     logger.info("name: " + results.name);
+                    logger.info("id: " + results.id);
                     logger.info("compare: " + validpwd);
                     if (validpwd == true) {
                         logger.info("findOne sending success");
@@ -122,7 +117,6 @@ module.exports = {
     register,
     fetch,
     fetchByNamePassword,
-    setStatus,
     update,
     deleteUser
 };

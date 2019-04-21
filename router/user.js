@@ -17,25 +17,6 @@ router.use((req,res,next) => {
     next();
 });
 
-router.put('/set-active', (req,res) => {
-
-    user.setStatus(req.body)
-        .then( (results) => {
-            logger.info("user:set-active: results:  " + results);
-
-            let output = new Status("success",req.session["user"], results);
-
-            res.send(output);
-        })
-        .catch( (err) => {
-            logger.error("user:set-active: err: " +err);
-
-            let output = new Status("failed",_.has(req.session, 'req.session.user') ? req.session["user"] : "undefined" , err );
-
-            res.send(output);
-        });
-});
-
 // delete tested with part deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
 
@@ -96,7 +77,7 @@ router.put('/', (req,res) => {
         });
 });
 
-/*
+
 // This will be for admin
 router.post('/register', function (req, res) {
 
@@ -116,7 +97,7 @@ router.post('/register', function (req, res) {
             res.send(output);
         });
 });
-*/
+
 router.post('/check', function (req, res) {
     logger.info("===========================================================");
     logger.info("user/login called---user: " );

@@ -32,19 +32,6 @@ router.use((req,res,next) => {
     }
 });
 
-router.put('/set-active', (req,res) => {
-
-    maintain.setStatus(req.body)
-        .then( (results) => {
-            logger.info("router.post /set-active: results:  " + results);
-            res.send("set-active: " + results);
-        })
-        .catch( (err) => {
-            logger.error("router.post /set-active: err: " +err);
-            res.send("set-active: error: + err");
-        });
-});
-
 // delete tested with maintain deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
 

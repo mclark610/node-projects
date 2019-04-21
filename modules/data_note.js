@@ -4,16 +4,6 @@ const models = require( '../models');
 const { notes } = models;
 
 
-logger.info("yyyyyyyyyyyyyy  data_Note loaded yyyyyyyyyyyyyyyyyyyyy");
-let setStatus= (body) => {
-    // Check if id is number
-    if (( body["id"]) && !isNaN(parseInt(body["id"]))) {
-        if ( body["status"] == "active" || body["status"] == "inactive" ) {
-            return new notes.update({"status":body["status"]}, {where: {"id": body["id"]}});
-        }
-    }
-};
-
 // TODO: needs work.  check for sql injection?
 let validate = (body) => {
     let results;
@@ -127,7 +117,6 @@ let deleteNote = (id) => {
 module.exports = {
     insert,
     fetch,
-    setStatus,
     update,
     deleteNote,
     notes

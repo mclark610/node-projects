@@ -1,15 +1,6 @@
 const logger = require('../modules/logger');
 const models = require( '../models');
 const { parts } = models;
-logger.info("zzzzzzzzzzzzzzzzzzzzzzzzz data_part loaded zzzzzzzzzzzzzzzzzzzzzz");
-let setStatus= (body) => {
-    // Check if id is number
-    if (( body["id"]) && !isNaN(parseInt(body["id"]))) {
-        if ( body["status"] == "active" || body["status"] == "inactive" ) {
-            return new parts.update({"status":body["status"]}, {where: {"id": body["id"]}});
-        }
-    }
-};
 
 // TODO: needs work.  check for sql injection?
 let validate = (body) => {
@@ -124,7 +115,6 @@ let deletePart = (id) => {
 module.exports = {
     insert,
     fetch,
-    setStatus,
     update,
     deletePart,
     parts

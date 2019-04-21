@@ -9,7 +9,8 @@ const path = require('path');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 
-//const https = require('https');
+const https = require('https');
+const fs = require('fs-extra');
 
 let client = redis.createClient();
 
@@ -51,8 +52,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 // dev or production:
-logger.info("env: " + app.get('env'));
-if ( app.get('env') === 'production') {
+// if ( process.env.NODE_ENV ==)
+logger.info("env: " + process.env.NODE_ENV);
+if ( process.env.NODE_ENV === 'production') {
     app.set('trust proxy', 1);
     configSession.cookie.secure = true;
 }
@@ -61,7 +63,8 @@ app.use(session(configSession));
 
 // temporary no affect to jquery error yet
 app.use(express.static(path.join(__dirname, 'public')));
-logger.info("dirname: " + __dirname);
+//logger.info("dirname: " + __dirname);
+
 // init cookies in redis and user if server went down
 app.use((req,res,next) => {
     logger.info("server use called: " );
@@ -85,16 +88,20 @@ app.use('/user',user);
 app.use('/todo',todo);
 app.use('/toto',toto);
 
-app.listen(PORT, () => {
-    logger.info(`LISTEN: started on port ${PORT}`);
-});
-// openssl req -nodes -new -x509 -keyout server.key -out server.cert
-//https.createServer({
-//    key: fs.readFileSync('server.key'),
-//    cert: fs.readFileSync('server.cert')
-//},app)
-//.listen(PORT, () => {
-//    logger.info(`LISTEN: started on port ${PORT}`);
-//});
+if ( process.env.NODE_ENV === 'development' ) {
+    app.listen(PORT, () => {
+        logger.info(`LISTEN: started on port ${PORT}`);
+    });
+}
+else {
+    // openssl req -nodes -new -x509 -keyout server.key -out server.cert
+    https.createServer({
+        key: fs.readFileSync('server.key'),
+        cert: fs.readFileSync('server.cert')
+    },app)
+        .listen(PORT, () => {
+            logger.info(`LISTEN: started on port ${PORT}`);
+        });
+}
 
 module.exports = app;

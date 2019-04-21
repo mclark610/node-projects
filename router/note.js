@@ -32,22 +32,6 @@ router.use((req,res,next) => {
     }
 });
 
-router.put('/set-active', (req,res) => {
-    let option;
-
-    note.setStatus(req.body)
-        .then( (results) => {
-            logger.info("note:set-active: results:  " + results);
-            option = new Status("success",req.session.user,results);
-
-            res.send(option);
-        })
-        .catch( (err) => {
-            logger.error("note:set-active: err: " +err);
-            option = new Status("failed",req.session.user,err);
-            res.send(option);
-        });
-});
 
 // delete tested with note deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
