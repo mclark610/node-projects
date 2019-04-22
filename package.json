@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node dist/server.bundle.js",
-    "start": "nodemon --ignore /",
+    "start": "node server.js",
     "test": "mocha",
     "build": "webpack --config webpack.config.js"
   },
