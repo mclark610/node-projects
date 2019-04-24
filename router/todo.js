@@ -52,8 +52,9 @@ router.get('/:id(\\d+)?', function (req, res) {
     todo.fetch(req.params["id"])
         .then( (results) => {
             logger.info("results: " + results);
-            option = new Status("success",req.session.user,results);
-            res.send(option);
+//            option = new Status("success",req.session.user,results);
+//            res.send(option);
+            res.send(results);
         })
         .catch( (err) => {
             logger.info("err: " + err);
@@ -64,6 +65,7 @@ router.get('/:id(\\d+)?', function (req, res) {
 });
 
 router.put('/', (req,res) => {
+    logger.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
     // update
     todo.update(req.body)
         .then( (results) => {
@@ -83,15 +85,16 @@ router.put('/', (req,res) => {
 // post todo
 router.post('/', function (req, res) {
     let option;
+    logger.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
     todo.insert(req.body)
         .then( (results) => {
-            logger.info("todo:results: " + JSON.stringify(results));
+            logger.info("todo:post:results: " + JSON.stringify(results));
             option = new Status("success",req.session.user,results);
 
             res.send(option);
         })
         .catch( (err) => {
-            logger.info("todo:err: " + err);
+            logger.info("todo:post:err: " + err);
             option = new Status("failed",req.session.user,err);
 
             res.send(option);

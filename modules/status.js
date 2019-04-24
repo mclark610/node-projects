@@ -1,7 +1,7 @@
 
 class Status {
     constructor(status, user, results) {
-        this.return={
+        return {
             "status":status,
             "user": user,
             "results": results

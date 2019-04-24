@@ -2,8 +2,6 @@ const logger = require('../modules/logger');
 const models = require( '../models');
 const Status = require('./status');
 
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 
 const { users } = models;
 
