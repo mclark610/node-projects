@@ -19,12 +19,15 @@ router.use((req,res,next) => {
     logger.info("------------------------------------------------------------");
 
     if (_.has(req.session, 'req.session.user')) {
-        option = new Status("success",req.session.user,"");
         next();
     }
     else {
+        option = {
+            status: "failed",
+            user: req.session.user,
+            message: "todo use user not available"
+        };
         logger.info("todo:use:option: " + JSON.stringify(option));
-        option = new Status("failed",req.session.user,"todo use user not available");
         res.send(option);
     }
 });

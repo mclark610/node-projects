@@ -12,7 +12,7 @@ router.use((req,res,next) => {
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
-
+/*
     if (req.session["user"]) {
         option = {
             status: "success",
@@ -30,6 +30,8 @@ router.use((req,res,next) => {
         };
         res.send(option);
     }
+*/
+    next();
 });
 
 // delete tested with maintain deletion only. works

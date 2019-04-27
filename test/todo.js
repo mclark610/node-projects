@@ -3,7 +3,7 @@ const {describe,it} = require('mocha');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
-let should = chai.should();
+let should = require('should');
 
 const logger = require('../modules/logger.js');
 
@@ -69,11 +69,13 @@ describe('Todo', () => {
                         .send(todo)
                         .then( (results) => {
                             logger.info('-----results----' + JSON.stringify(results));
-                            results.should.have.status(200);
-                            let obj = JSON.parse(results.text);
+                            results.status.should.be.equal(200);
+
+
+                            let obj = JSON.parse(results);
                             let num = obj.length;
                             logger.info("num: " + num);
-                            chai.expect(obj.length).to.equal(3);
+                            num.should.be.equal(3);
                             //logger.info('results maintainId: ' + JSON.stringify(obj[0].id));
                         });
                 });

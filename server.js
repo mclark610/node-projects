@@ -14,7 +14,7 @@ const fs = require('fs-extra');
 
 let client = redis.createClient();
 
-const PORT =3000;
+const PORT =5000;
 
 
 const maintain = require('./router/maintain');
