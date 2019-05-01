@@ -1,8 +1,12 @@
+'use strict';
+
 const express = require('express');
 const router = express.Router();
 
 const logger = require('../modules/logger.js');
 const maintain = require('../modules/data_maintain.js');
+
+const _ = require('lodash');
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
@@ -12,22 +16,16 @@ router.use((req,res,next) => {
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
-
-    if (req.session["user"]) {
-        option = {
-            status: "success",
-            user: req.session["user"]
-        };
-        logger.info("option: " + option);
-
+    if (_.has(req.session, 'req.session.user')) {
         next();
     }
     else {
-        logger.info("user not found in session");
         option = {
-            status: "fail",
-            user: (req.session["user"] ? req.session["user"] : "")
+            status: "failed",
+            user: req.session.user,
+            message: "maintain user not available"
         };
+        logger.info("maintain:use:option: " + JSON.stringify(option));
         res.send(option);
     }
 });

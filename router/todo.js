@@ -1,3 +1,4 @@
+// todo.js
 const express = require('express');
 const router = express.Router();
 
@@ -19,12 +20,15 @@ router.use((req,res,next) => {
     logger.info("------------------------------------------------------------");
 
     if (_.has(req.session, 'req.session.user')) {
-        option = new Status("success",req.session.user,"");
         next();
     }
     else {
+        option = {
+            status: "failed",
+            user: req.session.user,
+            message: "todo use user not available"
+        };
         logger.info("todo:use:option: " + JSON.stringify(option));
-        option = new Status("failed",req.session.user,"todo use user not available");
         res.send(option);
     }
 });
@@ -52,8 +56,7 @@ router.get('/:id(\\d+)?', function (req, res) {
     todo.fetch(req.params["id"])
         .then( (results) => {
             logger.info("results: " + results);
-            option = new Status("success",req.session.user,results);
-            res.send(option);
+            res.send(results);
         })
         .catch( (err) => {
             logger.info("err: " + err);
@@ -85,13 +88,13 @@ router.post('/', function (req, res) {
     let option;
     todo.insert(req.body)
         .then( (results) => {
-            logger.info("todo:results: " + JSON.stringify(results));
+            logger.info("todo:post:results: " + JSON.stringify(results));
             option = new Status("success",req.session.user,results);
 
             res.send(option);
         })
         .catch( (err) => {
-            logger.info("todo:err: " + err);
+            logger.info("todo:post:err: " + err);
             option = new Status("failed",req.session.user,err);
 
             res.send(option);

@@ -13,8 +13,8 @@ const https = require('https');
 const fs = require('fs-extra');
 
 let client = redis.createClient();
-
-const PORT =3000;
+const cors = require('cors');
+const PORT =5000;
 
 
 const maintain = require('./router/maintain');
@@ -45,8 +45,7 @@ let configSession = {
 };
 
 let app = express();
-const cors = require('cors');
-app.use(cors({origin: '*'}));
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -55,8 +54,20 @@ app.use(bodyParser.urlencoded({extended:true}));
 // if ( process.env.NODE_ENV ==)
 logger.info("env: " + process.env.NODE_ENV);
 if ( process.env.NODE_ENV === 'production') {
+    logger.info("setting cors for production");
+    app.use(cors({origin: '*'}));
     app.set('trust proxy', 1);
     configSession.cookie.secure = true;
+}
+else {
+    logger.info("setting cors for development");
+    app.use(cors(
+        {
+            origin: 'http://localhost:3000',
+            credentials: true
+        }
+    ));
+
 }
 
 app.use(session(configSession));
