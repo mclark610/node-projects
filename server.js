@@ -8,7 +8,8 @@ const uuid = require('uuid');
 const path = require('path');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
-
+const cookieParser = require('cookie-parser');
+const jsCookie = require('js-cookie');
 const https = require('https');
 const fs = require('fs-extra');
 
@@ -49,7 +50,6 @@ let app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
-
 // dev or production:
 // if ( process.env.NODE_ENV ==)
 logger.info("env: " + process.env.NODE_ENV);
@@ -69,8 +69,13 @@ else {
     ));
 
 }
-
+app.use(cookieParser());
 app.use(session(configSession));
+
+app.use( (req,res,next) => {
+    console.log("**************** APP USE *************************");
+    next();
+});
 
 // temporary no affect to jquery error yet
 app.use(express.static(path.join(__dirname, 'public')));
@@ -86,12 +91,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
-
-
-app.use('/test', (req,res) => {
-    logger.info("server / called test.html at: " +__dirname+'/public/view/test.html');
-    res.sendFile(__dirname+'/public/view/test.html');
-});
 
 app.use('/maintain',maintain);
 app.use('/part',part);

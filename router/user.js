@@ -4,16 +4,18 @@ const router = express.Router();
 const logger = require('../modules/logger.js');
 const user = require('../modules/data_user.js');
 const _ = require("lodash");
+const cookieParser = require('cookie-parser');
 
 const Status = require('../modules/status');
 
 // TODO: create /user/destroy to destroy session
 // TODO: check if user authorized to perform user maintenance
 
+router.use(cookieParser());
+
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    logger.info("***********************USED CALLED************************* ");
-
+    logger.info("***********************USER USED CALLED************************* ");
     next();
 });
 
@@ -112,6 +114,80 @@ router.post('/check', function (req, res) {
     res.send(output);
 });
 
+router.get('/temp-login', function (req,res) {
+    let output;
+
+    logger.info(" **********************LOGIN CALLED************************ ");
+    logger.info("user/login called---session info below " );
+    logger.info("  sessionID   : " + req.sessionID);
+    logger.info("  session     : " + JSON.stringify(req.session));
+    logger.info("  body        : " + JSON.stringify(req.body));
+    logger.info("  user        : " + req.query["username"]);
+    logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "yes": "no" ));
+    logger.info("  cookie      : " +  JSON.stringify(req.cookies));
+    logger.info('Signed Cookies: ', JSON.stringify(req.signedCookies));
+
+
+    // is user already logged in?
+    // if user name matches in cookie
+    // and if user key matches in cookie
+    // then ignore existing login request
+
+    if (_.has(req.session, 'req.session.key')) {
+        logger.info("login: session cookie key already exists");
+
+        output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined","already logged in" );
+
+        res.json(output);
+    }
+    else {
+        logger.info("login: new session");
+
+        user.fetchByNamePassword(req.query["username"],req.query["password"])
+            .then( (results) => {
+                logger.info("results were a success " + JSON.stringify(results));
+                req.session.cookie["user"] = req.query["username"];
+                req.session["user"] = req.query["username"];
+                //req.session["key"]  = new Date().getTime();
+                req.session.key  = new Date().getTime();
+                res.cookie('sessionID', req.session.key);
+                res.json(results);
+
+            })
+            .catch( (err) => {
+                logger.info("results were failed " + JSON.stringify(err));
+                res.json(err);
+            });
+
+    }
+});
+router.get('/temp-logout', function(req,res) {
+    let output;
+
+    logger.info("user/logout called---user");
+    logger.info("sessionID: " + req.sessionID);
+
+    logger.info("session before: " + JSON.stringify(req.session));
+    logger.info("session.user before: " + req.session.user);
+    logger.info("store: " + JSON.stringify(req.session));
+
+    req.session.destroy( (err) => {
+        if (err) {
+            logger.error("user:logout:destroy failed with error: " + JSON.stringify(err));
+            logger.info("session: " + JSON.stringify(req.session));
+            logger.info("session has check failed++++" + _.has(req.session, 'req.session.user'));
+
+            output = new Status("failed", _.has(req.session, 'req.session.user') ? "req.session.user": 'undefined', err );
+        }
+        else {
+            logger.info("user:logout success");
+            logger.info("session has check success++++" + _.has(req.session, 'req.session.user'));
+            output = new Status("success",_.has(req.session, 'req.session.user') ? "req.session.user" : 'undefined', "user logged out" );
+        }
+        res.send(output);
+    });
+})
+
 router.post('/login', function (req,res) {
     let output;
 
@@ -122,6 +198,10 @@ router.post('/login', function (req,res) {
     logger.info("  body        : " + JSON.stringify(req.body));
     logger.info("  user        : " + req.body["username"]);
     logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "yes": "no" ));
+    logger.info("  cookie      : " +  req.cookies);
+    logger.info('Signed Cookies: ', JSON.stringify(req.signedCookies));
+
+
     // is user already logged in?
     // if user name matches in cookie
     // and if user key matches in cookie
@@ -144,7 +224,7 @@ router.post('/login', function (req,res) {
                 req.session["user"] = req.body["username"];
                 //req.session["key"]  = new Date().getTime();
                 req.session.key  = new Date().getTime();
-
+                res.cookie('sessionID', req.session.key);
                 res.json(results);
 
             })
