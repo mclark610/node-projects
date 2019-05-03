@@ -20,8 +20,25 @@ router.use((req,res,next) => {
 });
 
 // delete tested with part deletion only. works
-router.delete('/:id(\\d+)', (req,res) => {
-
+router.delete('/:id(\\d+)', (req,res,next) => {
+    let option;
+    // Check user is logged in.
+    logger.info("maintain use called");
+    logger.info("------------------ use -------------------------------------");
+    logger.info("req.session: " + JSON.stringify(req.session));
+    logger.info("------------------------------------------------------------");
+    if (_.has(req.session, 'req.session.user')) {
+        next();
+    }
+    else {
+        option = {
+            status: "failed",
+            user: req.session.user,
+            message: "maintain user not available"
+        };
+        logger.info("maintain:use:option: " + JSON.stringify(option));
+        res.send(option);
+    }
     user.deleteUser(req.params["id"])
         .then( (results) => {
             logger.info("user:delete: " + req.params["id"] + "--- " + results);
@@ -40,7 +57,24 @@ router.delete('/:id(\\d+)', (req,res) => {
 });
 
 router.get('/:id(\\d+)?', function (req, res) {
-
+    let option;
+    // Check user is logged in.
+    logger.info("maintain use called");
+    logger.info("------------------ use -------------------------------------");
+    logger.info("req.session: " + JSON.stringify(req.session));
+    logger.info("------------------------------------------------------------");
+    if (_.has(req.session, 'req.session.user')) {
+        // reserved
+    }
+    else {
+        option = {
+            status: "failed",
+            user: req.session.user,
+            message: "maintain user not available"
+        };
+        logger.info("maintain:use:option: " + JSON.stringify(option));
+        res.send(option);
+    }
     user.fetch(req.params["id"])
         .then( (results) => {
             logger.info("user:get:results: " + results);
