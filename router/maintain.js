@@ -5,6 +5,12 @@ const router = express.Router();
 
 const logger = require('../modules/logger.js');
 const maintain = require('../modules/data_maintain.js');
+const cookieParser = require('cookie-parser');
+
+// TODO: create /user/destroy to destroy session
+// TODO: check if user authorized to perform user maintenance
+
+router.use(cookieParser());
 
 const _ = require('lodash');
 

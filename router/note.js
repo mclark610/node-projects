@@ -7,6 +7,12 @@ const note = require('../modules/data_note');
 const Status = require('../modules/status');
 const _ = require("lodash");
 
+const cookieParser = require('cookie-parser');
+
+// TODO: create /user/destroy to destroy session
+// TODO: check if user authorized to perform user maintenance
+
+router.use(cookieParser());
 
 
 // middleware that is specific to this router

@@ -16,6 +16,12 @@ const Note = require('../modules/data_note');
 
 const graphql = require('graphql');
 const graphqlDate = require('graphql-iso-date');
+const cookieParser = require('cookie-parser');
+
+// TODO: create /user/destroy to destroy session
+// TODO: check if user authorized to perform user maintenance
+
+router.use(cookieParser());
 
 let fakeDatabase = {
     'a': {

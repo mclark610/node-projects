@@ -5,6 +5,12 @@ const Status = require('../modules/status');
 const logger = require('../modules/logger.js');
 const part = require('../modules/data_part');
 const _ = require("lodash");
+const cookieParser = require('cookie-parser');
+
+// TODO: create /user/destroy to destroy session
+// TODO: check if user authorized to perform user maintenance
+
+router.use(cookieParser());
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
@@ -14,17 +20,17 @@ router.use((req,res,next) => {
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
-    /*
-        if (_.has(req.session, 'req.session.user')) {
-            option = new Status("success",req.session.user,"");
-            next();
-        }
-        else {
-            logger.info("part:use:option: " + JSON.stringify(option));
-            option = new Status("failed",req.session.user,"part use user not available");
-            res.send(option);
-        }
-    */
+
+    if (_.has(req.session, 'req.session.user')) {
+        option = new Status("success",req.session.user,"");
+        next();
+    }
+    else {
+        logger.info("part:use:option: " + JSON.stringify(option));
+        option = new Status("failed",req.session.user,"part use user not available");
+        res.send(option);
+    }
+
     next();
 });
 
