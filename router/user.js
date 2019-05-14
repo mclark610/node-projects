@@ -4,14 +4,15 @@ const router = express.Router();
 const logger = require('../modules/logger.js');
 const user = require('../modules/data_user.js');
 const _ = require("lodash");
-const cookieParser = require('cookie-parser');
+
+//const cookieParser = require('cookie-parser');
 
 const Status = require('../modules/status');
 
 // TODO: create /user/destroy to destroy session
 // TODO: check if user authorized to perform user maintenance
 
-router.use(cookieParser());
+//router.use(cookieParser());
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
@@ -158,7 +159,7 @@ router.get('/temp-login', function (req,res) {
     logger.info("  body        : " + JSON.stringify(req.body));
     logger.info("  user        : " + req.query["username"]);
     logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "yes": "no" ));
-    logger.info("  cookie      : " +  JSON.stringify(req.cookies));
+    logger.info("  cookie      : " +  JSON.stringify(req.cookie));
     logger.info('Signed Cookies: ', JSON.stringify(req.signedCookies));
 
 
@@ -179,13 +180,17 @@ router.get('/temp-login', function (req,res) {
 
         user.fetchByNamePassword(req.query["username"],req.query["password"])
             .then( (results) => {
+                logger.info("(((((((((((((((((((((((( inside successfull fetch ))))))))))))))))))))))))");
                 logger.info("results were a success " + JSON.stringify(results));
+                logger.info("  session     : " + JSON.stringify(req.session));
+                logger.info("  req.cookie  : " + JSON.stringify(req.session.cookie));
                 req.session.cookie["user"] = req.query["username"];
                 req.session["user"] = req.query["username"];
                 //req.session["key"]  = new Date().getTime();
                 req.session.key  = new Date().getTime();
                 res.cookie('sessionID', req.session.key);
                 res.json(results);
+                logger.info("(((((((((((((((((((((((())))))))))))))))))))))))");
 
             })
             .catch( (err) => {
@@ -220,7 +225,7 @@ router.get('/temp-logout', function(req,res) {
         }
         res.send(output);
     });
-})
+});
 
 router.post('/login', function (req,res) {
     let output;
@@ -231,8 +236,8 @@ router.post('/login', function (req,res) {
     logger.info("  session     : " + JSON.stringify(req.session));
     logger.info("  body        : " + JSON.stringify(req.body));
     logger.info("  user        : " + req.body["username"]);
-    logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "yes": "no" ));
-    logger.info("  cookie      : " +  req.cookies);
+    logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "exists": "does not exist" ));
+    logger.info("  cookie      : " +  JSON.stringify(req.cookies));
     logger.info('Signed Cookies: ', JSON.stringify(req.signedCookies));
 
 
@@ -249,21 +254,32 @@ router.post('/login', function (req,res) {
         res.json(output);
     }
     else {
+        /*
+        Serverside uses sessions to store data.  Pass key back to user for them to pass back when they want something
+        */
         logger.info("login: new session");
-
         user.fetchByNamePassword(req.body["username"],req.body["password"])
             .then( (results) => {
                 logger.info("results were a success " + JSON.stringify(results));
-                req.session.cookie["user"] = req.body["username"];
                 req.session["user"] = req.body["username"];
-                //req.session["key"]  = new Date().getTime();
                 req.session.key  = new Date().getTime();
-                res.cookie('sessionID', req.session.key);
-                res.json(results);
+
+                req.cookies["username"] = req.body["username"];
+                req.cookies["sessonID"] = req.sessionID;
+                //req.cookies["heydee"] =  "Marko";
+                logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                logger.info("user:login:sessionID  : " + JSON.stringify(req.sessionID));
+                logger.info("user:login:session key: " + JSON.stringify(req.session.key));
+                logger.info("user:login:username   : " + JSON.stringify(req.session.user));
+                logger.info("user:login:username cookies  : " + JSON.stringify(req.cookies["username"]));
+                logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+                output = new Status("success",_.has(req.session, 'req.session.user') ? "req.session.user" : 'undefined', "user logged out" );
+
+                res.send(results);
 
             })
             .catch( (err) => {
-                logger.info("results were failed " + JSON.stringify(err));
+                logger.info("fetchByNamePassword results:  " + JSON.stringify(err));
                 res.json(err);
             });
 

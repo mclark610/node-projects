@@ -18,10 +18,11 @@ router.use((req,res,next) => {
     // Check if user is logged in.
     logger.info("part use called");
     logger.info("------------------ use -------------------------------------");
-    logger.info("req.session: " + JSON.stringify(req.session));
+    logger.info("req.session: "      + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
     if (_.has(req.session, 'req.session.user')) {
+        logger.info("req.session.user: " + JSON.stringify(req.session.user));
         option = new Status("success",req.session.user,"");
         next();
     }

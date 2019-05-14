@@ -5,12 +5,12 @@ const router = express.Router();
 
 const logger = require('../modules/logger.js');
 const maintain = require('../modules/data_maintain.js');
-const cookieParser = require('cookie-parser');
+//const cookieParser = require('cookie-parser');
 
 // TODO: create /user/destroy to destroy session
 // TODO: check if user authorized to perform user maintenance
 
-router.use(cookieParser());
+//router.use(cookieParser());
 
 const _ = require('lodash');
 
@@ -19,10 +19,16 @@ router.use((req,res,next) => {
     let option;
     // Check user is logged in.
     logger.info("maintain use called");
-    logger.info("------------------ use -------------------------------------");
+    logger.info("------------------ MAINTAIN USE -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
+    logger.info("req.session.name: " + JSON.stringify(req.cookies.username));
+    logger.info("user:login:sessionID  : " + JSON.stringify(req.sessionID));
+    logger.info("user:login:session key: " + JSON.stringify(req.session.key));
+    logger.info("user:login:username   : " + JSON.stringify(req.session.user));
+
     logger.info("------------------------------------------------------------");
     if (_.has(req.session, 'req.session.user')) {
+        logger.info("maintain:use:req.session.user: " + JSON.stringify(req.session.user));
         next();
     }
     else {

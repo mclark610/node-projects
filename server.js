@@ -9,7 +9,6 @@ const path = require('path');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
 const cookieParser = require('cookie-parser');
-const jsCookie = require('js-cookie');
 const https = require('https');
 const fs = require('fs-extra');
 
@@ -32,18 +31,21 @@ const toto = require('./router/intoto');
 let configSession = {
     key: 'session_id',
     secret: 'some-secret',
-    resave: false,
+    resave: true,
     saveUninitialized: true,
     cookie: {
         secure: false
     },
-    genid: (req) => {
+    genid: () => {
         return uuid();
     },
     store: new RedisStore({
+        host:'localhost',
+        port: 6379,
         client: client
     })
 };
+let commonSession = session(configSession);
 
 let app = express();
 
@@ -70,10 +72,12 @@ else {
 
 }
 app.use(cookieParser());
-app.use(session(configSession));
+
+app.use(commonSession);
 
 app.use( (req,res,next) => {
-    console.log("**************** APP USE *************************");
+    logger.info("**************** APP USE *************************");
+    req.session.test = "test";
     next();
 });
 
@@ -81,16 +85,12 @@ app.use( (req,res,next) => {
 app.use(express.static(path.join(__dirname, 'public')));
 //logger.info("dirname: " + __dirname);
 
-// init cookies in redis and user if server went down
-app.use((req,res,next) => {
-    logger.info("server use called: " );
-    next();
-});
 app.use(bodyParser.json());
 
 app.use(bodyParser.urlencoded({
     extended: false
 }));
+
 
 app.use('/maintain',maintain);
 app.use('/part',part);
