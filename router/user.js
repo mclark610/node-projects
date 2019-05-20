@@ -275,7 +275,7 @@ router.post('/login', function (req,res) {
                 logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
                 output = new Status("success",_.has(req.session, 'req.session.user') ? "req.session.user" : 'undefined', "user logged out" );
 
-                res.send(results);
+                res.send(output);
 
             })
             .catch( (err) => {

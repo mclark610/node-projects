@@ -23,22 +23,6 @@ const cookieParser = require('cookie-parser');
 
 router.use(cookieParser());
 
-let fakeDatabase = {
-    'a': {
-        id: 'a',
-        name: 'alice',
-        vendor: 'Testing ground',
-        complete: false
-    },
-    'b': {
-        id: 'b',
-        name: 'beth',
-        vendor: 'grocery store',
-        description: 'trye me ye olde placement.',
-        complete: false,
-        status: 0
-    }
-};
 /*
 let statusType = new graphql.GraphQLEnumType({
     name: 'status',
