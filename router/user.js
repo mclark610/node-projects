@@ -43,10 +43,7 @@ router.delete('/:id(\\d+)', (req,res,next) => {
     user.deleteUser(req.params["id"])
         .then( (results) => {
             logger.info("user:delete: " + req.params["id"] + "--- " + results);
-
-            let output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"] : "undefined" , results );
-
-            res.send(output);
+            res.status(200).send(results);
         })
         .catch( (err) => {
             logger.info("user:delete: " + JSON.stringify(err));
@@ -58,7 +55,7 @@ router.delete('/:id(\\d+)', (req,res,next) => {
 });
 
 router.get('/:id(\\d+)?', function (req, res) {
-    let option;
+
     // Check user is logged in.
     logger.info("maintain use called");
     logger.info("------------------ use -------------------------------------");
@@ -68,29 +65,17 @@ router.get('/:id(\\d+)?', function (req, res) {
         // reserved
     }
     else {
-        option = {
-            status: "failed",
-            user: req.session.user,
-            message: "maintain user not available"
-        };
-        logger.info("maintain:use:option: " + JSON.stringify(option));
-        res.send(option);
+        res.status(500).send("unauthorized user");
     }
+
     user.fetch(req.params["id"])
         .then( (results) => {
-            logger.info("user:get:results: " + results);
-
-            let output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"] : "undefined" , results );
-
-            res.send(output);
+            logger.info("user:get: " + req.params["id"] + "--- " + results);
+            res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("user:get:err: " + err);
-
-            let output = new Status("failed",req.session["user"], err);
-
-            res.send(output);
-
+            logger.info("user:get: error: " + JSON.stringify(err));
+            res.status(500).send(err);
         });
 });
 
@@ -98,19 +83,12 @@ router.put('/', (req,res) => {
     // update
     user.update(req.body)
         .then( (results) => {
-            logger.info("user:put:results: " + results);
-
-            let output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"] : "undefined" , results );
-
-            res.send(output);
+            logger.info("user:put: " + req.params["id"] + "--- " + results);
+            res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("user:put:err: " + err);
-
-            let output = new Status("failed",(!(req.session["user"]) ? "undefined" : req.session["user"]),err);
-
-            res.send(output);
-
+            logger.info("user:put: error: " + JSON.stringify(err));
+            res.status(500).send(err);
         });
 });
 
@@ -120,18 +98,12 @@ router.post('/register', function (req, res) {
 
     user.register(req.body)
         .then( (results) => {
-            logger.info("user:register:results: " + results);
-
-            let output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"] : "undefined" , results );
-
-            res.send(output);
+            logger.info("user:post: " + req.data["id"] + "--- " + results);
+            res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("part catch err: " + err);
-
-            let output = new Status("failed",_.has(req.session, 'req.session.user') ? req.session["user"] : "undefined" , err );
-
-            res.send(output);
+            logger.info("user:post: error: " + JSON.stringify(err));
+            res.status(500).send(err);
         });
 });
 
@@ -145,91 +117,10 @@ router.post('/check', function (req, res) {
     logger.info("===========================================================");
 
 
-    let output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined",req.session["user"] );
-    res.send(output);
-});
-
-router.get('/temp-login', function (req,res) {
-    let output;
-
-    logger.info(" **********************LOGIN CALLED************************ ");
-    logger.info("user/login called---session info below " );
-    logger.info("  sessionID   : " + req.sessionID);
-    logger.info("  session     : " + JSON.stringify(req.session));
-    logger.info("  body        : " + JSON.stringify(req.body));
-    logger.info("  user        : " + req.query["username"]);
-    logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "yes": "no" ));
-    logger.info("  cookie      : " +  JSON.stringify(req.cookie));
-    logger.info('Signed Cookies: ', JSON.stringify(req.signedCookies));
-
-
-    // is user already logged in?
-    // if user name matches in cookie
-    // and if user key matches in cookie
-    // then ignore existing login request
-
-    if (_.has(req.session, 'req.session.key')) {
-        logger.info("login: session cookie key already exists");
-
-        output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined","already logged in" );
-
-        res.json(output);
-    }
-    else {
-        logger.info("login: new session");
-
-        user.fetchByNamePassword(req.query["username"],req.query["password"])
-            .then( (results) => {
-                logger.info("(((((((((((((((((((((((( inside successfull fetch ))))))))))))))))))))))))");
-                logger.info("results were a success " + JSON.stringify(results));
-                logger.info("  session     : " + JSON.stringify(req.session));
-                logger.info("  req.cookie  : " + JSON.stringify(req.session.cookie));
-                req.session.cookie["user"] = req.query["username"];
-                req.session["user"] = req.query["username"];
-                //req.session["key"]  = new Date().getTime();
-                req.session.key  = new Date().getTime();
-                res.cookie('sessionID', req.session.key);
-                res.json(results);
-                logger.info("(((((((((((((((((((((((())))))))))))))))))))))))");
-
-            })
-            .catch( (err) => {
-                logger.info("results were failed " + JSON.stringify(err));
-                res.json(err);
-            });
-
-    }
-});
-router.get('/temp-logout', function(req,res) {
-    let output;
-
-    logger.info("user/logout called---user");
-    logger.info("sessionID: " + req.sessionID);
-
-    logger.info("session before: " + JSON.stringify(req.session));
-    logger.info("session.user before: " + req.session.user);
-    logger.info("store: " + JSON.stringify(req.session));
-
-    req.session.destroy( (err) => {
-        if (err) {
-            logger.error("user:logout:destroy failed with error: " + JSON.stringify(err));
-            logger.info("session: " + JSON.stringify(req.session));
-            logger.info("session has check failed++++" + _.has(req.session, 'req.session.user'));
-
-            output = new Status("failed", _.has(req.session, 'req.session.user') ? "req.session.user": 'undefined', err );
-        }
-        else {
-            logger.info("user:logout success");
-            logger.info("session has check success++++" + _.has(req.session, 'req.session.user'));
-            output = new Status("success",_.has(req.session, 'req.session.user') ? "req.session.user" : 'undefined', "user logged out" );
-        }
-        res.send(output);
-    });
+    res.status(200).send("checked: see server log");
 });
 
 router.post('/login', function (req,res) {
-    let output;
-
     logger.info(" **********************LOGIN CALLED************************ ");
     logger.info("user/login called---session info below " );
     logger.info("  sessionID   : " + req.sessionID);
@@ -247,11 +138,8 @@ router.post('/login', function (req,res) {
     // then ignore existing login request
 
     if (_.has(req.session, 'req.session.key')) {
-        logger.info("login: session cookie key already exists");
-
-        output = new Status("success",_.has(req.session, 'req.session.user') ? req.session["user"]: "undefined","already logged in" );
-
-        res.json(output);
+        logger.info("login: session cookie key already exists: " + req.session.user);
+        res.status(200).send(req.session.user);
     }
     else {
         /*
@@ -273,22 +161,19 @@ router.post('/login', function (req,res) {
                 logger.info("user:login:username   : " + JSON.stringify(req.session.user));
                 logger.info("user:login:username cookies  : " + JSON.stringify(req.cookies["username"]));
                 logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-                output = new Status("success",_.has(req.session, 'req.session.user') ? "req.session.user" : 'undefined', "user logged out" );
 
-                res.send(output);
+                res.status(200).send(req.session.user);
 
             })
             .catch( (err) => {
-                logger.info("fetchByNamePassword results:  " + JSON.stringify(err));
-                res.json(err);
+                logger.info("user:post: error: " + JSON.stringify(err));
+                res.status(500).send(err);
             });
 
     }
 });
 
 router.post('/logout', function(req,res) {
-    let output;
-
     logger.info("user/logout called---user");
     logger.info("sessionID: " + req.sessionID);
 
@@ -301,15 +186,13 @@ router.post('/logout', function(req,res) {
             logger.error("user:logout:destroy failed with error: " + JSON.stringify(err));
             logger.info("session: " + JSON.stringify(req.session));
             logger.info("session has check failed++++" + _.has(req.session, 'req.session.user'));
-
-            output = new Status("failed", _.has(req.session, 'req.session.user') ? "req.session.user": 'undefined', err );
+            logger.info("user:post: error: " + JSON.stringify(err));
+            res.status(500).send(err);
         }
         else {
             logger.info("user:logout success");
-            logger.info("session has check success++++" + _.has(req.session, 'req.session.user'));
-            output = new Status("success",_.has(req.session, 'req.session.user') ? "req.session.user" : 'undefined', "user logged out" );
+            res.status(200).send("user:logout:success");
         }
-        res.send(output);
     });
 });
 

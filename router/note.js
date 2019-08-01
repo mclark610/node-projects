@@ -4,7 +4,6 @@ const router = express.Router();
 const logger = require('../modules/logger.js');
 const note = require('../modules/data_note');
 
-const Status = require('../modules/status');
 const _ = require("lodash");
 
 const cookieParser = require('cookie-parser');
@@ -17,7 +16,6 @@ router.use(cookieParser());
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    let option;
     // Check user is logged in.
     logger.info("note use called");
     logger.info("------------------ use -------------------------------------");
@@ -25,83 +23,66 @@ router.use((req,res,next) => {
     logger.info("------------------------------------------------------------");
 
     if (_.has(req.session, 'req.session.user')) {
-        option = new Status("success",req.session.user,"use: continue on");
-
-        logger.info("option: " + JSON.stringify(option));
+        logger.info("note:use:user: "+req.session.user);
 
         next();
     }
     else {
-        logger.info("option in fail: " + JSON.stringify(option));
-        option = new Status("fail",req.session.user,"use: session user not found");
-        res.send(option);
+        logger.info("note:use:user: not available");
+        res.status(403).send("unauthorized user");
     }
 });
 
 
 // delete tested with note deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
-    let option;
 
     note.deletenote(req.params["id"])
         .then( (results) => {
             logger.info("note:delete: " + req.params["id"] + "--- " + results);
-            option = new Status("success",req.session.user,results);
-            res.send(option);
+            res.status(200).send(results);
         })
         .catch( (err) => {
-            option = new Status("failed",req.session.user,err);
-            res.send(option);
+            logger.info("note:delete: error: " + JSON.stringify(err));
+            res.status(500).send(err);
         });
 });
 
 router.get('/:id(\\d+)?', function (req, res) {
-    let option;
-
     note.fetch(req.params["id"])
         .then( (results) => {
-            logger.info("results: " + results);
-            option = new Status("success",req.session.user,results);
-            res.send(option);
+            logger.info("note:get:results: " + JSON.stringify(results));
+            res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("err: " + err);
-            option = new Status("failed",req.session.user,err);
-            res.send(option);
-
+            logger.info("note:get:err: " + JSON.stringify(err));
+            res.status(500).send(err);
         });
 });
 
 router.put('/', (req,res) => {
-    let option;
     // update
     note.update(req.body)
         .then( (results) => {
-            logger.info("note:put:results: " + results);
-            option = new Status("success",req.session.user,results);
-            res.send(option);
+            logger.info("note:put:results: " + JSON.stringify(results));
+            res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("note:put:err: " + err);
-            option = new Status("failed",req.session.user,err);
-            res.send(option);
-
+            logger.info("note:get:err: " + JSON.stringify(err));
+            res.status(500).send(err);
         });
 });
 
 // post note
 router.post('/', function (req, res) {
-    let option;
     note.insert(req.body)
         .then( (results) => {
             logger.info("note:results: " + JSON.stringify(results));
-            option = new Status("success",req.session.user,results);
-            res.send(option);
+            res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("note:err: " + err);
-            option = new Status("failed",req.session.user,err);
-            res.send(option);
+            logger.info("note:get:err: " + JSON.stringify(err));
+            res.status(500).send(err);
         });
 });
 

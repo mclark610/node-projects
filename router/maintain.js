@@ -16,7 +16,6 @@ const _ = require('lodash');
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    let option;
     // Check user is logged in.
     logger.info("maintain use called");
     logger.info("------------------ MAINTAIN USE -------------------------------------");
@@ -32,13 +31,8 @@ router.use((req,res,next) => {
         next();
     }
     else {
-        option = {
-            status: "failed",
-            user: req.session.user,
-            message: "maintain user not available"
-        };
-        logger.info("maintain:use:option: " + JSON.stringify(option));
-        res.send(option);
+        logger.info("maintain:use:option: " + JSON.stringify("user not authorized"));
+        res.status(403).send("unauthorized user");
     }
 });
 
@@ -51,7 +45,7 @@ router.delete('/:id(\\d+)', (req,res) => {
             res.send("router.delete this stuff!: " + req.params["id"]);
         })
         .catch( (err) => {
-            res.send("router.delete error: " + err);
+            res.status(403).send(err);
         });
 });
 
@@ -64,12 +58,12 @@ router.get('/:id(\\d+)?', function (req,res) {
 
     maintain.fetch(req.params["id"])
         .then( (results) => {
-            logger.info("results: " + results);
-            res.send(results);
+            logger.info("maintain:get:results: " + results);
+            res.status(200).send(results);
         })
         .catch( (err) => {
             logger.info("err: " + err);
-            res.send(err);
+            res.status(500).send(err);
 
         });
 
@@ -80,11 +74,11 @@ router.put('/', (req,res) => {
     maintain.update(req.body)
         .then( (results) => {
             logger.log("info","results: " + results);
-            res.send(results);
+            res.status(200).send(results);
         })
         .catch( (err) => {
             logger.info("maintain catch err: " + err);
-            res.send(err);
+            res.status(500).send(err);
         });
 });
 
@@ -93,11 +87,11 @@ router.post('/', function (req, res) {
     maintain.insert(req.body)
         .then( (results) => {
             logger.log("info","results: " + results);
-            res.send(results);
+            res.status(200).send(results);
         })
         .catch( (err) => {
             logger.info("maintain catch err: " + err);
-            res.send(err);
+            res.status(500).send(err);
         });
 });
 

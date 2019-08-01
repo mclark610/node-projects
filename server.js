@@ -77,7 +77,7 @@ app.use(commonSession);
 
 app.use( (req,res,next) => {
     logger.info("**************** APP USE *************************");
-    req.session.test = "test";
+
     next();
 });
 
