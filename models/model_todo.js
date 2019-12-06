@@ -41,12 +41,12 @@ module.exports = (sequelize, DataTypes) => {
         // associations can be defined here
 
         models.todos.belongsToMany(models.parts, {
-            through: 'todo_parts',
+            through: 'todo_part',
             foreignKey: 'todoId',
             as: 'parts'
         });
         models.todos.belongsToMany(models.notes, {
-            through: 'todo_notes',
+            through: 'todo_note',
             foreignKey: 'todoId',
             as: 'notes'
         });

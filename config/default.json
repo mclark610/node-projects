@@ -11,7 +11,6 @@
 			"dialect": "mysql",
 			"host": "localhost",
 			"port": "3306",
-			"operatorsAliases": false,
 			"pool": {
 				"max": 3,
 				"min": 0,

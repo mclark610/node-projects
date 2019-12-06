@@ -9,7 +9,7 @@ module.exports = {
                 autoIncrement: true
             },
             name:   Sequelize.STRING(128),
-            password: Sequelize.STRING(16),
+            password: Sequelize.STRING(128),
             description: Sequelize.TEXT,
             status: {
                 type: Sequelize.ENUM,

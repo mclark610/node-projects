@@ -69,6 +69,7 @@ else {
             credentials: true
         }
     ));
+    logger.info("NODE_ENV: " + process.env.NODE_ENV);
 
 }
 app.use(cookieParser());

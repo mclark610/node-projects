@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             type: DataTypes.INTEGER
         },
-        maintain_id: DataTypes.INTEGER,
-        todo_id: DataTypes.INTEGER
+        maintainId: DataTypes.INTEGER,
+        todoId: DataTypes.INTEGER
     },
     {
         timestamps        : false,

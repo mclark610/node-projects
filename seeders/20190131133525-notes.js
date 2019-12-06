@@ -4,7 +4,7 @@ module.exports = {
   up: (queryInterface, Sequelize) => {
       return queryInterface.bulkInsert('notes', [
           {
-              maintain_id: 1,
+              id: 1,
               name: "air filter",
               description: `replace air filter
                 loosen the acorn nut and pull off the cover-remove
@@ -16,7 +16,7 @@ module.exports = {
               status: 'active',
               complete: false
           }, {
-              maintain_id: 1,
+              id: 2,
               name: "oil",
               description: `change oil:
                 remove 7/16 square nut at base of engine and drain into pan.
@@ -28,7 +28,7 @@ module.exports = {
               status: 'active',
               complete: false
           }, {
-              maintain_id: 1,
+              id: 3,
               name: "wash",
               description: `cleanup:
                 remove dirt using scrub brush and power washer.
@@ -38,7 +38,7 @@ module.exports = {
               status: 'active',
               complete: false
           }, {
-              maintain_id: 3,
+              id: 4,
               name: "oil",
               description: `change oil:
                 remove 7/16 square nut at base of engine and drain into pan.
