@@ -32,9 +32,15 @@ module.exports = (sequelize, DataTypes) => {
 
     Part.associate = function(models) {
         models.parts.belongsToMany(models.todos, {
-            through: 'todo_parts',
+            through: 'todo_part',
             foreignKey: 'partId'
         });
+        models.parts.belongsToMany(models.maintains, {
+            through: 'todo_maintain',
+            foreignKey: 'partId'
+        });
+
     };
+
     return Part;
 };

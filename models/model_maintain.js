@@ -26,7 +26,8 @@ module.exports = (sequelize, DataTypes) => {
     Maintain.associate = function(models) {
 
         models.maintains.hasMany(models.todos);
-
+        models.maintains.hasMany(models.notes);
+        models.maintains.hasMany(models.parts);
     };
 
     return Maintain;
