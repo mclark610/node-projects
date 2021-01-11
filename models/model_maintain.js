@@ -1,7 +1,6 @@
 /*
  * maintain table is the main maintenance table.
  */
-'use strict';
 module.exports = (sequelize, DataTypes) => {
     let Maintain = sequelize.define('maintains', {
         id:  {

@@ -102,7 +102,7 @@ router.post('/register', function (req, res) {
             res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("user:post: error: " + JSON.stringify(err));
+            logger.info("user:post: register error: " + JSON.stringify(err));
             res.status(500).send(err);
         });
 });
@@ -166,7 +166,7 @@ router.post('/login', function (req,res) {
 
             })
             .catch( (err) => {
-                logger.info("user:post: error: " + JSON.stringify(err));
+                logger.info("user:post:fetchByNamePassword error: " + JSON.stringify(err));
                 res.status(500).send(err);
             });
 
@@ -186,7 +186,7 @@ router.post('/logout', function(req,res) {
             logger.error("user:logout:destroy failed with error: " + JSON.stringify(err));
             logger.info("session: " + JSON.stringify(req.session));
             logger.info("session has check failed++++" + _.has(req.session, 'req.session.user'));
-            logger.info("user:post: error: " + JSON.stringify(err));
+            logger.info("user:post:logout error: " + JSON.stringify(err));
             res.status(500).send(err);
         }
         else {

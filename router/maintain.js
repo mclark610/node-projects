@@ -21,17 +21,23 @@ router.use((req,res,next) => {
     logger.info("------------------ MAINTAIN USE -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("req.session.name: " + JSON.stringify(req.cookies.username));
-    logger.info("user:login:sessionID  : " + JSON.stringify(req.sessionID));
-    logger.info("user:login:session key: " + JSON.stringify(req.session.key));
-    logger.info("user:login:username   : " + JSON.stringify(req.session.user));
-
+    logger.info("maintain:use:sessionID  : " + JSON.stringify(req.sessionID));
+    logger.info("maintain:use:session key: " + JSON.stringify(req.session.key));
+    logger.info("maintain:use:username   : " + JSON.stringify(req.session.user));
     logger.info("------------------------------------------------------------");
-    if (_.has(req.session, 'req.session.user')) {
+
+    if (_.has(req.session.user)) {
         logger.info("maintain:use:req.session.user: " + JSON.stringify(req.session.user));
         next();
     }
     else {
-        logger.info("maintain:use:option: " + JSON.stringify("user not authorized"));
+        if (!_.has(req.session.user)) {
+            logger.info("maintain:user:req.session.user is undefined");
+            return;
+        }
+        else {
+            logger.info("maintain:use:option: " + JSON.stringify("user not authorized"));
+        }
         res.status(403).send("unauthorized user");
     }
 });

@@ -3,3 +3,4 @@ dist
 config
 test_programs
 .keys
+.env
