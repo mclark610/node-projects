@@ -5,8 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
-const graphqlHTTP = require('express-graphql');
-
+const { graphqlHTTP } = require('express-graphql');
 const logger = require('../modules/logger.js');
 
 const Part = require('../modules/data_part');
