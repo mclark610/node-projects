@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const logger  = require('./modules/logger');
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const path = require('path');
 const RedisStore = require('connect-redis')(session);
 const redis = require('redis');
@@ -37,7 +37,7 @@ let configSession = {
         secure: true
     },
     genid: () => {
-        return uuid();
+        return uuidv4();
     },
     store: new RedisStore({
         host:process.env.REDIS_SERVER,

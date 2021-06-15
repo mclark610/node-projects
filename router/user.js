@@ -95,7 +95,6 @@ router.put('/', (req,res) => {
 
 // This will be for admin
 router.post('/register', function (req, res) {
-
     user.register(req.body)
         .then( (results) => {
             logger.info("user:post: " + req.data["id"] + "--- " + results);
@@ -166,7 +165,7 @@ router.post('/login', function (req,res) {
 
             })
             .catch( (err) => {
-                logger.info("user:post:fetchByNamePassword error: " + JSON.stringify(err));
+                logger.info("user:post:fetchByNamePassword error: " + err);
                 res.status(500).send(err);
             });
 
