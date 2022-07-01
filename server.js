@@ -6,9 +6,9 @@ const session = require('express-session');
 const logger  = require('./modules/logger');
 const { v4: uuidv4 } = require('uuid');
 const path = require('path');
-const RedisStore = require('connect-redis')(session);
-const redis = require('redis');
-const redisClient = require('./modules/redis_server');
+//const RedisStore = require('connect-redis')(session);
+//const redis = require('redis');
+//const redisClient = require('./modules/redis_server');
 const cookieParser = require('cookie-parser');
 const https = require('https');
 const fs = require('fs-extra');
@@ -39,12 +39,8 @@ let configSession = {
     genid: () => {
         return uuidv4();
     },
-    store: new RedisStore({
-        host:process.env.REDIS_SERVER,
-        port: process.env.REDIS_PORT,
-        client: redisClient
-    })
 };
+
 let commonSession = session(configSession);
 
 let app = express();
