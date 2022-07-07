@@ -1,11 +1,11 @@
-const pbkdf2 = require('pbkdf2');
-const uuid   = require('uuid');
-// This is how it will work.  
-// 1. user enters userid & password
-// 2. return decrypted uuid
-// 3. encrypt and compare with original encrypted string
+const  {describe, expect, test} = require( '@jest/globals');
+const { v4: uuidv4 } = require('uuid');
 
-let derivedKey = pbkdf2.pbkdf2Sync('helloworld','salt',1,32,'sha512');
-let decrypted = 
+describe('Trying this for the first time in node-project',() => {
 
-console.log("derivedKey: " + derivedKey.toString());
+    test('uuid is a long string',() => {
+        expect(4).toBeGreaterThan(3);
+    })
+    
+})
+
