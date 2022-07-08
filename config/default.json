@@ -9,7 +9,7 @@
 	"sequelize": {
 		"options": {
 			"dialect": "mysql",
-			"host": "172.18.0.3",
+			"host": "linux-desktop",
 			"port": "3306",
 			"pool": {
 				"max": 3,

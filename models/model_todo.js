@@ -1,57 +1,43 @@
 /*
- * todo table tracks all the todo information. Todo can be used by the maintenance table.
+ * task table tracks all the task information. Task can be used by the maintenance table.
  */
 
 module.exports = (sequelize, DataTypes) => {
-    let ToDo = sequelize.define('todos', {
+    let Task = sequelize.define('tasks', {
         id:  {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        maintainId: {
-            type: DataTypes.INTEGER,
-        },
         name:   DataTypes.STRING(128),
         description: DataTypes.TEXT,
-        dueOnHour: {
-            type: DataTypes.INTEGER,
-            defaultValue: -1
-        },
-        dueOnDate: DataTypes.DATE,
         status: {
-            type: DataTypes.ENUM,
-            values: ['active','inactive'],
-            defaultValue: 'active'
+            type: DataTypes.INTEGER,
+            defaultValue: 1
         },
-        complete: DataTypes.BOOLEAN,
+        complete: DataTypes.INTEGER,
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE
     },
     {
         timestamps        : true,
-        tableName         : 'todos',
+        tableName         : 'tasks',
     });
 
-    ToDo.associate = function(models) {
-        models.todos.hasOne(models.maintains, {
-            through: 'maintains',
-            foreignKey: 'id'
-        });
-        // associations can be defined here
+    Task.associate = function(models) {
 
-        models.todos.belongsToMany(models.parts, {
-            through: 'todo_part',
-            foreignKey: 'todoId',
+        models.tasks.belongsToMany(models.parts, {
+            through: 'task_part',
+            foreignKey: 'task_id',
             as: 'parts'
         });
-        models.todos.belongsToMany(models.notes, {
-            through: 'todo_note',
-            foreignKey: 'todoId',
+        models.tasks.belongsToMany(models.notes, {
+            through: 'task_note',
+            foreignKey: 'task_id',
             as: 'notes'
         });
 
     };
 
-    return ToDo;
+    return Task;
 };

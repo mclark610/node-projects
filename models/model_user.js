@@ -13,9 +13,8 @@ module.exports = (sequelize, DataTypes) => {
         password: DataTypes.STRING(128),
         description: DataTypes.TEXT,
         status: {
-            type: DataTypes.ENUM,
-            values: ['active','inactive'],
-            defaultValue: 'active'
+            type: DataTypes.INTEGER,
+            defaultValue: 1
         },
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE

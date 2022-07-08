@@ -12,9 +12,8 @@ module.exports = {
             password: Sequelize.STRING(128),
             description: Sequelize.TEXT,
             status: {
-                type: Sequelize.ENUM,
-                values: ['active','inactive'],
-                defaultValue: 'active'
+                type: Sequelize.INTEGER,
+                defaultValue: 1,
             },
             createdAt: Sequelize.DATE,
             updatedAt: Sequelize.DATE

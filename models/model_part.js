@@ -17,11 +17,10 @@ module.exports = (sequelize, DataTypes) => {
         image_filename: DataTypes.STRING(255),
         doc_filename: DataTypes.STRING(255),
         status: {
-            type: DataTypes.ENUM,
-            values: ['active','inactive'],
-            defaultValue: 'active'
+            type: DataTypes.INTEGER,
+            defaultValue: 1
         },
-        complete: DataTypes.BOOLEAN,
+        complete: DataTypes.INTEGER,
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE
     },
@@ -31,13 +30,13 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Part.associate = function(models) {
-        models.parts.belongsToMany(models.todos, {
-            through: 'todo_part',
-            foreignKey: 'partId'
+        models.parts.belongsToMany(models.tasks, {
+            through: 'task_part',
+            foreignKey: 'part_id'
         });
-        models.parts.belongsToMany(models.maintains, {
-            through: 'todo_maintain',
-            foreignKey: 'partId'
+        models.parts.belongsToMany(models.projects, {
+            through: 'project_task',
+            foreignKey: 'part_id'
         });
 
     };

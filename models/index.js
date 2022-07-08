@@ -30,8 +30,8 @@ db.Sequelize = Sequelize;
 fs.readdirSync("./models/")
     .filter( file => file !== "index.js")
     .forEach( file => {
-        console.log("dirname: " + __dirname);
-        console.log("filefound: " + file);
+//        console.log("dirname: " + __dirname);
+//        console.log("filefound: " + file);
         models.push(require(path.join(__dirname,file)));
     });
 

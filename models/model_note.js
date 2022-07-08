@@ -14,26 +14,24 @@ module.exports = (sequelize, DataTypes) => {
         image_filename: DataTypes.STRING(255),
         doc_filename: DataTypes.STRING(255),
         status: {
-            type: DataTypes.ENUM,
-            values: ['active','inactive'],
-            defaultValue: 'active'
+            type: DataTypes.INTEGER,
+            defaultValue: 1
         },
-        complete: DataTypes.BOOLEAN,
+        complete: DataTypes.INTEGER,
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE
     });
 
     Note.associate = function(models) {
 
-        models.notes.belongsToMany(models.todos, {
-            through: 'todo_note',
-            foreignKey: 'noteId'
+        models.notes.belongsToMany(models.tasks, {
+            through: 'task_note',
+            foreignKey: 'note_id'
         });
-        models.notes.belongsToMany(models.maintains, {
-            through: 'todo_note',
-            foreignKey: 'noteId'
+        models.notes.belongsToMany(models.projects, {
+            through: 'project_note',
+            foreignKey: 'note_id'
         });
-
     };
     return Note;
 };
