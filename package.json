@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development node dist/server.bundle.js",
     "start": "node server.js",
-    "test": "jest",
+    "test": "cross-env NODE_ENV=test jest",
     "build": "webpack --config webpack.config.js"
   },
   "keywords": [
@@ -18,7 +18,8 @@
     "webpack",
     "cross-env",
     "session",
-    "redis"
+    "redis",
+    "graphql"
   ],
   "author": "Mark",
   "license": "GPL",

@@ -9,8 +9,8 @@ const { graphqlHTTP } = require('express-graphql');
 const logger = require('../modules/logger.js');
 
 const Part = require('../modules/data_part');
-const Maintain = require('../modules/data_maintain');
-const Todo = require('../modules/data_todo');
+const Project = require('../modules/data_project');
+const Task = require('../modules/data_task');
 const Note = require('../modules/data_note');
 
 const graphql = require('graphql');
@@ -91,9 +91,6 @@ var partType = new graphql.GraphQLObjectType({
         doc_filename: {
             type: graphql.GraphQLString,
         },
-        type: {
-            type: graphql.GraphQLString,
-        },
         complete: {
             type: graphql.GraphQLBoolean,
         },
@@ -109,8 +106,8 @@ var partType = new graphql.GraphQLObjectType({
     }
 });
 
-var todoType = new graphql.GraphQLObjectType({
-    name: 'Todo',
+var taskType = new graphql.GraphQLObjectType({
+    name: 'Task',
     fields: {
         id:  {
             type: graphql.GraphQLInt,
@@ -153,13 +150,13 @@ var todoType = new graphql.GraphQLObjectType({
 });
 
 var maintainType = new graphql.GraphQLObjectType({
-    name: 'Maintain',
+    name: 'Project',
     fields: {
         id:  {
             type: graphql.GraphQLInt,
         },
-        todos: {
-            type: new graphql.GraphQLList(todoType),
+        tasks: {
+            type: new graphql.GraphQLList(taskType),
         },
         name: {
             type: graphql.GraphQLString,
@@ -208,22 +205,22 @@ let queryType = new graphql.GraphQLObjectType({
                 return Part.fetch(undefined);
             }
         },
-        todo: {
-            type: todoType,
+        task: {
+            type: taskType,
             args: {
                 id: {
                     type: graphql.GraphQLInt
                 }
             },
             resolve: function( _, id ) {
-                return Todo.fetch(id["id"]);
+                return Task.fetch(id["id"]);
                 //return fakeDatabase[id];
             }
         },
-        todos: {
-            type: new graphql.GraphQLList(todoType),
+        tasks: {
+            type: new graphql.GraphQLList(taskType),
             resolve: function() {
-                return Todo.fetch(undefined);
+                return Task.fetch(undefined);
             }
         },
         note: {
@@ -252,14 +249,14 @@ let queryType = new graphql.GraphQLObjectType({
                 }
             },
             resolve: (_,id) => {
-                return Maintain.fetch(id["id"]);
+                return Project.fetch(id["id"]);
             },
 
         },
         maintains: {
             type: new graphql.GraphQLList(maintainType),
             resolve: () => {
-                return Maintain.fetch(undefined);
+                return Project.fetch(undefined);
             },
 
         }

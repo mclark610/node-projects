@@ -29,14 +29,17 @@ module.exports = (sequelize, DataTypes) => {
         models.tasks.belongsToMany(models.parts, {
             through: 'task_part',
             foreignKey: 'task_id',
-            as: 'parts'
         });
+
         models.tasks.belongsToMany(models.notes, {
             through: 'task_note',
             foreignKey: 'task_id',
-            as: 'notes'
         });
 
+        models.tasks.belongsToMany(models.projects, {
+            through: 'project_task',
+            foreignKey: 'task_id',
+        })
     };
 
     return Task;

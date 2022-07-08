@@ -2,6 +2,8 @@
  * part table tracks all the parts information. Part can be used by the maintenance table.
  */
 
+const Project = require('./model_project');
+
 module.exports = (sequelize, DataTypes) => {
     let Part = sequelize.define('parts', {
         id:  {
@@ -35,10 +37,12 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'part_id'
         });
         models.parts.belongsToMany(models.projects, {
-            through: 'project_task',
+            through: 'project_part',
             foreignKey: 'part_id'
         });
-
+        models.parts.hasOne(models.projects, {
+            foreignKey: 'part_id'
+        })
     };
 
     return Part;

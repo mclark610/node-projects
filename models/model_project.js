@@ -1,6 +1,9 @@
 /*
  * project table is the main project table.
  */
+const Part = require( './model_part');
+
+
 module.exports = (sequelize, DataTypes) => {
     let Project = sequelize.define('projects', {
         id:  {
@@ -22,9 +25,26 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     Project.associate = function(models) {
-        models.projects.hasMany(models.tasks);
-        models.projects.hasMany(models.notes);
-        models.projects.hasMany(models.parts);
+
+        models.projects.hasOne(models.parts,{
+            allowNull: true,
+            foreignKey: 'part_id'
+        })
+        models.projects.belongsToMany(models.tasks, {
+            through: 'project_task',
+            foreign_key: 'project_id'
+        });
+
+        models.projects.belongsToMany(models.notes, {
+            through: 'project_note',
+            foreign_key: 'project_id'
+        });
+
+        models.projects.belongsToMany(models.parts, {
+            through: 'project_part',
+            foreignKey: 'project_id'
+        });
+
     };
 
     return Project;

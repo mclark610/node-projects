@@ -1,6 +1,10 @@
-const logger = require('../modules/logger');
+const logger = require('./logger');
 const models = require( '../models');
-const { todos, parts, notes } = models;
+const { projects,todos } = models;
+
+let setStatus= (body) => {
+    // Check if id is number
+};
 
 // TODO: needs work.  check for sql injection?
 let validate = (body) => {
@@ -23,60 +27,52 @@ let insert = (body) => {
     return new Promise( (resolve,reject) => {
         validate(body)
             .then((results) => {
-                if (!results["err"]) {
-                    todos.create(results)
-                        .then( (id) => {
-                            resolve( `
-                                "id": ${id},
-                                "status": "success"
-                                `);
-                        });
-                }
+                projects.create(results)
+                    .then( (id) => {
+                        resolve( `
+                            "id": ${id},
+                            "status": "success"
+                            `);
+                    });
             })
             .catch((err) => {
-                logger.info("insertMaintain: validateMaintain failed with " + err);
+                logger.info("insertProject: validateProject failed with " + err);
                 reject(err);
             });
     });
 };
 
+// tested manually works with id and no id
 let fetch = (id) => {
     return new Promise( (resolve,reject) => {
-        logger.info("fetchTodo:id: " + id);
+        logger.info("fetchProject:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
-            //models["maintains"].findByPk(id)
-            todos.findByPk(id, {
+            //models["projects"].findByPk(id)
+            projects.findByPk(id, {
                 include: [{
-                    model: parts,
-                    as: 'parts'
-                },{
-                    model: notes,
-                    as: 'notes'
-                }
-                /*,{
-                    model: maintains,
-                    as: 'maintains'
-                }*/],
+                    model: todos,
+                    as: 'todos'
+                }],
             })
                 .then( (results) => {
-                    logger.info("fetchTodos:findByPk: success: " + JSON.stringify(results));
+                    logger.info("fetchProject:findByPk: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchTodos:findByPk error: " + err);
+                    logger.info("fetchProject:findByPk error: " + err);
                     reject(err);
                 });
         }
         else {
-            //models["maintains"].findAll({})
-            todos.findAll({})
+            //models["projects"].findAll({})
+            projects.findAll({})
                 .then( (results) => {
-                    logger.info("fetchTodos:findAll: success: " + JSON.stringify(results));
+                    logger.info("fetchProject:findAll: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchTodos:findAll error: " + err);
+                    logger.info("fetchProject:findAll error: " + err);
                     reject(err);
                 });
         }
@@ -89,19 +85,19 @@ let update = (body) => {
         logger.info("update: body: " + JSON.stringify(body));
         validate(body)
             .then( (valbody) => {
-                todos.update(valbody, {where: {"id": body["id"]}
+                projects.update(valbody, {where: {"id": body["id"]}
                 })
                     .then( (results) => {
-                        logger.info("updateMaintain:results: " + results);
+                        logger.info("updateProject:results: " + results);
                         resolve(results);
                     })
                     .catch( (err) => {
-                        logger.error("updateMaintain:error: " + err );
+                        logger.error("updateProject:error: " + err );
                         reject(err);
                     });
             })
             .catch( (err) => {
-                logger.error("updateMaintain: validateMaintain: error: " + err );
+                logger.error("updateProject: validateProject: error: " + err );
                 reject(err);
             });
     });
@@ -109,17 +105,17 @@ let update = (body) => {
 
 // TODO: Need validation
 // tested manually without validation works
-let deleteTodo = (id) => {
+let deleteProject = (id) => {
     return new Promise( (resolve, reject) => {
-        todos.findByPk(id)
+        projects.findByPk(id)
             .then( (results) => {
                 return results.destroy();
             })
             .then( () => {
-                resolve("deleteMaintain: deleted id: " + id);
+                resolve("deleteProject: deleted id: " + id);
             })
             .catch( (err) => {
-                logger.info("deleteMaintain:findByPk error: " + err);
+                logger.info("deleteProject:findByPk error: " + err);
                 reject(err);
             });
     });
@@ -128,6 +124,7 @@ let deleteTodo = (id) => {
 module.exports = {
     insert,
     fetch,
+    setStatus,
     update,
-    deleteTodo
+    deleteProject
 };

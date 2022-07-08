@@ -1,15 +1,6 @@
-const logger = require('../modules/logger');
+const logger = require('./logger');
 const models = require( '../models');
-const { maintains,todos } = models;
-
-let setStatus= (body) => {
-    // Check if id is number
-    if (( body["id"]) && !isNaN(parseInt(body["id"]))) {
-        if ( body["status"] == "active" || body["status"] == "inactive" ) {
-            return new maintains.update({"status":body["status"]}, {where: {"id": body["id"]}});
-        }
-    }
-};
+const { tasks, parts, notes } = models;
 
 // TODO: needs work.  check for sql injection?
 let validate = (body) => {
@@ -32,13 +23,15 @@ let insert = (body) => {
     return new Promise( (resolve,reject) => {
         validate(body)
             .then((results) => {
-                maintains.create(results)
-                    .then( (id) => {
-                        resolve( `
-                            "id": ${id},
-                            "status": "success"
-                            `);
-                    });
+                if (!results["err"]) {
+                    tasks.create(results)
+                        .then( (id) => {
+                            resolve( `
+                                "id": ${id},
+                                "status": "success"
+                                `);
+                        });
+                }
             })
             .catch((err) => {
                 logger.info("insertMaintain: validateMaintain failed with " + err);
@@ -47,37 +40,43 @@ let insert = (body) => {
     });
 };
 
-// tested manually works with id and no id
 let fetch = (id) => {
     return new Promise( (resolve,reject) => {
-        logger.info("fetchMaintain:id: " + id);
+        logger.info("fetchTask:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
             //models["maintains"].findByPk(id)
-            maintains.findByPk(id, {
+            tasks.findByPk(id, {
                 include: [{
-                    model: todos,
-                    as: 'todos'
-                }],
+                    model: parts,
+                    as: 'parts'
+                },{
+                    model: notes,
+                    as: 'notes'
+                }
+                /*,{
+                    model: maintains,
+                    as: 'maintains'
+                }*/],
             })
                 .then( (results) => {
-                    logger.info("fetchMaintain:findByPk: success: " + JSON.stringify(results));
+                    logger.info("fetchTasks:findByPk: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchMaintain:findByPk error: " + err);
+                    logger.info("fetchTasks:findByPk error: " + err);
                     reject(err);
                 });
         }
         else {
             //models["maintains"].findAll({})
-            maintains.findAll({})
+            tasks.findAll({})
                 .then( (results) => {
-                    logger.info("fetchMaintain:findAll: success: " + JSON.stringify(results));
+                    logger.info("fetchTasks:findAll: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchMaintain:findAll error: " + err);
+                    logger.info("fetchTasks:findAll error: " + err);
                     reject(err);
                 });
         }
@@ -90,7 +89,7 @@ let update = (body) => {
         logger.info("update: body: " + JSON.stringify(body));
         validate(body)
             .then( (valbody) => {
-                maintains.update(valbody, {where: {"id": body["id"]}
+                tasks.update(valbody, {where: {"id": body["id"]}
                 })
                     .then( (results) => {
                         logger.info("updateMaintain:results: " + results);
@@ -110,9 +109,9 @@ let update = (body) => {
 
 // TODO: Need validation
 // tested manually without validation works
-let deleteMaintain = (id) => {
+let deleteTask = (id) => {
     return new Promise( (resolve, reject) => {
-        maintains.findByPk(id)
+        tasks.findByPk(id)
             .then( (results) => {
                 return results.destroy();
             })
@@ -129,7 +128,6 @@ let deleteMaintain = (id) => {
 module.exports = {
     insert,
     fetch,
-    setStatus,
     update,
-    deleteMaintain
+    deleteTask
 };
