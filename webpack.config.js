@@ -13,7 +13,7 @@ module.exports = {
         app: './server.js',
     },
     externals: [ nodeExternals({
-        whitelist: [
+        allowlist: [
             'webpack/hot/dev-server',
             /^lodash/
         ]

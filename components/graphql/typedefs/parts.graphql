@@ -1,0 +1,24 @@
+scalar DateTime
+scalar Decimal
+scalar Text
+
+type Part {
+  id: Int!
+  name: String
+  part_nbr: String
+  price: Decimal
+  description: Text
+  vendor: String
+  image_filename: String
+  doc_filename: String
+  status: Int
+  complete: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  parts : [Part]
+  part(id:Int!) : Part
+  part2(id:Int!):PartResults
+}

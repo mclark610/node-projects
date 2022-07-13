@@ -1,0 +1,18 @@
+type Results {
+  fieldCount:Int
+  affectedRows:Int
+  insertId: Int 
+  serverStatus: Int 
+  warningCount: Int 
+  message: String
+  protocol41: Boolean
+  changedRows: Int 
+}
+
+type ErrorResults {
+  errorID: Int
+  errorMessage: String
+}
+
+union ProjectResults = Project | ErrorResults
+union PartResults = Part | ErrorResults

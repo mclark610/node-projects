@@ -1,0 +1,21 @@
+scalar DateTime
+
+""" 
+Projects 
+"""
+type Project {
+  id: Int!
+  part_id: Int
+  status: Int
+  complete: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  part: Part
+  parts: [Part]
+}
+
+type Query {
+  projects: [Project]
+  project(id: Int!) : Project
+  project2(id: Int!) : ProjectResults
+}
