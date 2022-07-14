@@ -1,4 +1,15 @@
 
+const tasks = [
+  { id: 1, name: 'Change oil', status: 1, complete: 0, dateDue: '2022-07-22'},
+  { id: 2, name: 'Change oil', status: 1, complete: 0, dateDue: '2022-07-22'},
+  { id: 3, name: 'wash car', status: 1, complete: 0, dateDue: '2022-07-22'},
+];
+
+const task_part = [
+  { task_id: 1, part_id: 3},
+  { task_id: 1, part_id: 4},
+];
+
 const projects = [
   { id: 1, part_id: 1, status: 1, complete: 1},
   { id: 2, part_id: 2, status: 1, complete: 1},

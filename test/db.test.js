@@ -5,6 +5,7 @@ const logger = require('../modules/logger');
 
 const { projects } = models;
 
+
 afterAll(async () => {
   db.sequelize.close();
 });

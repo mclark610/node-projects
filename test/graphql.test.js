@@ -36,3 +36,23 @@ test("get part 1 fom graphql", async () => {
   expect(result.data.part).toBeDefined();
   expect(result.data.part.name).toBe("Ranger");
 })
+
+test("Get error if part id is invalid", async () => {
+  const result = await graphql( {
+    schema,
+    source:`
+    {
+      part(id:'a') {
+        id
+        name
+        description
+      }
+    }
+    `,
+  });
+
+  console.log("result: " + JSON.stringify(result));
+  expect(result.errors).toBeDefined();
+
+})
+
