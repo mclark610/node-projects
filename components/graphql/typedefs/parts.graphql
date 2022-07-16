@@ -17,8 +17,20 @@ type Part {
   updatedAt: DateTime
 }
 
+type CreatePart {
+  part_id: Int
+}
+type CreateImageDocForPart {
+  id: Int
+}
+
 type Query {
   parts : [Part]
-  part(id:Int!) : Part
-  part2(id:Int!):PartResults
+  part(id:Int!) : PartResults
+}
+
+type Mutation {
+  createPart(projectID: Int, partName: String!,partDescription: Text,partNumber: String,partStatus: Int,partPrice:Decimal,partVendor:String,partImageFile:String,partNoteFile:String): CreatePart
+  createDocForPart(partID: Int!, docFilename: String!): CreateImageDocForPart
+  createImageForPart(partID: Int!, imageFilename: String!): CreateImageDocForPart
 }

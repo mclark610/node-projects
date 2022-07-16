@@ -1,4 +1,8 @@
 scalar DateTime
+scalar Decimal
+scalar Text
+
+union ProjectResults = Project | ErrorResults
 
 """ 
 Projects 
@@ -12,10 +16,20 @@ type Project {
   updatedAt: DateTime
   part: Part
   parts: [Part]
+  tasks: [Task]
+  notes: [Note]
+}
+
+type CreateProjectResults {
+  id: Int!
+  part_id: Int
 }
 
 type Query {
   projects: [Project]
-  project(id: Int!) : Project
-  project2(id: Int!) : ProjectResults
+  project(id: Int!) : ProjectResults
+}
+
+type Mutation {
+  createProject(projectName: String!,projectDescription: Text,projectPartNumber: String,projectStatus: Int,projectPrice:Decimal,projectVendor:String,projectImageFile:String,projectNoteFile:String): CreateProjectResults
 }

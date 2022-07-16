@@ -1,0 +1,19 @@
+scalar DateTime
+scalar Decimal
+scalar Text
+
+type Note {
+  id: Int!
+  name: String
+  description: Text
+  image_filename: String
+  doc_filename: String
+  status: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type Query {
+  notes : [Note]
+  note(id:Int!) : NoteResults
+}

@@ -1,0 +1,26 @@
+scalar DateTime
+scalar Text
+
+type Task {
+  id: Int!
+  name: String
+  description: Text
+  status: Int
+  complete: Int
+  parts: [Part]
+  notes: [Note]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type CreateTask {
+  id: Int
+}
+type Query {
+  tasks : [Task]
+  task(id:Int!) : TaskResults
+}
+
+type Mutation {
+  createTask(projectID: Int, taskName: String, taskDescription:Text, taskStatus: Int, taskComplete: Int) : CreateTask
+}

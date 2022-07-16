@@ -229,26 +229,6 @@ BEGIN
 	   task_id = vtaskid;
 END;
 
-CREATE DEFINER=`root`@`%` PROCEDURE `projects`.`fetch_complete_project`(
-  vprojectid int
-)
-begin
-	select 
-	  pr.id,
-	  pr.part_id,
-	  pr.status,
-	  pr.complete,
-	  pr.createdAt,
-	  pr.updatedAt
-	from
-	  projects pr
-	inner join project_part prp on prp.project_id = pr.id 
-	inner join parts p on p.id = prp.part_id
-	 where 
-	   pr.id = vprojectid;
-	  
-end;
-
 CREATE DEFINER=`root`@`%` PROCEDURE `projects`.`remove_part_from_project`(partid integer, projectid integer)
 begin
 	delete from project_part where partid = partid and projectid=projectid;
@@ -616,3 +596,21 @@ delete from
 	  where
 	    note_id = vnoteid;
 END;
+
+CREATE DEFINER=`root`@`%` PROCEDURE `projects`.`retrieve_projects` ()
+begin
+	select
+	 pr.id,
+	 pr.part_id,
+	 pr.status,
+	 pr.complete,
+	 pr.createdAt,
+	 pr.updatedAt,
+	 p.name,
+	 p.description
+	from 
+	  projects pr,
+	  parts p
+	where 
+	  pr.part_id = p.id;
+end ;

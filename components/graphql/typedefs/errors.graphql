@@ -16,3 +16,5 @@ type ErrorResults {
 
 union ProjectResults = Project | ErrorResults
 union PartResults = Part | ErrorResults
+union TaskResults = Task | ErrorResults
+union NoteResults = Note | ErrorResults
