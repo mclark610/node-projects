@@ -96,3 +96,51 @@ test("create Task mutation test", async () => {
   console.log("createTask result: " + JSON.stringify(result));
   console.log("***********************************")
 });
+
+test("update Task mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoTask {
+        updateTask(taskID: 5, taskName:"polish rims",taskDescription:"give the wheels a really good scrubbing", taskStatus:1,taskComplete:0) {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("updateTask result: " + JSON.stringify(result));
+  console.log("***********************************")
+});
+
+test("update Task Complete mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoTask {
+        updateTaskComplete(taskID: 5, taskComplete:1)  {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("updateTask Complete result: " + JSON.stringify(result));
+  console.log("***********************************")
+});
+
+test("update Task Complete Status mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoTask {
+        updateTaskStatus(taskID: 5, taskStatus:1)  {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("updateTask Status result: " + JSON.stringify(result));
+  console.log("***********************************")
+});

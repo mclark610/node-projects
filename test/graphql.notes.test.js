@@ -7,7 +7,7 @@ afterAll(async () => {
   db.sequelize.close();
 });
 
-test("Retrieve all Parts using graphql", async () => {
+test("Retrieve all Notes using graphql", async () => {
   const result = await graphql({
     schema,
     source: /* GraphQL */ `
@@ -75,5 +75,54 @@ test("get note(2) from graphql", async () => {
   });
 //console.log("result is : " + JSON.stringify(result));
   expect(result.data.note).toBeDefined();
+});
 
+
+test("create Note mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoNote {
+        createNote(noteName:"cleaning rims",noteDescription:"using mothers aluminum,it works", noteImageFilename: null, noteDocFilename: null, noteStatus:1) {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("createNote result: " + JSON.stringify(result));
+  console.log("***********************************")
+});
+
+test("update Note mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoNote {
+        updateNote(noteID: 5, noteName:"polish rims",noteDescription:"give the wheels a really good scrubbing", noteImageFilename: null, noteDocFilename: null,noteStatus:1) {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("updateNote result: " + JSON.stringify(result));
+  console.log("***********************************")
+});
+
+
+test("update Note Status mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoNote {
+        updateNoteStatus(noteID: 5, noteStatus:1)  {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("updateNote Status result: " + JSON.stringify(result));
+  console.log("***********************************")
 });

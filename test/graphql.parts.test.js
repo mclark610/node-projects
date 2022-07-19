@@ -127,3 +127,35 @@ test("create Image for Part mutation test", async () => {
   console.log("createPart result: " + JSON.stringify(result));
   console.log("***********************************")
 });
+
+test("update Part mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoPart {
+        updatePart(partID: 5, partName:"Hyundai",partDescription:"Grey Elantra", partNumber: "GLS",partImageFilename: null, partDocFilename: null,partStatus:1,partPrice:13995.32,partVendor:"Hyundai") {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("updatePart result: " + JSON.stringify(result));
+  console.log("***********************************")
+});
+
+test("update Part Status mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoPart {
+        updatePartStatus(partID: 5, partStatus:1)  {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("updatePart Status result: " + JSON.stringify(result));
+  console.log("***********************************")
+});

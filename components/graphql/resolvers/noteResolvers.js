@@ -42,6 +42,42 @@ const resolver = {
       }
     },
   },
+  Mutation: {
+    createNote: async (root, {noteName,noteDescription,noteImageFilename, noteDocFilename, noteStatus}) => {
+      try {
+        console.log(`createNote args: ${noteName}, ${noteDescription}, ${noteImageFilename}, ${noteDocFilename}, ${noteStatus}`);
+        const results = await db.sequelize.query(`CALL create_note('${noteName}','${noteDescription}','${noteImageFilename}', '${noteDocFilename}',${noteStatus})`);
+        console.log("createNote results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to createNote:", JSON.stringify(error));
+        return error;
+      }
+    },
+    updateNote: async (root, {noteID,noteName,noteDescription,noteImageFilename, noteDocFilename, noteStatus}) => {
+      try {
+        console.log(`updateNote args: ${noteID}, ${noteName}, ${noteDescription}, ${noteImageFilename}, ${noteDocFilename}, ${noteStatus}`);
+        const results = await db.sequelize.query(`CALL update_note(${noteID}, '${noteName}','${noteDescription}','${noteImageFilename}', '${noteDocFilename}',${noteStatus})`);
+        console.log("updateNote results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to updateNote:", JSON.stringify(error));
+        return error;
+      }
+    },
+    updateNoteStatus: async (root, {noteID,noteStatus}) => {
+      try {
+        console.log(`updateNoteStatus args: ${noteID}, ${noteStatus}`);
+        const results = await db.sequelize.query(`CALL update_note_status(${noteID},${noteStatus})`);
+        console.log("updateNoteStatus results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to updateNoteStatus:", JSON.stringify(error));
+        return error;
+      }
+    },
+
+  },
 }
 
 module.exports = {resolver};

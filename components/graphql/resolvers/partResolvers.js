@@ -76,6 +76,29 @@ const resolver = {
         return error;
       }
     },
+    updatePart: async (root, {partID,partName,partDescription,partNumber,partStatus,partPrice,partVendor,partImageFilename,partDocFilename}) => {
+        console.log(`updatePart args: ${partID},${partName}, ${partDescription}, ${partNumber}, ${partStatus}, ${partPrice},${partVendor},${partImageFilename},${partDocFilename}`);
+        try {
+          const results = await db.sequelize.query(`CALL update_part(${partID},'${partName}','${partDescription}','${partNumber}',${partPrice},'${partVendor}',${partStatus},'${partImageFilename}','${partDocFilename}')`);
+          console.log("updatePart results: " + JSON.stringify(results));
+          return results[0];
+      } catch(error) {
+          console.error("Unable to updatePart:", JSON.stringify(error));
+          return error;
+      }
+    },
+    updatePartStatus: async (root, {partID,partStatus}) => {
+      try {
+        console.log(`updatePartStatus args: ${partID}, ${partStatus}`);
+        const results = await db.sequelize.query(`CALL update_part_status(${partID},${partStatus})`);
+        console.log("updatePartStatus results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to updatePartStatus:", JSON.stringify(error));
+        return error;
+      }
+    },
+
 
 
   }

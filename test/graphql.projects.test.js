@@ -1,19 +1,17 @@
 const { graphql } = require("graphql");
 const { schema } = require("../components/graphql/loadSchemas.js");
-const db = require('../models/index.js');
-
+const db = require("../models/index.js");
 
 afterAll(async () => {
   db.sequelize.close();
 });
-
 
 test("get data from Project(1)", async () => {
   const result = await graphql({
     schema,
     source: /* GraphQL */ `
       {
-        project(id:1) {
+        project(id: 1) {
           ... on Project {
             id
             part_id
@@ -30,26 +28,25 @@ test("get data from Project(1)", async () => {
               description
             }
           }
-        
+
           ... on ErrorResults {
             errorID
             errorMessage
           }
         }
       }
-      `,
+    `,
   });
   console.log("get data from graphql result: " + JSON.stringify(result));
-//  expect(result.data.project).toBeDefined();
-//  expect(result.data.project.part_id).toBe(1);
+  //  expect(result.data.project).toBeDefined();
+  //  expect(result.data.project.part_id).toBe(1);
 });
-
 
 // Retrieve ALL PROJECTS
 test("get all projects from graphql", async () => {
   const result = await graphql({
     schema,
-    source:  /*Graphql*/ `
+    source: /*Graphql*/ `
       {
         projects {
           id
@@ -67,7 +64,7 @@ test("get all projects from graphql", async () => {
   });
   console.log("projects results are: " + JSON.stringify(result));
   expect(result.data.projects).toBeDefined();
-//  expect(result.data.projects.length).toBe(5);
+  //  expect(result.data.projects.length).toBe(5);
 });
 
 // Retrieve PROJECT(1)
@@ -76,7 +73,7 @@ test("get project(1) from graphql", async () => {
     schema,
     source: /* GraphQL */ `
       {
-        project(id:2) {
+        project(id: 2) {
           ... on Project {
             part_id
             part {
@@ -88,14 +85,14 @@ test("get project(1) from graphql", async () => {
               name
               description
             }
-        }
-        ... on ErrorResults {
-          errorID
-          errorMessage
+          }
+          ... on ErrorResults {
+            errorID
+            errorMessage
+          }
         }
       }
-      }
-      `,
+    `,
   });
   console.log("result is : " + JSON.stringify(result));
   expect(result.data.project).toBeDefined();
@@ -107,10 +104,10 @@ test("get project 2 (2) from graphql", async () => {
     schema,
     source: /* GraphQL */ `
       {
-        project(id:1) {
+        project(id: 1) {
           ... on Project {
             part_id
-            part{
+            part {
               name
               description
             }
@@ -122,13 +119,11 @@ test("get project 2 (2) from graphql", async () => {
             errorMessage
           }
         }
-
       }
-      `,
+    `,
   });
-//console.log("result is : " + JSON.stringify(result));
+  //console.log("result is : " + JSON.stringify(result));
   expect(result.data.project).toBeDefined();
-
 });
 
 test("create Project mutation test", async () => {
@@ -136,14 +131,81 @@ test("create Project mutation test", async () => {
     schema,
     source: /* GraphQL */ `
       mutation AddProject {
-        createProject(projectName:"myProjectName",projectDescription:"vdescription",projectPartNumber:"vpart_nbr",projectStatus:1,projectPrice:0.00,projectVendor:"vvendor",projectImageFile:"vimagefile",projectNoteFile:"vnotefile") {
+        createProject(
+          projectName: "myProjectName"
+          projectDescription: "vdescription"
+          projectPartNumber: "vpart_nbr"
+          projectStatus: 1
+          projectPrice: 0.00
+          projectVendor: "vvendor"
+          projectImageFile: "vimagefile"
+          projectNoteFile: "vnotefile"
+        ) {
           id
           part_id
         }
       }
-      `,
-  })
-  console.log("***********************************")
+    `,
+  });
+  console.log("***********************************");
   console.log("createProject result: " + JSON.stringify(result));
-  console.log("***********************************")
+  console.log("***********************************");
+});
+
+test("update Project mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoProject {
+        updateProject(
+          projectID: 5
+          partID: 5
+          projectName: "Lathe"
+          projectDescription: "Clean up lathe"
+          projectComplete: 0
+          projectPartNumber: "3L"
+          projectStatus: 1
+          projectPrice: 500.00
+          projectVendor: "Unimat"
+        ) {
+          id
+        }
+      }
+    `,
+  });
+  console.log("***********************************");
+  console.log("updateProject result: " + JSON.stringify(result));
+  console.log("***********************************");
+});
+
+test("update Project Complete mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoProject {
+        updateProjectComplete(projectID: 5, projectComplete: 1) {
+          id
+        }
+      }
+    `,
+  });
+  console.log("***********************************");
+  console.log("updateProject Complete result: " + JSON.stringify(result));
+  console.log("***********************************");
+});
+
+test("update Project Complete Status mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoProject {
+        updateProjectStatus(projectID: 5, projectStatus: 1) {
+          id
+        }
+      }
+    `,
+  });
+  console.log("***********************************");
+  console.log("updateProject Status result: " + JSON.stringify(result));
+  console.log("***********************************");
 });

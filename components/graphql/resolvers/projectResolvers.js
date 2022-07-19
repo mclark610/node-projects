@@ -6,7 +6,9 @@ const resolver = {
   Query: {
     projects: async () => {
       try {
-        const results = await db.sequelize.query("CALL retrieve_all_projects()");
+        const results = await db.sequelize.query(
+          "CALL retrieve_all_projects()"
+        );
         console.log("PROJECT RESULTS: " + JSON.stringify(results));
         return results;
       } catch (error) {
@@ -68,39 +70,114 @@ const resolver = {
     },
     tasks: async (project) => {
       try {
-        const results = await db.sequelize.query(`CALL retrieve_project_tasks(${project.id})`);
+        const results = await db.sequelize.query(
+          `CALL retrieve_project_tasks(${project.id})`
+        );
         return results;
-      } catch(error) {
+      } catch (error) {
         console.error("Unable to retrieve_part:", JSON.stringify(error));
         return error;
       }
     },
     notes: async (project) => {
       try {
-        const results = await db.sequelize.query(`CALL retrieve_project_notes(${project.id})`);
+        const results = await db.sequelize.query(
+          `CALL retrieve_project_notes(${project.id})`
+        );
         return results;
-      } catch(error) {
+      } catch (error) {
         console.error("Unable to retrieve_part:", JSON.stringify(error));
         return error;
       }
-    }
+    },
   },
 
   Mutation: {
-    createProject: async (root, {projectName,projectDescription,projectPartNumber,projectStatus,projectPrice,projectVendor,projectImageFile,projectNoteFile}) => {
+    createProject: async (
+      root,
+      {
+        projectName,
+        projectDescription,
+        projectPartNumber,
+        projectStatus,
+        projectPrice,
+        projectVendor,
+        projectImageFile,
+        projectNoteFile,
+      }
+    ) => {
       try {
-        console.log(`createProject args: ${projectName}, ${projectDescription}, ${projectPartNumber}, ${projectStatus}, ${projectPrice},${projectVendor},${projectImageFile},${projectNoteFile}`);
-        const results = await db.sequelize.query(`CALL create_project('${projectName}','${projectDescription}','${projectPartNumber}',${projectStatus},${projectPrice},'${projectVendor}','${projectImageFile}','${projectNoteFile}')`);
+        console.log(
+          `createProject args: ${projectName}, ${projectDescription}, ${projectPartNumber}, ${projectStatus}, ${projectPrice},${projectVendor},${projectImageFile},${projectNoteFile}`
+        );
+        const results = await db.sequelize.query(
+          `CALL create_project('${projectName}','${projectDescription}','${projectPartNumber}',${projectStatus},${projectPrice},'${projectVendor}','${projectImageFile}','${projectNoteFile}')`
+        );
         console.log("createProject results: " + JSON.stringify(results));
         return results[0];
-      } catch(error) {
+      } catch (error) {
         console.error("Unable to createProject:", JSON.stringify(error));
         return error;
       }
-    }
-  }
+    },
+    updateProject: async (
+      root,
+      {
+        projectID,
+        partID,
+        projectName,
+        projectDescription,
+        projectPartNumber,
+        projectStatus,
+        projectComplete,
+        projectPrice,
+        projectVendor,
+        projectImageFilename,
+        projectDocFilename,
+      }
+    ) => {
+      console.log(
+        `updateProject args: ${projectID},${partID}, ${projectName}, ${projectDescription}, ${projectPartNumber}, ${projectStatus}, ${projectComplete},${projectPrice},${projectVendor},${projectImageFilename},${projectDocFilename}`
+      );
+      try {
+        const results = await db.sequelize.query(
+          `CALL update_project(${projectID},${partID},'${projectName}','${projectDescription}','${projectPartNumber}',${projectStatus},${projectComplete}, ${projectPrice},'${projectVendor}','${projectImageFilename}','${projectDocFilename}')`
+          );
+        console.log("updateProject results: " + JSON.stringify(results));
+        return results[0];
+      } catch (error) {
+        console.error("Unable to updateProject:", JSON.stringify(error));
+        return error;
+      }
+    },
+    updateProjectStatus: async (root, { projectID, projectStatus }) => {
+      try {
+        console.log(`updateProjectStatus args: ${projectID}, ${projectStatus}`);
+        const results = await db.sequelize.query(
+          `CALL update_project_status(${projectID},${projectStatus})`
+        );
+        console.log("updateProjectStatus results: " + JSON.stringify(results));
+        return results[0];
+      } catch (error) {
+        console.error("Unable to updateProjectStatus:", JSON.stringify(error));
+        return error;
+      }
+    },
+    updateProjectComplete: async (root, { projectID, projectComplete }) => {
+      try {
+        console.log(`updateProjectStatus args: ${projectID}, ${projectComplete}`);
+        const results = await db.sequelize.query(
+          `CALL update_project_status(${projectID},${projectComplete})`
+        );
+        console.log("updateProjectStatus results: " + JSON.stringify(results));
+        return results[0];
+      } catch (error) {
+        console.error("Unable to updateProjectComplete:", JSON.stringify(error));
+        return error;
+      }
+    },
 
+  },
 };
-
 
 module.exports = { resolver };

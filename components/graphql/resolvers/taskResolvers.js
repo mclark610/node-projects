@@ -67,7 +67,7 @@ const resolver = {
   Mutation: {
     createTask: async (root, {projectID,taskName,taskDescription,taskStatus,taskComplete}) => {
       try {
-        console.log(`createProject args: ${projectID}, ${taskName}, ${taskDescription}, ${taskStatus}, ${taskComplete}`);
+        console.log(`createTask args: ${projectID}, ${taskName}, ${taskDescription}, ${taskStatus}, ${taskComplete}`);
         const results = await db.sequelize.query(`CALL create_task(${projectID}, '${taskName}','${taskDescription}',${taskStatus},${taskComplete})`);
         console.log("createTask results: " + JSON.stringify(results));
         return results[0];
@@ -75,7 +75,41 @@ const resolver = {
         console.error("Unable to createTask:", JSON.stringify(error));
         return error;
       }
-    }
+    },
+    updateTask: async (root, {taskID,taskName,taskDescription,taskStatus,taskComplete}) => {
+      try {
+        console.log(`updateTask args: ${taskID}, ${taskName}, ${taskDescription}, ${taskStatus}, ${taskComplete}`);
+        const results = await db.sequelize.query(`CALL update_task(${taskID}, '${taskName}','${taskDescription}',${taskStatus},${taskComplete})`);
+        console.log("updateTask results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to updateTask:", JSON.stringify(error));
+        return error;
+      }
+    },
+    updateTaskComplete: async (root, {taskID,taskComplete}) => {
+      try {
+        console.log(`updateTaskComplete args: ${taskID}, ${taskComplete}`);
+        const results = await db.sequelize.query(`CALL update_task_complete(${taskID},${taskComplete})`);
+        console.log("updateTaskComplete results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to updateTaskComplete:", JSON.stringify(error));
+        return error;
+      }
+    },
+    updateTaskStatus: async (root, {taskID,taskStatus}) => {
+      try {
+        console.log(`updateTaskComplete args: ${taskID}, ${taskStatus}`);
+        const results = await db.sequelize.query(`CALL update_task_status(${taskID},${taskStatus})`);
+        console.log("updateTaskStatus results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to updateTaskStatus:", JSON.stringify(error));
+        return error;
+      }
+    },
+
   }
 }
 

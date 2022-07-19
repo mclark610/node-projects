@@ -20,7 +20,7 @@ type Part {
 type CreatePart {
   part_id: Int
 }
-type CreateImageDocForPart {
+type MutationPart {
   id: Int
 }
 
@@ -31,6 +31,8 @@ type Query {
 
 type Mutation {
   createPart(projectID: Int, partName: String!,partDescription: Text,partNumber: String,partStatus: Int,partPrice:Decimal,partVendor:String,partImageFile:String,partNoteFile:String): CreatePart
-  createDocForPart(partID: Int!, docFilename: String!): CreateImageDocForPart
-  createImageForPart(partID: Int!, imageFilename: String!): CreateImageDocForPart
+  createDocForPart(partID: Int!, docFilename: String!): MutationPart
+  createImageForPart(partID: Int!, imageFilename: String!): MutationPart
+  updatePart(partID: Int, partName: String!,partDescription: Text,partNumber: String,partStatus:Int,partPrice:Decimal,partVendor:String,partImageFilename:String,partDocFilename:String): MutationPart
+  updatePartStatus(partID: Int,partStatus: Int): MutationPart
 }

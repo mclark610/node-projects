@@ -25,6 +25,10 @@ type CreateProjectResults {
   part_id: Int
 }
 
+type MutationResults {
+  id: Int
+}
+
 type Query {
   projects: [Project]
   project(id: Int!) : ProjectResults
@@ -32,4 +36,7 @@ type Query {
 
 type Mutation {
   createProject(projectName: String!,projectDescription: Text,projectPartNumber: String,projectStatus: Int,projectPrice:Decimal,projectVendor:String,projectImageFile:String,projectNoteFile:String): CreateProjectResults
+  updateProject(projectID: Int,partID: Int, projectName: String,projectDescription: Text,projectComplete: Int,projectPartNumber: String ,projectStatus: Int,projectPrice: Decimal,projectVendor: String,projectImageFilename: String,projectDocFilename: String):MutationResults
+  updateProjectStatus(projectID: Int, projectStatus: Int): MutationResults
+  updateProjectComplete(projectID:Int, projectComplete: Int):MutationResults
 }
