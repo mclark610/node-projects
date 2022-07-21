@@ -98,6 +98,51 @@ const resolver = {
         return error;
       }
     },
+    deletePart: async (root, {partID}) => {
+      try {
+        console.log(`deletePart args: ${partID}`);
+        const results = await db.sequelize.query(`CALL delete_part(${partID})`);
+        console.log("deletePart results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to deletePart:", JSON.stringify(error));
+        return error;
+      }
+    },
+    removePartFromProject: async (root, {projectID, partID}) => {
+      try {
+        console.log(`removePartFromProject args: ${projectID}`);
+        const results = await db.sequelize.query(`CALL remove_part_from_project(${projectID}, ${partID})`);
+        console.log("removePartFromProject results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to removePartFromProject:", JSON.stringify(error));
+        return error;
+      }
+    },
+    associatePartWithProject: async (root, {projectID,partID}) => {
+      try {
+        console.log(`associatePartWithProject args: ${projectID}`);
+        const results = await db.sequelize.query(`CALL associate_part_with_project(${projectID}, ${partID})`);
+        console.log("associatePartWithProject results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to associatePartWithProject:", JSON.stringify(error));
+        return error;
+      }
+    }, 
+    associatePartWithTask: async (root, {taskID,partID}) => {
+      try {
+        console.log(`associatePartWithTask args: ${projectID}`);
+        const results = await db.sequelize.query(`CALL associate_part_with_task(${projectID}, ${taskID})`);
+        console.log("associatePartWithTask results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to associatePartWithTask:", JSON.stringify(error));
+        return error;
+      }
+    } 
+  
 
 
 

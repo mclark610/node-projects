@@ -39,4 +39,5 @@ type Mutation {
   updateProject(projectID: Int,partID: Int, projectName: String,projectDescription: Text,projectComplete: Int,projectPartNumber: String ,projectStatus: Int,projectPrice: Decimal,projectVendor: String,projectImageFilename: String,projectDocFilename: String):MutationResults
   updateProjectStatus(projectID: Int, projectStatus: Int): MutationResults
   updateProjectComplete(projectID:Int, projectComplete: Int):MutationResults
+  deleteProject(projectID: Int): MutationResults
 }

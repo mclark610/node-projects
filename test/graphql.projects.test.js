@@ -209,3 +209,20 @@ test("update Project Complete Status mutation test", async () => {
   console.log("updateProject Status result: " + JSON.stringify(result));
   console.log("***********************************");
 });
+
+test("delete Project mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoProject {
+        deleteProject(projectID: 7) {
+          id
+        }
+      }
+    `,
+  });
+
+  console.log("***********************************");
+  console.log("deleteProject result: " + JSON.stringify(result));
+  console.log("***********************************");
+});

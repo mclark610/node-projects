@@ -176,6 +176,18 @@ const resolver = {
         return error;
       }
     },
+    deleteProject: async (root, {projectID}) => {
+      try {
+        console.log(`deleteProject args: ${projectID}`);
+        const results = await db.sequelize.query(
+          `CALL delete_project(${projectID})`
+        );
+        return results[0];
+      } catch (error) {
+        console.error(`deleteProject error: ${error}`)
+        return error;
+      }
+    },
 
   },
 };

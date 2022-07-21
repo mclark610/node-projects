@@ -126,3 +126,20 @@ test("update Note Status mutation test", async () => {
   console.log("updateNote Status result: " + JSON.stringify(result));
   console.log("***********************************")
 });
+
+test("delete Note mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoNote {
+        deleteNote(noteID: 7) {
+          id
+        }
+      }
+    `,
+  });
+
+  console.log("***********************************");
+  console.log("deleteNote result: " + JSON.stringify(result));
+  console.log("***********************************");
+});

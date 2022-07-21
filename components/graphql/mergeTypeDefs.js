@@ -12,7 +12,7 @@ const { ScalarNameTypeDefinition } = require('graphql-scalars');
 
 const pathdir = path.join(__dirname,'./**/*.graphql');
 
-console.log("pathdir: " + pathdir);
+//console.log("pathdir: " + pathdir);
 //const typesArray = loadFilesSync(path.join(__dirname, './typedefs/*.graphql'))
 
 const typesArray = loadFilesSync(path.join(__dirname, './typedefs/*.graphql'), { recursive: true,extensions: ['graphql']  })
@@ -26,9 +26,9 @@ const typeDefs = [
   mergeTypeDefs(typesArray),
 ]
 
-const printTypeDefs = print(typeDefs);
 
 /*
+const printTypeDefs = print(typeDefs);
 console.log("TYPEDEFS")
 console.log("-----------------------");
 console.log(printTypeDefs);

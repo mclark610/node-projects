@@ -144,3 +144,52 @@ test("update Task Complete Status mutation test", async () => {
   console.log("updateTask Status result: " + JSON.stringify(result));
   console.log("***********************************")
 });
+
+
+test("delete Task mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoTask {
+        deleteTask(taskID: 7) {
+          id
+        }
+      }
+    `,
+  });
+
+  console.log("***********************************");
+  console.log("deleteTask result: " + JSON.stringify(result));
+  console.log("***********************************");
+});
+test("remove Task from Project mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoTask {
+        removeTaskFromProject(projectID: 5, taskID: 8) {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("removeTaskFromProject result: " + JSON.stringify(result));
+  console.log("***********************************")
+});
+
+test("associate Task with Project mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoTask {
+        associateTaskWithProject(projectID: 5, taskID: 8) {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("associateTaskWithProject result: " + JSON.stringify(result));
+  console.log("***********************************")
+});

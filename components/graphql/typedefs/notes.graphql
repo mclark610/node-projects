@@ -26,4 +26,5 @@ type Mutation {
   createNote(noteName: String,noteDescription: Text, noteImageFilename: String, noteDocFilename: String, noteStatus: Int) : MutationNote
   updateNote(noteID: Int,noteName: String,noteDescription: Text,noteImageFilename: String, noteDocFilename: String, noteStatus: Int): MutationNote
   updateNoteStatus(noteID: Int,noteStatus: Int): MutationNote
+  deleteNote(noteID: Int) : MutationNote
 }

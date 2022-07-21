@@ -159,3 +159,35 @@ test("update Part Status mutation test", async () => {
   console.log("updatePart Status result: " + JSON.stringify(result));
   console.log("***********************************")
 });
+
+test("remove Part from Project mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoPart {
+        removePartFromProject(projectID: 5, partID: 8) {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("removePartFromProject result: " + JSON.stringify(result));
+  console.log("***********************************")
+});
+
+test("associate Part with Project mutation test", async () => {
+  const result = await graphql({
+    schema,
+    source: /* GraphQL */ `
+      mutation DoPart {
+        associatePartWithProject(projectID: 5, partID: 8) {
+          id
+        }
+      }
+      `,
+  });
+  console.log("***********************************")
+  console.log("associatePartWithProject result: " + JSON.stringify(result));
+  console.log("***********************************")
+});

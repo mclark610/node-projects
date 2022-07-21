@@ -76,6 +76,17 @@ const resolver = {
         return error;
       }
     },
+    deleteNote: async (root, {noteID}) => {
+      try {
+        console.log(`deleteNote args: ${noteID}`);
+        const results = await db.sequelize.query(`CALL delete_note(${noteID})`);
+        console.log("deleteNote results: " + JSON.stringify(results));
+        return results[0];
+      } catch(error) {
+        console.error("Unable to deleteNote:", JSON.stringify(error));
+        return error;
+      }
+    },
 
   },
 }

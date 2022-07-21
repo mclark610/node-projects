@@ -35,4 +35,8 @@ type Mutation {
   createImageForPart(partID: Int!, imageFilename: String!): MutationPart
   updatePart(partID: Int, partName: String!,partDescription: Text,partNumber: String,partStatus:Int,partPrice:Decimal,partVendor:String,partImageFilename:String,partDocFilename:String): MutationPart
   updatePartStatus(partID: Int,partStatus: Int): MutationPart
+  deletePart(partID: Int) : MutationPart
+  removePartFromProject(projectID: Int, partID: Int): MutationPart
+  associatePartWithProject(projectID: Int, partID: Int): MutationPart
+  associatePartWithTask(taskID: Int, partID: Int): MutationPart
 }

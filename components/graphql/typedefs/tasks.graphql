@@ -16,6 +16,10 @@ type Task {
 type CreateTask {
   id: Int
 }
+
+type TaskMutation {
+  id: Int
+}
 type Query {
   tasks : [Task]
   task(id:Int!) : TaskResults
@@ -26,4 +30,7 @@ type Mutation {
   updateTask(taskID: Int,taskName:String,taskDescription:Text,taskStatus:Int,taskComplete:Int) : CreateTask
   updateTaskComplete(taskID: Int, taskComplete: Int) : CreateTask
   updateTaskStatus(taskID: Int, taskStatus: Int) : CreateTask
+  deleteTask(taskID: Int) : TaskMutation
+  removeTaskFromProject( projectID: Int, taskID: Int) : TaskMutation
+  associateTaskWithProject(projectID: Int, taskID: Int): TaskMutation
 }

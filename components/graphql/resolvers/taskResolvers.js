@@ -109,6 +109,42 @@ const resolver = {
         return error;
       }
     },
+    deleteTask: async (root, {taskID}) => {
+      try {
+        console.log(`deleteTask args: ${taskID}`);
+        const results = await db.sequelize.query(
+          `CALL delete_task(${taskID})`
+        );
+        return results[0];
+      } catch (error) {
+        console.error(`deleteTask error: ${error}`)
+        return error;
+      }
+    },
+    removeTaskFromProject: async (root, {projectID, taskID}) => {
+      try {
+        console.log(`removeTaskFromProject args: ${projectID}, ${taskID}`);
+        const results = await db.sequelize.query(
+          `CALL remove_task_from_project(${projectID}, ${taskID})`
+        );
+        return results[0];
+      } catch (error) {
+        console.error(`removeTaskFromProject error: ${error}`)
+        return error;
+      }
+    },
+    associateTaskWithProject: async (root, {projectID, taskID}) => {
+      try {
+        console.log(`associateTaskWithProject args: ${projectID}, ${taskID}`);
+        const results = await db.sequelize.query(
+          `CALL associate_task_with_project(${projectID}, ${taskID})`
+        );
+        return results[0];
+      } catch (error) {
+        console.error(`associateTaskWithProject error: ${error}`)
+        return error;
+      }
+    }
 
   }
 }
