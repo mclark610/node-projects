@@ -79,7 +79,7 @@ router.put('/', (req,res) => {
     // update
     project.update(req.body)
         .then( (results) => {
-            logger.log("info","results: " + results);
+            logger.info("info","results: " + results);
             res.status(200).send(results);
         })
         .catch( (err) => {
@@ -92,7 +92,7 @@ router.put('/', (req,res) => {
 router.post('/', function (req, res) {
     project.insert(req.body)
         .then( (results) => {
-            logger.log("info","results: " + results);
+            logger.info("info","results: " + results);
             res.status(200).send(results);
         })
         .catch( (err) => {

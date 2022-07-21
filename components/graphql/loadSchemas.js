@@ -2,11 +2,11 @@ const {typeDefs} = require('./mergeTypeDefs.js');
 const {resolvers}= require('./mergeResolvers.js');
 
 const { makeExecutableSchema } = require("@graphql-tools/schema");
-
+const logger = require('../../modules/logger')
 /*
-console.log("----------------------------- typeDefs -------------------------------- ")
-console.log(JSON.stringify(typeDefs));
-console.log("----------------------------------------------------------------------- ")
+logger.info("----------------------------- typeDefs -------------------------------- ")
+logger.info(JSON.stringify(typeDefs));
+logger.info("----------------------------------------------------------------------- ")
 */
 
 const schema = makeExecutableSchema({
@@ -14,9 +14,6 @@ const schema = makeExecutableSchema({
   resolvers: resolvers
 })
 
-console.log("schema is ");
-console.log("-----------------------");
-console.log(JSON.stringify(schema));
-console.log("-----------------------");
+logger.info("loadSchemas:schema is : %s",JSON.stringify(schema));
 
 module.exports.schema = schema;

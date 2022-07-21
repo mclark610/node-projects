@@ -9,10 +9,21 @@ const Sequelize = require('sequelize');
 const Config = require('config');
 
 const config  = Config.get('database');
-const options = Config.get('sequelize.options');
+const options1 = Config.get('sequelize.options');
+const logger = require('../modules/logger');
+
 const db = {};
 const models = [];
 
+const options2 = {
+    logging: (msg) => {
+      logger.info(msg)
+    }
+  };
+  
+  //const options = Object.assign({}, options1,options2);
+  const options = {...options1,...options2};
+  
 let sequelize = new Sequelize(config.database, config.username, config.password, options);
 /*
 //Webpack require.context : read in a directory - use regex for searches!
@@ -30,8 +41,8 @@ db.Sequelize = Sequelize;
 fs.readdirSync("./models/")
     .filter( file => file !== "index.js")
     .forEach( file => {
-//        console.log("dirname: " + __dirname);
-//        console.log("filefound: " + file);
+//        logger.info("dirname: " + __dirname);
+//        logger.info("filefound: " + file);
         models.push(require(path.join(__dirname,file)));
     });
 

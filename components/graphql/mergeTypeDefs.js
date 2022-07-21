@@ -9,17 +9,18 @@ const { mergeTypeDefs } = require('@graphql-tools/merge');
 //const { typeDefs: scalarTypeDefs } = require('graphql-scalars');
 
 const { ScalarNameTypeDefinition } = require('graphql-scalars');
+const logger = require('../../modules/logger')
 
 const pathdir = path.join(__dirname,'./**/*.graphql');
 
-//console.log("pathdir: " + pathdir);
+//logger.info("pathdir: " + pathdir);
 //const typesArray = loadFilesSync(path.join(__dirname, './typedefs/*.graphql'))
 
 const typesArray = loadFilesSync(path.join(__dirname, './typedefs/*.graphql'), { recursive: true,extensions: ['graphql']  })
 //const typeDefs = mergeTypeDefs(typesArray)
 
-//console.log( "typesArray: " + JSON.stringify(typesArray));
-//console.log("mergeTypeDefs: " + JSON.stringify(mergeTypeDefs(typesArray)));
+//logger.info( "typesArray: " + JSON.stringify(typesArray));
+//logger.info("mergeTypeDefs: " + JSON.stringify(mergeTypeDefs(typesArray)));
 
 const typeDefs = [
   ScalarNameTypeDefinition,
@@ -29,10 +30,10 @@ const typeDefs = [
 
 /*
 const printTypeDefs = print(typeDefs);
-console.log("TYPEDEFS")
-console.log("-----------------------");
-console.log(printTypeDefs);
-console.log("-----------------------");
+logger.info("TYPEDEFS")
+logger.info("-----------------------");
+logger.info(printTypeDefs);
+logger.info("-----------------------");
 */
 
 module.exports.typeDefs=typeDefs;

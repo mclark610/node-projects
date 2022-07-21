@@ -1,7 +1,7 @@
 const { graphql } = require("graphql");
 const { schema } = require("../components/graphql/loadSchemas.js");
 const db = require('../models/index.js');
-
+const logger = require('../modules/logger');
 
 afterAll(async () => {
   db.sequelize.close();
@@ -51,7 +51,7 @@ test("get part(1) from graphql", async () => {
       }
       `,
   });
-  console.log("part 1 result is : " + JSON.stringify(result));
+  logger.info("part 1 result is : " + JSON.stringify(result));
   expect(result.data.part).toBeDefined();
 });
 
@@ -76,7 +76,7 @@ test("get part(2) from graphql", async () => {
       }
       `,
   });
-//console.log("result is : " + JSON.stringify(result));
+//logger.info("result is : " + JSON.stringify(result));
   expect(result.data.part).toBeDefined();
 
 });
@@ -91,9 +91,9 @@ test("create Part mutation test", async () => {
       }
       `,
   })
-  console.log("***********************************")
-  console.log("createPart result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("createPart result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("create Document for Part mutation test", async () => {
@@ -107,9 +107,9 @@ test("create Document for Part mutation test", async () => {
       }
       `,
   })
-  console.log("***********************************")
-  console.log("createPart result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("createPart result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("create Image for Part mutation test", async () => {
@@ -123,9 +123,9 @@ test("create Image for Part mutation test", async () => {
       }
       `,
   })
-  console.log("***********************************")
-  console.log("createPart result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("createPart result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("update Part mutation test", async () => {
@@ -139,9 +139,9 @@ test("update Part mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("updatePart result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("updatePart result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("update Part Status mutation test", async () => {
@@ -155,9 +155,9 @@ test("update Part Status mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("updatePart Status result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("updatePart Status result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("remove Part from Project mutation test", async () => {
@@ -171,9 +171,9 @@ test("remove Part from Project mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("removePartFromProject result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("removePartFromProject result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("associate Part with Project mutation test", async () => {
@@ -187,7 +187,7 @@ test("associate Part with Project mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("associatePartWithProject result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("associatePartWithProject result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });

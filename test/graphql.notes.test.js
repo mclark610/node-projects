@@ -1,6 +1,7 @@
 const { graphql } = require("graphql");
 const { schema } = require("../components/graphql/loadSchemas.js");
 const db = require('../models/index.js');
+const logger = require('../modules/logger');
 
 
 afterAll(async () => {
@@ -48,7 +49,7 @@ test("get note(1) from graphql", async () => {
       }
       `,
   });
-  console.log("note 1 result is : " + JSON.stringify(result));
+  logger.info("note 1 result is : " + JSON.stringify(result));
   expect(result.data.note).toBeDefined();
 });
 
@@ -73,7 +74,7 @@ test("get note(2) from graphql", async () => {
       }
       `,
   });
-//console.log("result is : " + JSON.stringify(result));
+//logger.info("result is : " + JSON.stringify(result));
   expect(result.data.note).toBeDefined();
 });
 
@@ -89,9 +90,9 @@ test("create Note mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("createNote result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("createNote result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("update Note mutation test", async () => {
@@ -105,9 +106,9 @@ test("update Note mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("updateNote result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("updateNote result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 
@@ -122,9 +123,9 @@ test("update Note Status mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("updateNote Status result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("updateNote Status result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("delete Note mutation test", async () => {
@@ -139,7 +140,7 @@ test("delete Note mutation test", async () => {
     `,
   });
 
-  console.log("***********************************");
-  console.log("deleteNote result: " + JSON.stringify(result));
-  console.log("***********************************");
+  logger.info("***********************************");
+  logger.info("deleteNote result: " + JSON.stringify(result));
+  logger.info("***********************************");
 });

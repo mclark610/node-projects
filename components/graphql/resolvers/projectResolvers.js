@@ -1,6 +1,7 @@
 const { projects, parts, project_part } = require("../data.js");
 const _ = require("lodash");
 const db = require("../../../models");
+const logger = require("../../../modules/logger");
 
 const resolver = {
   Query: {
@@ -9,10 +10,10 @@ const resolver = {
         const results = await db.sequelize.query(
           "CALL retrieve_all_projects()"
         );
-        console.log("PROJECT RESULTS: " + JSON.stringify(results));
+        logger.info("PROJECT RESULTS: " + JSON.stringify(results));
         return results;
       } catch (error) {
-        console.error("Unable to retrieve_projects:", JSON.stringify(error));
+        logger.error("Unable to retrieve_projects:", JSON.stringify(error));
         return error;
       }
     },
@@ -35,7 +36,7 @@ const resolver = {
           };
         }
       } catch (error) {
-        console.error("Unable to retrieve_project:", JSON.stringify(error));
+        logger.error("Unable to retrieve_project:", JSON.stringify(error));
         return {
           __typename: "ErrorResults",
           errorID: 13,
@@ -53,7 +54,7 @@ const resolver = {
         );
         return results[0];
       } catch (error) {
-        console.error("Unable to retrieve_part:", JSON.stringify(error));
+        logger.error("Unable to retrieve_part:", JSON.stringify(error));
         return error;
       }
     },
@@ -64,7 +65,7 @@ const resolver = {
         );
         return results;
       } catch (error) {
-        console.error("Unable to retrieve_part:", JSON.stringify(error));
+        logger.error("Unable to retrieve_part:", JSON.stringify(error));
         return error;
       }
     },
@@ -75,7 +76,7 @@ const resolver = {
         );
         return results;
       } catch (error) {
-        console.error("Unable to retrieve_part:", JSON.stringify(error));
+        logger.error("Unable to retrieve_part:", JSON.stringify(error));
         return error;
       }
     },
@@ -86,7 +87,7 @@ const resolver = {
         );
         return results;
       } catch (error) {
-        console.error("Unable to retrieve_part:", JSON.stringify(error));
+        logger.error("Unable to retrieve_part:", JSON.stringify(error));
         return error;
       }
     },
@@ -107,16 +108,16 @@ const resolver = {
       }
     ) => {
       try {
-        console.log(
+        logger.info(
           `createProject args: ${projectName}, ${projectDescription}, ${projectPartNumber}, ${projectStatus}, ${projectPrice},${projectVendor},${projectImageFile},${projectNoteFile}`
         );
         const results = await db.sequelize.query(
           `CALL create_project('${projectName}','${projectDescription}','${projectPartNumber}',${projectStatus},${projectPrice},'${projectVendor}','${projectImageFile}','${projectNoteFile}')`
         );
-        console.log("createProject results: " + JSON.stringify(results));
+        logger.info("createProject results: " + JSON.stringify(results));
         return results[0];
       } catch (error) {
-        console.error("Unable to createProject:", JSON.stringify(error));
+        logger.error("Unable to createProject:", JSON.stringify(error));
         return error;
       }
     },
@@ -136,55 +137,55 @@ const resolver = {
         projectDocFilename,
       }
     ) => {
-      console.log(
+      logger.info(
         `updateProject args: ${projectID},${partID}, ${projectName}, ${projectDescription}, ${projectPartNumber}, ${projectStatus}, ${projectComplete},${projectPrice},${projectVendor},${projectImageFilename},${projectDocFilename}`
       );
       try {
         const results = await db.sequelize.query(
           `CALL update_project(${projectID},${partID},'${projectName}','${projectDescription}','${projectPartNumber}',${projectStatus},${projectComplete}, ${projectPrice},'${projectVendor}','${projectImageFilename}','${projectDocFilename}')`
           );
-        console.log("updateProject results: " + JSON.stringify(results));
+        logger.info("updateProject results: " + JSON.stringify(results));
         return results[0];
       } catch (error) {
-        console.error("Unable to updateProject:", JSON.stringify(error));
+        logger.error("Unable to updateProject:", JSON.stringify(error));
         return error;
       }
     },
     updateProjectStatus: async (root, { projectID, projectStatus }) => {
       try {
-        console.log(`updateProjectStatus args: ${projectID}, ${projectStatus}`);
+        logger.info(`updateProjectStatus args: ${projectID}, ${projectStatus}`);
         const results = await db.sequelize.query(
           `CALL update_project_status(${projectID},${projectStatus})`
         );
-        console.log("updateProjectStatus results: " + JSON.stringify(results));
+        logger.info("updateProjectStatus results: " + JSON.stringify(results));
         return results[0];
       } catch (error) {
-        console.error("Unable to updateProjectStatus:", JSON.stringify(error));
+        logger.error("Unable to updateProjectStatus:", JSON.stringify(error));
         return error;
       }
     },
     updateProjectComplete: async (root, { projectID, projectComplete }) => {
       try {
-        console.log(`updateProjectStatus args: ${projectID}, ${projectComplete}`);
+        logger.info(`updateProjectStatus args: ${projectID}, ${projectComplete}`);
         const results = await db.sequelize.query(
           `CALL update_project_status(${projectID},${projectComplete})`
         );
-        console.log("updateProjectStatus results: " + JSON.stringify(results));
+        logger.info("updateProjectStatus results: " + JSON.stringify(results));
         return results[0];
       } catch (error) {
-        console.error("Unable to updateProjectComplete:", JSON.stringify(error));
+        logger.error("Unable to updateProjectComplete:", JSON.stringify(error));
         return error;
       }
     },
     deleteProject: async (root, {projectID}) => {
       try {
-        console.log(`deleteProject args: ${projectID}`);
+        logger.info(`deleteProject args: ${projectID}`);
         const results = await db.sequelize.query(
           `CALL delete_project(${projectID})`
         );
         return results[0];
       } catch (error) {
-        console.error(`deleteProject error: ${error}`)
+        logger.error(`deleteProject error: ${error}`)
         return error;
       }
     },

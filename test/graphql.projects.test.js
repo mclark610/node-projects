@@ -1,6 +1,7 @@
 const { graphql } = require("graphql");
 const { schema } = require("../components/graphql/loadSchemas.js");
 const db = require("../models/index.js");
+const logger = require('../modules/logger');
 
 afterAll(async () => {
   db.sequelize.close();
@@ -37,7 +38,7 @@ test("get data from Project(1)", async () => {
       }
     `,
   });
-  console.log("get data from graphql result: " + JSON.stringify(result));
+  logger.info("get data from graphql result: " + JSON.stringify(result));
   //  expect(result.data.project).toBeDefined();
   //  expect(result.data.project.part_id).toBe(1);
 });
@@ -62,7 +63,7 @@ test("get all projects from graphql", async () => {
       }
       `,
   });
-  console.log("projects results are: " + JSON.stringify(result));
+  logger.info("projects results are: " + JSON.stringify(result));
   expect(result.data.projects).toBeDefined();
   //  expect(result.data.projects.length).toBe(5);
 });
@@ -94,7 +95,7 @@ test("get project(1) from graphql", async () => {
       }
     `,
   });
-  console.log("result is : " + JSON.stringify(result));
+  logger.info("result is : " + JSON.stringify(result));
   expect(result.data.project).toBeDefined();
 });
 
@@ -122,7 +123,7 @@ test("get project 2 (2) from graphql", async () => {
       }
     `,
   });
-  //console.log("result is : " + JSON.stringify(result));
+  //logger.info("result is : " + JSON.stringify(result));
   expect(result.data.project).toBeDefined();
 });
 
@@ -147,9 +148,9 @@ test("create Project mutation test", async () => {
       }
     `,
   });
-  console.log("***********************************");
-  console.log("createProject result: " + JSON.stringify(result));
-  console.log("***********************************");
+  logger.info("***********************************");
+  logger.info("createProject result: " + JSON.stringify(result));
+  logger.info("***********************************");
 });
 
 test("update Project mutation test", async () => {
@@ -173,9 +174,9 @@ test("update Project mutation test", async () => {
       }
     `,
   });
-  console.log("***********************************");
-  console.log("updateProject result: " + JSON.stringify(result));
-  console.log("***********************************");
+  logger.info("***********************************");
+  logger.info("updateProject result: " + JSON.stringify(result));
+  logger.info("***********************************");
 });
 
 test("update Project Complete mutation test", async () => {
@@ -189,9 +190,9 @@ test("update Project Complete mutation test", async () => {
       }
     `,
   });
-  console.log("***********************************");
-  console.log("updateProject Complete result: " + JSON.stringify(result));
-  console.log("***********************************");
+  logger.info("***********************************");
+  logger.info("updateProject Complete result: " + JSON.stringify(result));
+  logger.info("***********************************");
 });
 
 test("update Project Complete Status mutation test", async () => {
@@ -205,9 +206,9 @@ test("update Project Complete Status mutation test", async () => {
       }
     `,
   });
-  console.log("***********************************");
-  console.log("updateProject Status result: " + JSON.stringify(result));
-  console.log("***********************************");
+  logger.info("***********************************");
+  logger.info("updateProject Status result: " + JSON.stringify(result));
+  logger.info("***********************************");
 });
 
 test("delete Project mutation test", async () => {
@@ -222,7 +223,7 @@ test("delete Project mutation test", async () => {
     `,
   });
 
-  console.log("***********************************");
-  console.log("deleteProject result: " + JSON.stringify(result));
-  console.log("***********************************");
+  logger.info("***********************************");
+  logger.info("deleteProject result: " + JSON.stringify(result));
+  logger.info("***********************************");
 });

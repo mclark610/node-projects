@@ -14,9 +14,9 @@ test("authenticate the sequelize connection is valid", async () => {
 
   try {
     await db.sequelize.authenticate();
-    console.log('Connection has been established successfully.');
+    logger.info('Connection has been established successfully.');
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    logger.error('Unable to connect to the database:', error);
   }
 })
 
@@ -24,20 +24,20 @@ test("authenticate the sequelize connection is valid", async () => {
 test("Sequelize Project model still work?", async () => {
   await projects.findAll({})
   .then( (results) => {
-      console.log("Results are : " + JSON.stringify(results));
+      logger.info("Results are : " + JSON.stringify(results));
   })
   .catch( (err) => {
-      console.log("fetchProject:findAll error: " + err);
+      logger.info("fetchProject:findAll error: " + err);
   });
 })
 
 test("Sequelize Project 1 model send all data?", async () => {
   await projects.findByPk(1)
   .then( (results) => {
-      console.log("Project ID 1 is Results are : " + JSON.stringify(results));
+      logger.info("Project ID 1 is Results are : " + JSON.stringify(results));
   })
   .catch( (err) => {
-      console.log("fetchProject:findAll error: " + err);
+      logger.info("fetchProject:findAll error: " + err);
   });
 })
 

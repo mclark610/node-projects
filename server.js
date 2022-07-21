@@ -21,7 +21,7 @@ const part = require("./router/part");
 const user = require("./router/user");
 const todo = require("./router/todo");
 const intoto = require("./router/intoto");
-
+const logger = require("./modules/logger");
 //let https;
 
 // get this from config

@@ -1,7 +1,7 @@
 const { graphql } = require("graphql");
 const { schema } = require("../components/graphql/loadSchemas.js");
 const db = require('../models/index.js');
-
+const logger = require('../modules/logger');
 
 afterAll(async () => {
   db.sequelize.close();
@@ -50,7 +50,7 @@ test("get task(1) from graphql", async () => {
       }
       `,
   });
-  console.log("task 1 result is : " + JSON.stringify(result));
+  logger.info("task 1 result is : " + JSON.stringify(result));
   expect(result.data.task).toBeDefined();
 });
 
@@ -75,7 +75,7 @@ test("get task(2) from graphql", async () => {
       }
       `,
   });
-//console.log("result is : " + JSON.stringify(result));
+//logger.info("result is : " + JSON.stringify(result));
   expect(result.data.task).toBeDefined();
 
 });
@@ -92,9 +92,9 @@ test("create Task mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("createTask result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("createTask result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("update Task mutation test", async () => {
@@ -108,9 +108,9 @@ test("update Task mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("updateTask result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("updateTask result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("update Task Complete mutation test", async () => {
@@ -124,9 +124,9 @@ test("update Task Complete mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("updateTask Complete result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("updateTask Complete result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("update Task Complete Status mutation test", async () => {
@@ -140,9 +140,9 @@ test("update Task Complete Status mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("updateTask Status result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("updateTask Status result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 
@@ -158,9 +158,9 @@ test("delete Task mutation test", async () => {
     `,
   });
 
-  console.log("***********************************");
-  console.log("deleteTask result: " + JSON.stringify(result));
-  console.log("***********************************");
+  logger.info("***********************************");
+  logger.info("deleteTask result: " + JSON.stringify(result));
+  logger.info("***********************************");
 });
 test("remove Task from Project mutation test", async () => {
   const result = await graphql({
@@ -173,9 +173,9 @@ test("remove Task from Project mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("removeTaskFromProject result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("removeTaskFromProject result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });
 
 test("associate Task with Project mutation test", async () => {
@@ -189,7 +189,7 @@ test("associate Task with Project mutation test", async () => {
       }
       `,
   });
-  console.log("***********************************")
-  console.log("associateTaskWithProject result: " + JSON.stringify(result));
-  console.log("***********************************")
+  logger.info("***********************************")
+  logger.info("associateTaskWithProject result: " + JSON.stringify(result));
+  logger.info("***********************************")
 });

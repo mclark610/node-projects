@@ -1,5 +1,6 @@
 const { graphql } = require("graphql");
 const { schema } = require("../components/graphql/loadSchemas.js");
+const logger = require('../modules/logger');
 
 test("get data from graphql", async () => {
   const result = await graphql({
@@ -14,7 +15,7 @@ test("get data from graphql", async () => {
       }
     `,
   });
-  // console.log("result: " + JSON.stringify(result));
+  // logger.info("result: " + JSON.stringify(result));
   expect(result.data.parts).toBeDefined();
   expect(result.data.parts.length).toBe(6);
 });
@@ -32,7 +33,7 @@ test("get part 1 fom graphql", async () => {
       }
     `,
   });
-   console.log("result: " + JSON.stringify(result));
+   logger.info("result: " + JSON.stringify(result));
   expect(result.data.part).toBeDefined();
   expect(result.data.part.name).toBe("Ranger");
 })
@@ -51,7 +52,7 @@ test("Get error if part id is invalid", async () => {
     `,
   });
 
-  console.log("result: " + JSON.stringify(result));
+  logger.info("result: " + JSON.stringify(result));
   expect(result.errors).toBeDefined();
 
 })
