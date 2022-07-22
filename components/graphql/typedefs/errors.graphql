@@ -14,7 +14,11 @@ type ErrorResults {
   errorMessage: String
 }
 
-union ProjectResults = Project | ErrorResults
-union PartResults = Part | ErrorResults
-union TaskResults = Task | ErrorResults
-union NoteResults = Note | ErrorResults
+type IDResults {
+  id: Int
+}
+
+union ProjectResults = Project | ErrorResults | IDResults
+union PartResults = Part | ErrorResults | IDResults
+union TaskResults = Task | ErrorResults | IDResults
+union NoteResults = Note | ErrorResults | IDResults

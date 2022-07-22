@@ -9,7 +9,7 @@ want to incorporate supply chain management in next version
 
 It also demonstrates how to set up and use:
 sequelize
-graphql
+graphql - using gql and creating objects
 node
 router
 webpack

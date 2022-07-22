@@ -33,7 +33,7 @@ test("get part 1 fom graphql", async () => {
       }
     `,
   });
-   logger.info("result: " + JSON.stringify(result));
+//   logger.info("result: " + JSON.stringify(result));
   expect(result.data.part).toBeDefined();
   expect(result.data.part.name).toBe("Ranger");
 })
@@ -52,7 +52,7 @@ test("Get error if part id is invalid", async () => {
     `,
   });
 
-  logger.info("result: " + JSON.stringify(result));
+//  logger.info("result: " + JSON.stringify(result));
   expect(result.errors).toBeDefined();
 
 })

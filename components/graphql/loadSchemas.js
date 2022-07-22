@@ -14,6 +14,6 @@ const schema = makeExecutableSchema({
   resolvers: resolvers
 })
 
-logger.info("loadSchemas:schema is : %s",JSON.stringify(schema));
+// logger.info("loadSchemas:schema is : %s",JSON.stringify(schema));
 
 module.exports.schema = schema;
