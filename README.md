@@ -1,4 +1,4 @@
-# node-maintain
+# node-projects
 Maintenance program backend
 
 This program helps keep track of the maintenance of engines, or anything that requires maintenace.
@@ -14,3 +14,6 @@ node
 router
 webpack
 
+To get back on track:
+x. get test scripts to work 
+1. authorize user to use system
