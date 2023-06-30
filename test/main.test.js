@@ -1,4 +1,4 @@
-const logger = require('../modules/logger');
+const logger = require('../src/modules/logger');
 const Config = require('config');
 
 const config  = Config.get('database');

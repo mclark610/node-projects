@@ -2,7 +2,7 @@ const assert = require('assert');
 const {describe,it} = require('mocha');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const server = require('../server');
+const server = require('../src/server');
 let should = chai.should();
 
 
