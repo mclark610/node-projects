@@ -2,10 +2,10 @@
 /* intoto.js is messing with graphql using all tables
  *
  */
-
+const {createHandler} = require( 'graphql-http/lib/use/express');
 const express = require('express');
 const router = express.Router();
-const { graphqlHTTP } = require('express-graphql');
+//const { graphqlHTTP } = require('express-graphql');
 const logger = require('../modules/logger.js');
 
 const Part = require('../modules/data_part');
@@ -14,7 +14,7 @@ const Task = require('../modules/data_task');
 const Note = require('../modules/data_note');
 
 const graphql = require('graphql');
-const graphqlDate = require('graphql-iso-date');
+//const graphqlDate = require('graphql-iso-date');
 const cookieParser = require('cookie-parser');
 
 // TODO: create /user/destroy to destroy session
@@ -56,10 +56,10 @@ var noteType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLString,
         },
         createdAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphqlDateTime
         },
         updatedAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         }
     }
 });
@@ -98,10 +98,10 @@ var partType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLString,
         },
         createdAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         },
         updatedAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         }
     }
 });
@@ -128,7 +128,7 @@ var taskType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLInt
         },
         dueOnDate: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         },
         description: {
             type: graphql.GraphQLString,
@@ -140,10 +140,10 @@ var taskType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLString,
         },
         createdAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         },
         updatedAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         }
     }
 
@@ -174,10 +174,10 @@ var maintainType = new graphql.GraphQLObjectType({
             type: graphql.GraphQLString,
         },
         createdAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         },
         updatedAt: {
-            type: graphqlDate.GraphQLDateTime
+            type: graphql.GraphQLDateTime
         }
     }
 
@@ -288,9 +288,8 @@ let schema = new graphql.GraphQLSchema({
     query: queryType
 });
 
-router.use('/graphql', graphqlHTTP({
+router.use('/graphql', createHandler({
     schema: schema,
-    graphiql: true
 }));
 
 module.exports = router;
