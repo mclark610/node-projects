@@ -16,7 +16,7 @@ const cors = require("cors");
 
 const env = require("dotenv").config();
 
-const maintain = require("./router/maintain");
+const project = require("./router/project");
 const part = require("./router/part");
 const user = require("./router/user");
 const todo = require("./router/todo");
@@ -47,7 +47,7 @@ let commonSession = session(configSession);
 let app = express();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+//app.use(bodyParser.urlencoded({ extended: true }));
 
 // dev or production:
 if (process.env.NODE_ENV === "production") {
@@ -88,7 +88,7 @@ app.use(
   })
 );
 
-app.use("/maintain", maintain);
+app.use("/project", project);
 app.use("/part", part);
 app.use("/user", user);
 app.use("/todo", todo);

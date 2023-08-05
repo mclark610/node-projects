@@ -20,9 +20,10 @@ let register = (body) => {
     return users.create(body,options);
 };
 
-let fetchByNamePassword = (username,password) => {
+const fetchByNamePassword = (username,password) => {
     return new Promise( (resolve,reject) => {
-
+        logger.info("fetchByNamePassword:username: " + username);
+        logger.info("fetchByNamePassword:password: " + password);
         if (!username) {
             logger.info("missing username from body");
             reject(new Status("failed",username,"name missing"));
@@ -39,6 +40,7 @@ let fetchByNamePassword = (username,password) => {
                 }
             })
                 .then((results) =>  {
+                    logger.info("results: " + JSON.stringify(results));
                     let validpwd = encrypt.checkPassword(password,results.password);
                     logger.info("name: " + results.name);
                     logger.info("id: " + results.id);
@@ -54,7 +56,7 @@ let fetchByNamePassword = (username,password) => {
                 })
                 .catch((err) => {
                     logger.info("findOne sending error! error: "+ JSON.stringify(err));
-                    reject(new Status('failed','undefined','error in finding user'));
+                    reject(new Status('failed','undefined',err));
                 });
         }
     });

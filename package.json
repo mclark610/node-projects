@@ -6,7 +6,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node dist/server.bundle.js",
-    "start": "NODE_ENV=development && node ./src/server.js",
+    "start": "NODE_ENV=development && nodemon ./src/server.js",
     "test": "cross-env NODE_ENV=test jest",
     "build": "webpack --config ./webpack.config.js"
   },
@@ -46,6 +46,7 @@
     "jquery": "^3.7.0",
     "js-cookie": "^3.0.5",
     "js-yaml": "^4.1.0",
+    "jsonwebtoken": "^9.0.1",
     "mariadb": "^3.2.0",
     "mysql2": "^3.4.3",
     "path": "^0.12.7",

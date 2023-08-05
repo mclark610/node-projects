@@ -18,7 +18,7 @@ const _ = require('lodash');
 router.use((req,res,next) => {
     // Check user is logged in.
     logger.info("project use called");
-    logger.info("------------------ MAINTAIN USE -------------------------------------");
+    logger.info("------------------ PROJECTS USE -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("req.session.name: " + JSON.stringify(req.cookies.username));
     logger.info("project:use:sessionID  : " + JSON.stringify(req.sessionID));
@@ -28,17 +28,13 @@ router.use((req,res,next) => {
 
     if (_.has(req.session.user)) {
         logger.info("project:use:req.session.user: " + JSON.stringify(req.session.user));
-        next();
     }
     else {
         if (!_.has(req.session.user)) {
             logger.info("project:user:req.session.user is undefined");
-            return;
+
+            res.status(403).send("unauthorized user: Please log in.");
         }
-        else {
-            logger.info("project:use:option: " + JSON.stringify("user not authorized"));
-        }
-        res.status(403).send("unauthorized user");
     }
 });
 

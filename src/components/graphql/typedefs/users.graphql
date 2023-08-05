@@ -1,0 +1,20 @@
+scalar DateTime
+scalar Decimal
+scalar Text
+
+type User {
+  id: Int!
+  username: String
+  password: String
+  key: String
+}
+
+type Query {
+  hello: String
+  protected: String
+  user_info: User
+}
+
+type Mutation {
+    login(username: String!, password: String!): String
+}

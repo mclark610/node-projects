@@ -1,24 +1,113 @@
 const express = require('express');
 
+
 const router = express.Router();
 const logger = require('../modules/logger.js');
 const user = require('../modules/data_user.js');
 const _ = require("lodash");
-
-//const cookieParser = require('cookie-parser');
-
+const jwt = require('jsonwebtoken');
 const Status = require('../modules/status');
 
-// TODO: create /user/destroy to destroy session
-// TODO: check if user authorized to perform user maintenance
+//const cookieParser = require('cookie-parser');
+const users = [
+    { id: 1, username: 'john', password: 'password' },
+    { id: 2, username: 'jane', password: 'secret' },
+    { id: 3, username: 'mark', password: 'password' },
+  ];
 
-//router.use(cookieParser());
+const secret_key = 'your-secret-key';
+
+// Create a middleware function to authenticate the user
+const authenticateUser = (req, res, next) => {
+    const authHeader = req.header('Authorization');
+    logger.info("authenticateUser:authHeader: " + authHeader);
+
+
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.substring(7);
+        logger.info("token: " + token);
+        jwt.verify(token, secret_key, (err, user) => {
+            if (err) {
+                logger.info("authenticateUser:verify:err: " + err);
+                return res.status(401).json({ message: 'Invalid token' });
+            }
+            logger.info("authenticateUser:verify:user: " + JSON.stringify(user));
+            req.user = user;
+            next();
+        });
+    }
+    else {
+        return res.status(401).json({ message: 'No token found' });
+    }
+};
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
-    logger.info("***********************USER USED CALLED************************* ");
+    logger.info("***********************USER USE BEGIN ************************* ");
+    // Check user is logged in.
+    const username = req.body.username
+    const authHeader = req.headers.authorization;
+    logger.info("USE: username: " + username);
+    logger.info("USE: authHeader: " + authHeader);
+    logger.info("USE: req.session: " + JSON.stringify(req.session));
+    logger.info("***********************USER USE END ************************* ");
+
     next();
 });
+
+router.get('/check', authenticateUser, (req, res) => {
+  
+    logger.info("===========================================================");
+    logger.info("user/login called---user: " );
+    logger.info("  user: " + JSON.stringify(req.username));
+    logger.info("sessionID: " + req.sessionID);
+    logger.info("session cookie: " + JSON.stringify(req.session.cookie));
+    logger.info("store: " + JSON.stringify(req.session));
+    logger.info("===========================================================");
+    res.status(200).send("/usr/check works!");
+});
+
+router.post('/login', function (req,res) {
+    logger.info(" **********************LOGIN CALLED************************ ");
+    logger.info("user/login called---session info below " );
+    logger.info("  sessionID   : " + req.sessionID);
+    logger.info("  session     : " + JSON.stringify(req.session));
+    logger.info("  body        : " + JSON.stringify(req.body));
+    logger.info("  user        : " + req.body["username"]);
+    logger.info("  password    : " + req.body["password"]);
+    logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "exists": "does not exist" ));
+    logger.info("  cookie      : " +  JSON.stringify(req.cookies));
+    logger.info('Signed Cookies: ', JSON.stringify(req.signedCookies));
+
+    
+    user.fetchByNamePassword(req.body["username"],req.body["password"])
+        .then( (results) => {
+            logger.info("results were a success " + JSON.stringify(results));
+            // Try saving name to cookie and then check it.
+           
+            const token = jwt.sign(user, secret_key, {expiresIn: '1h'});
+            logger.info("token: " + token);
+            logger.info("results: " + JSON.stringify(results));
+
+            res.status(200).send(token);
+        })
+        .catch( (err) => {
+            
+            logger.info("user:post:fetchByNamePassword error: " + err);
+            res.status(500).send(err);
+        });
+});
+
+router.get("/super-secure-resource",  (req,res) => {
+    return res.status(401)
+            .json({message:"Need to be logged in"})
+});
+
+// Use the authentication middleware for the protected route
+router.get('/protected', authenticateUser, (req, res) => {
+    res.json({ message: 'This is a user protected route.', user: req.user });
+  });
+
 
 // delete tested with part deletion only. works
 router.delete('/:id(\\d+)', (req,res,next) => {
@@ -98,6 +187,7 @@ router.post('/register', function (req, res) {
     user.register(req.body)
         .then( (results) => {
             logger.info("user:post: " + req.data["id"] + "--- " + results);
+
             res.status(200).send(results);
         })
         .catch( (err) => {
@@ -106,71 +196,7 @@ router.post('/register', function (req, res) {
         });
 });
 
-router.post('/check', function (req, res) {
-    logger.info("===========================================================");
-    logger.info("user/login called---user: " );
-    logger.info("sessionID: " + req.sessionID);
-    logger.info("session cookie: " + JSON.stringify(req.session.cookie));
-    logger.info("session.user: " + req.session["user"]);
-    logger.info("store: " + JSON.stringify(req.session));
-    logger.info("===========================================================");
 
-
-    res.status(200).send("checked: see server log");
-});
-
-router.post('/login', function (req,res) {
-    logger.info(" **********************LOGIN CALLED************************ ");
-    logger.info("user/login called---session info below " );
-    logger.info("  sessionID   : " + req.sessionID);
-    logger.info("  session     : " + JSON.stringify(req.session));
-    logger.info("  body        : " + JSON.stringify(req.body));
-    logger.info("  user        : " + req.body["username"]);
-    logger.info("  session key : " + (_.has(req.session, 'req.session.key') ? "exists": "does not exist" ));
-    logger.info("  cookie      : " +  JSON.stringify(req.cookies));
-    logger.info('Signed Cookies: ', JSON.stringify(req.signedCookies));
-
-
-    // is user already logged in?
-    // if user name matches in cookie
-    // and if user key matches in cookie
-    // then ignore existing login request
-
-    if (_.has(req.session, 'req.session.key')) {
-        logger.info("login: session cookie key already exists: " + req.session.user);
-        res.status(200).send(req.session.user);
-    }
-    else {
-        /*
-        Serverside uses sessions to store data.  Pass key back to user for them to pass back when they want something
-        */
-        logger.info("login: new session");
-        user.fetchByNamePassword(req.body["username"],req.body["password"])
-            .then( (results) => {
-                logger.info("results were a success " + JSON.stringify(results));
-                req.session["user"] = req.body["username"];
-                req.session.key  = new Date().getTime();
-
-                req.cookies["username"] = req.body["username"];
-                req.cookies["sessonID"] = req.sessionID;
-                //req.cookies["heydee"] =  "Marko";
-                logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-                logger.info("user:login:sessionID  : " + JSON.stringify(req.sessionID));
-                logger.info("user:login:session key: " + JSON.stringify(req.session.key));
-                logger.info("user:login:username   : " + JSON.stringify(req.session.user));
-                logger.info("user:login:username cookies  : " + JSON.stringify(req.cookies["username"]));
-                logger.info("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
-
-                res.status(200).send(req.session.user);
-
-            })
-            .catch( (err) => {
-                logger.info("user:post:fetchByNamePassword error: " + err);
-                res.status(500).send(err);
-            });
-
-    }
-});
 
 router.post('/logout', function(req,res) {
     logger.info("user/logout called---user");
@@ -196,3 +222,4 @@ router.post('/logout', function(req,res) {
 });
 
 module.exports = router;
+

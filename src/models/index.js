@@ -37,14 +37,12 @@ context.keys().map(context).forEach(module => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-console.log("dirname:: " + __dirname);
-
 //grab all model files and plop into an array
 fs.readdirSync(__dirname)
     .filter( file => file !== "index.js")
     .forEach( file => {
-        logger.info("FOREACH DIRNAME: " + __dirname);
-        logger.info("FOREACH filefound: " + file);
+//        logger.info("FOREACH DIRNAME: " + __dirname);
+//        logger.info("FOREACH filefound: " + file);
         models.push(require(path.join(__dirname,file)));
     });
 
