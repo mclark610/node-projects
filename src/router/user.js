@@ -5,41 +5,11 @@ const router = express.Router();
 const logger = require('../modules/logger.js');
 const user = require('../modules/data_user.js');
 const _ = require("lodash");
-const jwt = require('jsonwebtoken');
+
 const Status = require('../modules/status');
-
+const {authenticateUser,createUserToken} = require('../modules/authenticate');
 //const cookieParser = require('cookie-parser');
-const users = [
-    { id: 1, username: 'john', password: 'password' },
-    { id: 2, username: 'jane', password: 'secret' },
-    { id: 3, username: 'mark', password: 'password' },
-  ];
 
-const secret_key = 'your-secret-key';
-
-// Create a middleware function to authenticate the user
-const authenticateUser = (req, res, next) => {
-    const authHeader = req.header('Authorization');
-    logger.info("authenticateUser:authHeader: " + authHeader);
-
-
-    if (authHeader && authHeader.startsWith('Bearer ')) {
-        const token = authHeader.substring(7);
-        logger.info("token: " + token);
-        jwt.verify(token, secret_key, (err, user) => {
-            if (err) {
-                logger.info("authenticateUser:verify:err: " + err);
-                return res.status(401).json({ message: 'Invalid token' });
-            }
-            logger.info("authenticateUser:verify:user: " + JSON.stringify(user));
-            req.user = user;
-            next();
-        });
-    }
-    else {
-        return res.status(401).json({ message: 'No token found' });
-    }
-};
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
@@ -62,7 +32,6 @@ router.get('/check', authenticateUser, (req, res) => {
     logger.info("  user: " + JSON.stringify(req.username));
     logger.info("sessionID: " + req.sessionID);
     logger.info("session cookie: " + JSON.stringify(req.session.cookie));
-    logger.info("store: " + JSON.stringify(req.session));
     logger.info("===========================================================");
     res.status(200).send("/usr/check works!");
 });
@@ -84,8 +53,8 @@ router.post('/login', function (req,res) {
         .then( (results) => {
             logger.info("results were a success " + JSON.stringify(results));
             // Try saving name to cookie and then check it.
-           
-            const token = jwt.sign(user, secret_key, {expiresIn: '1h'});
+           const token = createUserToken(req.body["username"]);
+            
             logger.info("token: " + token);
             logger.info("results: " + JSON.stringify(results));
 
