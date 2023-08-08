@@ -4,12 +4,7 @@ const router = express.Router();
 const logger = require('../modules/logger.js');
 const part = require('../modules/data_part');
 const _ = require("lodash");
-const cookieParser = require('cookie-parser');
-
-// TODO: create /user/destroy to destroy session
-// TODO: check if user authorized to perform user maintenance
-
-router.use(cookieParser());
+const {authenticateUser} = require("../modules/authenticate");
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
@@ -19,16 +14,7 @@ router.use((req,res,next) => {
     logger.info("req.session: "      + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    if (_.has(req.session, 'req.session.user')) {
-        logger.info("req.session.user: " + JSON.stringify(req.session.user));
-        next();
-    }
-    else {
-        logger.info("part:use:user: not available");
-        res.status(403).send("unauthorized user");
-    }
-
-    next();
+    authenticateUser(req,res,next);
 });
 
 // delete tested with part deletion only. works

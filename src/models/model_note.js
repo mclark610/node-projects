@@ -1,7 +1,3 @@
-/*
- * maintain table is the main maintenance table.
- */
-
 module.exports = (sequelize, DataTypes) => {
     let Note = sequelize.define('notes', {
         id:  {

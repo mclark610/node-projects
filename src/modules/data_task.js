@@ -34,7 +34,7 @@ let insert = (body) => {
                 }
             })
             .catch((err) => {
-                logger.info("insertMaintain: validateMaintain failed with " + err);
+                logger.info("data_task:insert:failed with " + err);
                 reject(err);
             });
     });
@@ -42,10 +42,9 @@ let insert = (body) => {
 
 let fetch = (id) => {
     return new Promise( (resolve,reject) => {
-        logger.info("fetchTask:id: " + id);
+        logger.info("data_task:fetch:id: " + id);
         // look for -1 for all or > -1 for one
         if (id) {
-            //models["maintains"].findByPk(id)
             tasks.findByPk(id, {
                 include: [{
                     model: parts,
@@ -53,30 +52,26 @@ let fetch = (id) => {
                 },{
                     model: notes,
                     as: 'notes'
-                }
-                /*,{
-                    model: maintains,
-                    as: 'maintains'
-                }*/],
+                }],
             })
                 .then( (results) => {
-                    logger.info("fetchTasks:findByPk: success: " + JSON.stringify(results));
+                    logger.info("data_task:fetch:findByPk: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchTasks:findByPk error: " + err);
+                    logger.info("data_task:fetch:findByPk error: " + err);
                     reject(err);
                 });
         }
         else {
-            //models["maintains"].findAll({})
+            //models["tas"].findAll({})
             tasks.findAll({})
                 .then( (results) => {
-                    logger.info("fetchTasks:findAll: success: " + JSON.stringify(results));
+                    logger.info("data_task:fetch:findAll: success: " + JSON.stringify(results));
                     resolve(results);
                 })
                 .catch( (err) => {
-                    logger.info("fetchTasks:findAll error: " + err);
+                    logger.info("data_task:fetch:findAll error: " + err);
                     reject(err);
                 });
         }
@@ -92,16 +87,16 @@ let update = (body) => {
                 tasks.update(valbody, {where: {"id": body["id"]}
                 })
                     .then( (results) => {
-                        logger.info("updateMaintain:results: " + results);
+                        logger.info("data_task:update:results: " + results);
                         resolve(results);
                     })
                     .catch( (err) => {
-                        logger.error("updateMaintain:error: " + err );
+                        logger.error("data_task:update:error: " + err );
                         reject(err);
                     });
             })
             .catch( (err) => {
-                logger.error("updateMaintain: validateMaintain: error: " + err );
+                logger.error("data_task:update:err: " + err );
                 reject(err);
             });
     });
@@ -116,10 +111,10 @@ let deleteTask = (id) => {
                 return results.destroy();
             })
             .then( () => {
-                resolve("deleteMaintain: deleted id: " + id);
+                resolve("deleteTask: deleted id: " + id);
             })
             .catch( (err) => {
-                logger.info("deleteMaintain:findByPk error: " + err);
+                logger.info("deleteTask:findByPk error: " + err);
                 reject(err);
             });
     });

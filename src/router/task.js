@@ -1,15 +1,12 @@
-// todo.js
+// task.js
 const express = require('express');
 const router = express.Router();
 
 const logger = require('../modules/logger.js');
-const todo = require('../modules/data_task');
+const task = require('../modules/data_task.js');
 const _ = require("lodash");
 
 const cookieParser = require('cookie-parser');
-
-// TODO: create /user/destroy to destroy session
-// TODO: check if user authorized to perform user maintenance
 
 router.use(cookieParser());
 
@@ -17,7 +14,7 @@ router.use(cookieParser());
 router.use((req,res,next) => {
 
     // Check user is logged in.
-    logger.info("todo use called");
+    logger.info("task use called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
@@ -26,60 +23,60 @@ router.use((req,res,next) => {
         next();
     }
     else {
-        logger.info("todo:use:user: not available");
+        logger.info("task:use:user: not available");
         res.status(403).send("unauthorized user");
     }
 });
 
 
-// delete tested with todo deletion only. works
+// delete tested with task deletion only. works
 router.delete('/:id(\\d+)', (req,res) => {
-    todo.deletetodo(req.params["id"])
+    task.deletetask(req.params["id"])
         .then( (results) => {
-            logger.info("todo:delete: " + req.params["id"] + "--- " + results);
+            logger.info("task:delete: " + req.params["id"] + "--- " + results);
             res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("todo:delete: error: " + JSON.stringify(err));
+            logger.info("task:delete: error: " + JSON.stringify(err));
             res.status(500).send(err);
         });
 });
 
 router.get('/:id(\\d+)?', function (req, res) {
-    logger.info("todo: id: " + req.params["id"] );
-    todo.fetch(req.params["id"])
+    logger.info("task: id: " + req.params["id"] );
+    task.fetch(req.params["id"])
         .then( (results) => {
-            logger.info("todo:get: " + req.params["id"] + "--- " + results);
+            logger.info("task:get: " + req.params["id"] + "--- " + results);
             res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("todo:get: error: " + JSON.stringify(err));
+            logger.info("task:get: error: " + JSON.stringify(err));
             res.status(500).send(err);
         });
 });
 
 router.put('/', (req,res) => {
     // update
-    todo.update(req.body)
+    task.update(req.body)
         .then( (results) => {
-            logger.info("todo:put: " + req.params["id"] + "--- " + results);
+            logger.info("task:put: " + req.params["id"] + "--- " + results);
             res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("todo:put: error: " + JSON.stringify(err));
+            logger.info("task:put: error: " + JSON.stringify(err));
             res.status(500).send(err);
         });
 });
 
-// post todo
+// post task
 router.post('/', function (req, res) {
-    todo.insert(req.body)
+    task.insert(req.body)
         .then( (results) => {
-            logger.info("todo:post: " + req.params["id"] + "--- " + results);
+            logger.info("task:post: " + req.params["id"] + "--- " + results);
             res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("todo:post: error: " + JSON.stringify(err));
+            logger.info("task:post: error: " + JSON.stringify(err));
             res.status(500).send(err);
         });
 });

@@ -8,8 +8,6 @@ const _ = require("lodash");
 
 const Status = require('../modules/status');
 const {authenticateUser,createUserToken} = require('../modules/authenticate');
-//const cookieParser = require('cookie-parser');
-
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
@@ -82,7 +80,7 @@ router.get('/protected', authenticateUser, (req, res) => {
 router.delete('/:id(\\d+)', (req,res,next) => {
     let option;
     // Check user is logged in.
-    logger.info("maintain use called");
+    logger.info("user delete called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
@@ -93,11 +91,13 @@ router.delete('/:id(\\d+)', (req,res,next) => {
         option = {
             status: "failed",
             user: req.session.user,
-            message: "maintain user not available"
+            message: "user not available"
         };
-        logger.info("maintain:use:option: " + JSON.stringify(option));
+        logger.info("user:delete: " + JSON.stringify(option));
+
         res.send(option);
     }
+    
     user.deleteUser(req.params["id"])
         .then( (results) => {
             logger.info("user:delete: " + req.params["id"] + "--- " + results);
@@ -115,7 +115,7 @@ router.delete('/:id(\\d+)', (req,res,next) => {
 router.get('/:id(\\d+)?', function (req, res) {
 
     // Check user is logged in.
-    logger.info("maintain use called");
+    logger.info("user: called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");

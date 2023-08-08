@@ -3,34 +3,18 @@ const router = express.Router();
 
 const logger = require('../modules/logger.js');
 const note = require('../modules/data_note');
+const {authenticateUser,createUserToken} = require('../modules/authenticate');
 
 const _ = require("lodash");
-
-const cookieParser = require('cookie-parser');
-
-// TODO: create /user/destroy to destroy session
-// TODO: check if user authorized to perform user maintenance
-
-router.use(cookieParser());
-
 
 // middleware that is specific to this router
 router.use((req,res,next) => {
     // Check user is logged in.
-    logger.info("note use called");
+    logger.info("note:use: called");
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
-
-    if (_.has(req.session, 'req.session.user')) {
-        logger.info("note:use:user: "+req.session.user);
-
-        next();
-    }
-    else {
-        logger.info("note:use:user: not available");
-        res.status(403).send("unauthorized user");
-    }
+    authenticateUser(req,res,next);
 });
 
 
@@ -77,11 +61,11 @@ router.put('/', (req,res) => {
 router.post('/', function (req, res) {
     note.insert(req.body)
         .then( (results) => {
-            logger.info("note:results: " + JSON.stringify(results));
+            logger.info("note:post:results: " + JSON.stringify(results));
             res.status(200).send(results);
         })
         .catch( (err) => {
-            logger.info("note:get:err: " + JSON.stringify(err));
+            logger.info("note:post:err: " + JSON.stringify(err));
             res.status(500).send(err);
         });
 });

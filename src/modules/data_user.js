@@ -106,10 +106,10 @@ let deleteUser = (id) => {
                 return results.destroy();
             })
             .then( () => {
-                resolve("deleteMaintain: deleted id: " + id);
+                resolve("deleteUser: deleted id: " + id);
             })
             .catch( (err) => {
-                logger.info("deleteMaintain:findByPk error: " + err);
+                logger.info("deleteUser:findByPk error: " + err);
                 reject(err);
             });
     });
