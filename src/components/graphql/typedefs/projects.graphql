@@ -2,7 +2,7 @@ scalar DateTime
 scalar Decimal
 scalar Text
 
-union ProjectResults = Project | ErrorResults
+union ProjectResults = Project | ErrorResults | IDResults
 
 """ 
 Projects 

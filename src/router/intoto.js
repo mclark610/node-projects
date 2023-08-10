@@ -12,13 +12,14 @@ const {authenticateUser}= require('../modules/authenticate.js');
 const Part = require('../modules/data_part');
 
 const { schema } = require("../components/graphql/loadSchemas.js");
+const {resolvers} = require("../components/graphql/mergeResolvers.js");
 
 router.use((req,res,next) => {
     authenticateUser(req,res,next)
 
     // Check user is logged in.
     logger.info("toto use called");
-    next();
+   // next();
 });
 
 router.get('/test',(req,res) => {
@@ -36,6 +37,7 @@ router.get('/test',(req,res) => {
  
 router.use('/graphql', createHandler({
     schema: schema,
+    rootValue: resolvers
 }));
 
 module.exports = router;

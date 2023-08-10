@@ -3,7 +3,7 @@ const router = express.Router();
 
 const logger = require('../modules/logger.js');
 const note = require('../modules/data_note');
-const {authenticateUser,createUserToken} = require('../modules/authenticate');
+const {authenticateUser} = require('../modules/authenticate');
 
 const _ = require("lodash");
 

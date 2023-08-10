@@ -16,5 +16,5 @@ webpack
 
 To get back on track:
 x. get test scripts to work 
-1. authorize user to use system
-2. 
+x. authorize user to use system
+2. user entry validation
