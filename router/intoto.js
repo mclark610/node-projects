@@ -5,7 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { graphqlHTTP } = require('express-graphql');
+const { createHandler } = require('graphql-http');
 const logger = require('../modules/logger.js');
 
 const Part = require('../modules/data_part');
@@ -271,8 +271,9 @@ router.use((req,res,next) => {
     next();
 });
 
-router.get('/test',(req,res) => {
+router.get('/test/:id',(req,res) => {
     logger.info("############################ toto/test called ##########################");
+    logger.info("req.params: " + JSON.stringify(req.params));
     Part.fetch(req.params["id"])
         .then((results) => {
             logger.info("results: " + JSON.stringify(results));
@@ -288,7 +289,7 @@ let schema = new graphql.GraphQLSchema({
     query: queryType
 });
 
-router.use('/graphql', graphqlHTTP({
+router.use('/graphql', createHandler({
     schema: schema,
     graphiql: true
 }));

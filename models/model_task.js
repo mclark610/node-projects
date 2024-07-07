@@ -28,7 +28,9 @@ module.exports = (sequelize, DataTypes) => {
 
         models.tasks.belongsToMany(models.parts, {
             through: 'task_part',
+            as: 'parts', // Alias when accessing through the task
             foreignKey: 'task_id',
+            otherKey: 'part_id'
         });
 
         models.tasks.belongsToMany(models.notes, {

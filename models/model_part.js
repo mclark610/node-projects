@@ -16,8 +16,6 @@ module.exports = (sequelize, DataTypes) => {
         price: DataTypes.DECIMAL(8,2),
         description: DataTypes.TEXT,
         vendor: DataTypes.STRING(255),
-        image_filename: DataTypes.STRING(255),
-        doc_filename: DataTypes.STRING(255),
         status: {
             type: DataTypes.INTEGER,
             defaultValue: 1
@@ -34,14 +32,13 @@ module.exports = (sequelize, DataTypes) => {
     Part.associate = function(models) {
         models.parts.belongsToMany(models.tasks, {
             through: 'task_part',
-            foreignKey: 'part_id'
-        });
-        models.parts.belongsToMany(models.projects, {
-            through: 'project_part',
-            foreignKey: 'part_id'
+            as: 'tasks', // Alias when accessing through the part
+            foreignKey: 'part_id',
+            otherKey: 'task_id'
         });
         models.parts.hasOne(models.projects, {
-            foreignKey: 'part_id'
+            foreignKey: 'part_id',
+            as: 'project'
         })
     };
 

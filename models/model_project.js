@@ -28,20 +28,17 @@ module.exports = (sequelize, DataTypes) => {
 
         models.projects.hasOne(models.parts,{
             allowNull: true,
-            foreignKey: 'part_id'
+            foreignKey: 'id',
+            as: 'parts'
         })
+
         models.projects.belongsToMany(models.tasks, {
             through: 'project_task',
-            foreign_key: 'project_id'
+            foreignKey: 'project_id'
         });
 
         models.projects.belongsToMany(models.notes, {
             through: 'project_note',
-            foreign_key: 'project_id'
-        });
-
-        models.projects.belongsToMany(models.parts, {
-            through: 'project_part',
             foreignKey: 'project_id'
         });
 
