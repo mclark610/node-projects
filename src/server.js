@@ -24,6 +24,7 @@ const part = require("./router/part");
 const user = require("./router/user");
 const todo = require("./router/task");
 const intoto = require("./router/intoto");
+const note = require("./router/note");
 
 //let https;
 
@@ -96,6 +97,8 @@ app.use("/project", project);
 app.use("/part", part);
 app.use("/user", user);
 app.use("/todo", todo);
+app.use("/note", note);
+
 app.use("/intoto", intoto);
 
 let https;

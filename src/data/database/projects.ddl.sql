@@ -4,12 +4,13 @@
 
 CREATE TABLE `projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `part_id` int(11) DEFAULT -1,
+  `part_id` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT 1,
   `complete` tinyint(1) DEFAULT 0,
   `createdAt` datetime DEFAULT current_timestamp(),
   `updatedAt` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+	 CONSTRAINT `fk_project_part` FOREIGN KEY (`part_id`) REFERENCES `parts` (`id`) -- Foreign key constraint added
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 

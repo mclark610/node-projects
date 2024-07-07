@@ -14,7 +14,8 @@ router.use((req,res,next) => {
     logger.info("------------------ use -------------------------------------");
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
-    authenticateUser(req,res,next);
+    //authenticateUser(req,res,next);
+    next();
 });
 
 
@@ -33,6 +34,7 @@ router.delete('/:id(\\d+)', (req,res) => {
 });
 
 router.get('/:id(\\d+)?', function (req, res) {
+    logger.info("note:get: called");
     note.fetch(req.params["id"])
         .then( (results) => {
             logger.info("note:get:results: " + JSON.stringify(results));

@@ -16,12 +16,9 @@ module.exports = (sequelize, DataTypes) => {
             defaultValue: 1
         },
         complete: DataTypes.INTEGER,
-        createdAt: DataTypes.DATE,
-        updatedAt: DataTypes.DATE
     },
     {
         timestamps        : true,
-        tableName         : 'tasks',
     });
 
     Task.associate = function(models) {

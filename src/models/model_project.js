@@ -8,20 +8,25 @@ module.exports = (sequelize, DataTypes) => {
     let Project = sequelize.define('projects', {
         id:  {
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true,
             autoIncrement: true
         },
         part_id: {
-            type: DataTypes.INTEGER,
+          type: DataTypes.INTEGER,
+          references: {
+              model: 'parts',
+              key: 'id'
+          },
+          allowNull: true
         },
         status: {
-            type: DataTypes.INTEGER,
-            defaultValue: 1
+          type: DataTypes.INTEGER,
+          defaultValue: 1
         },
-        complete: DataTypes.INTEGER,
-        createdAt: DataTypes.DATE,
-        updatedAt: DataTypes.DATE
-
+        complete:  DataTypes.BOOLEAN,
+    }, {
+        timestamps        : true,
     });
 
     Project.associate = function(models) {
