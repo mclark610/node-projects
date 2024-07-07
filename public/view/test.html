@@ -15,7 +15,7 @@
         <input id="btn-login" name="btn-login" type="button" value="POST LOGIN"/><br/>
         <input id="btn-check" name="btn-check" type="button" value="GET CHECK"/><br/>
         <input id="btn-logout" name="btn-logout" type="button" value="POST LOGOUT"/><br/>
-        <input id="btn-maintain-list" name="btn-maintain-list" type="button" value="GET MAINTAIN LIST"/><br/>
+        <input id="btn-project-list" name="btn-project-list" type="button" value="GET PROJECT LIST"/><br/>
         <div id="result" name="result"></div>
     </form>
 </body>
@@ -33,12 +33,12 @@ $(document).ready( function() {
         alert("Submitted");
     });
 
-    $("#btn-maintain-list").on("click", function() {
+    $("#btn-project-list").on("click", function() {
         $('#collection').submit();
-        console.log("maintain-list");
+        console.log("project-list");
         $.ajax({
            type: "GET",
-           url: "/maintain",
+           url: "/project",
            dataType:"json",
            crossDomain: true,
            jsonp: false,

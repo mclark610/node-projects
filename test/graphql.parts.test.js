@@ -1,7 +1,7 @@
 const { graphql } = require("graphql");
-const { schema } = require("../components/graphql/loadSchemas.js");
-const db = require('../models/index.js');
-const logger = require('../modules/logger');
+const { schema } = require("../src/components/graphql/loadSchemas.js");
+const db = require('../src/models/index.js');
+const logger = require('../src/modules/logger');
 
 afterAll(async () => {
   db.sequelize.close();

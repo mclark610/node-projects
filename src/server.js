@@ -24,10 +24,7 @@ const part = require("./router/part");
 const user = require("./router/user");
 const todo = require("./router/task");
 const intoto = require("./router/intoto");
-<<<<<<< HEAD:server.js
 
-=======
->>>>>>> f89315fced36728f3a699351d3ef647cb1c772a8:src/server.js
 //let https;
 
 // get this from config

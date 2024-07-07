@@ -1,6 +1,6 @@
-const db = require('../models/index.js');
+const db = require('../src/models/index.js');
 
-const logger = require('../modules/logger');
+const logger = require('../src/modules/logger');
 
 test("run a sql query", async () => {
 

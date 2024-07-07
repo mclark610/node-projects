@@ -1,7 +1,7 @@
-const db = require('../models/index.js');
-const models = require( '../models');
+const db = require('../src/models/index.js');
+const models = require( '../src/models');
 
-const logger = require('../modules/logger');
+const logger = require('../src/modules/logger');
 
 const { projects } = models;
 

@@ -1,6 +1,6 @@
 const { graphql } = require("graphql");
-const { schema } = require("../components/graphql/loadSchemas.js");
-const logger = require('../modules/logger');
+const { schema } = require("../src/components/graphql/loadSchemas.js");
+const logger = require('../src/modules/logger');
 
 test("get data from graphql", async () => {
   const result = await graphql({
