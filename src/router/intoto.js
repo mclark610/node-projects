@@ -15,15 +15,16 @@ const { schema } = require("../components/graphql/loadSchemas.js");
 const {resolvers} = require("../components/graphql/mergeResolvers.js");
 
 router.use((req,res,next) => {
-    authenticateUser(req,res,next)
+   // authenticateUser(req,res,next)
 
     // Check user is logged in.
     logger.info("toto use called");
-   // next();
+    next();
 });
 
-router.get('/test',(req,res) => {
+router.get('/test/:id',(req,res) => {
     logger.info("############################ toto/test called ##########################");
+    logger.info("req.params: " + JSON.stringify(req.params));
     Part.fetch(req.params["id"])
         .then((results) => {
             logger.info("results: " + JSON.stringify(results));
