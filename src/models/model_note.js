@@ -7,8 +7,8 @@ module.exports = (sequelize, DataTypes) => {
         },
         name:   DataTypes.STRING(128),
         description: DataTypes.TEXT,
-        image_filename: DataTypes.STRING(255),
-        doc_filename: DataTypes.STRING(255),
+        filename: DataTypes.STRING(255),
+        mimetype: DataTypes.STRING(128),
         status: {
             type: DataTypes.INTEGER,
             defaultValue: 1

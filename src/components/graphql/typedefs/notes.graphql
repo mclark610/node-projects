@@ -6,8 +6,8 @@ type Note {
   id: Int!
   name: String
   description: Text
-  image_filename: String
-  doc_filename: String
+  filename: String
+  mimetype: String
   status: Int
   createdAt: DateTime
   updatedAt: DateTime
@@ -23,8 +23,8 @@ type Query {
 }
 
 type Mutation {
-  createNote(noteName: String,noteDescription: Text, noteImageFilename: String, noteDocFilename: String, noteStatus: Int) : MutationNote
-  updateNote(noteID: Int,noteName: String,noteDescription: Text,noteImageFilename: String, noteDocFilename: String, noteStatus: Int): MutationNote
+  createNote(noteName: String,noteDescription: Text, noteFilename: String, noteMimetype: String, noteStatus: Int) : MutationNote
+  updateNote(noteID: Int,noteName: String,noteDescription: Text,noteFilename: String, noteMimetype: String, noteStatus: Int): MutationNote
   updateNoteStatus(noteID: Int,noteStatus: Int): MutationNote
   deleteNote(noteID: Int) : MutationNote
 }

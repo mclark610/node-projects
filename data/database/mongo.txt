@@ -1,0 +1,59 @@
+Part Schema:
+JavaScript
+
+{
+  "_id": ObjectId,
+  "name": String,
+  "part_nbr": String,  // optional part number
+  "price": Number,     // optional price
+  "description": String,
+  "vendor": String,    // optional vendor information
+  "status": Number,
+  "complete": Boolean,
+  "createdAt": Date,
+  "updatedAt": Date,
+  "notes": [{         // array of references to note documents (many-to-many)
+    "_id": ObjectId
+  }]
+}
+
+Task Schema:
+JavaScript
+
+{
+  "_id": ObjectId,
+  "name": String,
+  "description": String,
+  "status": Number,
+  "complete": Boolean,
+  "dateDue": Date,
+  "createdAt": Date,
+  "updatedAt": Date,
+  "parts": [{        // array of references to part documents (many-to-many)
+    "_id": ObjectId
+  }],
+  "notes": [{         // array of references to note documents (many-to-many)
+    "_id": ObjectId
+  }]
+}
+
+Project Schema:
+JavaScript
+
+{
+  "_id": ObjectId,
+  "name": String, // optional project name
+  "part": {       // reference to a part document (one-to-one)
+    "_id": ObjectId
+  },
+  "status": Number,  // project status
+  "complete": Boolean, // is the project complete?
+  "createdAt": Date,   // creation timestamp
+  "updatedAt": Date,   // update timestamp
+  "tasks": [{         // array of references to task documents (many-to-many)
+    "_id": ObjectId
+  }],
+  "notes": [{         // array of references to note documents (many-to-many)
+    "_id": ObjectId
+  }]
+}
