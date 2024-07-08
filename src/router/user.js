@@ -34,6 +34,7 @@ router.get('/check', authenticateUser, (req, res) => {
     res.status(200).send("/usr/check works!");
 });
 
+
 router.post('/login', function (req,res) {
     logger.info(" **********************LOGIN CALLED************************ ");
     logger.info("user/login called---session info below " );
@@ -121,12 +122,7 @@ router.get('/:id(\\d+)?', function (req, res) {
     logger.info("------------------------------------------------------------");
     if (_.has(req.session, 'req.session.user')) {
         // reserved
-    }
-    else {
-        res.status(500).send("unauthorized user");
-    }
-
-    user.fetch(req.params["id"])
+        user.fetch(req.params["id"])
         .then( (results) => {
             logger.info("user:get: " + req.params["id"] + "--- " + results);
             res.status(200).send(results);
@@ -135,6 +131,14 @@ router.get('/:id(\\d+)?', function (req, res) {
             logger.info("user:get: error: " + JSON.stringify(err));
             res.status(500).send(err);
         });
+
+        
+    }
+    else {
+        res.status(500).send("unauthorized user");
+    }
+
+    
 });
 
 router.put('/', (req,res) => {

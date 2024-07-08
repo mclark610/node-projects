@@ -13,7 +13,6 @@ const authenticateUser = (req, res, next) => {
     const authHeader = req.header('Authorization');
     logger.info("authenticateUser:authHeader: " + authHeader);
 
-
     if (authHeader && authHeader.startsWith('Bearer ')) {
         const token = authHeader.substring(7);
         logger.info("token: " + token);

@@ -7,6 +7,7 @@ const task = require('../modules/data_task.js');
 const _ = require("lodash");
 
 const cookieParser = require('cookie-parser');
+const {authenticateUser} = require('../modules/authenticate');
 
 router.use(cookieParser());
 
@@ -19,13 +20,7 @@ router.use((req,res,next) => {
     logger.info("req.session: " + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-    if (_.has(req.session, 'req.session.user')) {
-        next();
-    }
-    else {
-        logger.info("task:use:user: not available");
-        res.status(403).send("unauthorized user");
-    }
+    authenticateUser(req,res,next);
 });
 
 

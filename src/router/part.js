@@ -14,8 +14,8 @@ router.use((req,res,next) => {
     logger.info("req.session: "      + JSON.stringify(req.session));
     logger.info("------------------------------------------------------------");
 
-//    authenticateUser(req,res,next);
-    next();
+    authenticateUser(req,res,next);
+//    next();
 });
 
 // delete tested with part deletion only. works

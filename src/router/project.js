@@ -5,7 +5,7 @@ const router = express.Router();
 
 const logger = require('../modules/logger.js');
 const project = require('../modules/data_project.js');
-//const {authenticateUser} = require('../modules/authenticate');
+const {authenticateUser} = require('../modules/authenticate');
 
 /*
 const { check, validationResult } = require('express-validator/check');
@@ -29,7 +29,7 @@ router.use((req,res,next) => {
     logger.info("project:use:username   : " + JSON.stringify(req.session.user));
     logger.info("------------------------------------------------------------");
 
-  //  authenticateUser(req,res,next);
+    authenticateUser(req,res,next);
 });
 
 // delete tested with project deletion only. works
